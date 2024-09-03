@@ -33,6 +33,7 @@ cmake --build "$NATIVE_BUILD_DIR/LinuxGlobalMenu/"
 cp "$NATIVE_BUILD_DIR/LinuxGlobalMenu/libdbm.so" "$OUTPUT_DIR/libdbm.so"
 
 ## fsNotifier
+FSNOTIFIER_DIR="$NATIVE_DIR/fsNotifier"
 $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"f93937d\"" -std=c11 \
-  "$NATIVE_DIR/main.c" "$NATIVE_DIR/inotify.c" "$NATIVE_DIR/util.c" \
+  "$FSNOTIFIER_DIR/main.c" "$FSNOTIFIER_DIR/inotify.c" "$FSNOTIFIER_DIR/util.c" \
   -o "$OUTPUT_DIR/fsnotifier"
