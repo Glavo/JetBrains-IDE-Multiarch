@@ -37,3 +37,8 @@ FSNOTIFIER_DIR="$NATIVE_DIR/fsNotifier"
 $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"f93937d\"" -std=c11 \
   "$FSNOTIFIER_DIR/main.c" "$FSNOTIFIER_DIR/inotify.c" "$FSNOTIFIER_DIR/util.c" \
   -o "$OUTPUT_DIR/fsnotifier"
+
+## restarter
+cargo build --release --manifest-path="$NATIVE_DIR/restarter/Cargo.toml"
+cp "$NATIVE_DIR/restarter/target/release/restarter" "$OUTPUT_DIR/restarter"
+
