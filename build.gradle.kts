@@ -20,13 +20,12 @@ plugins {
     id("de.undercouch.download") version "5.6.0"
 }
 
-
 group = "org.glavo"
 version = property("idea.version") as String
 
-val downloadDir = layout.buildDirectory.dir("download")
+val downloadDir = layout.buildDirectory.dir("download").get()
 val baseArch = "aarch64"
-val ijDir = layout.buildDirectory.dir("ideaIU-$version-$baseArch")
+val ijDir = downloadDir.dir("ideaIU-$version-$baseArch")
 
 var downloadIJ = tasks.create<Download>("downloadIJ") {
     src("https://download.jetbrains.com/idea/ideaIU-$version-$baseArch.tar.gz")
@@ -43,7 +42,7 @@ tasks.create("extractIJ") {
             throw GradleException("This task should not run on Windows")
         }
 
-        val targetDir = ijDir.get().asFile.toPath()
+        val targetDir = ijDir.asFile.toPath()
         targetDir.toFile().deleteRecursively()
         Files.createDirectories(targetDir)
 
