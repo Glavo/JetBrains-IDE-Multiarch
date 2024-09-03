@@ -24,3 +24,5 @@ cp "$LIBDBUSMENU_DIR/libdbusmenu-glib/.libs/libdbusmenu-glib.a" "$NATIVE_DIR/Lin
 cd "$NATIVE_DIR"
 
 ## LinuxGlobalMenu
+cmake -DCMAKE_BUILD_TYPE=Release -S "$NATIVE_DIR/LinuxGlobalMenu/" -B "$NATIVE_BUILD_DIR/LinuxGlobalMenu/"
+cmake --build "$NATIVE_BUILD_DIR/LinuxGlobalMenu/"
