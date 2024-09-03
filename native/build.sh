@@ -17,6 +17,6 @@ rm -rf libdbusmenu
 git clone https://github.com/JetBrains/libdbusmenu.git "$LIBDBUSMENU_DIR"
 cd "$LIBDBUSMENU_DIR"
 ./configure --build "$OS_ARCH-unknown-linux-gnu" --target "$OS_ARCH-unknown-linux-gnu"
-cd "$LIBDBUSMENU_DIR/libdbusmenu-gtk"
+cd "$LIBDBUSMENU_DIR/libdbusmenu-glib"
 make
 cd "$NATIVE_DIR"
