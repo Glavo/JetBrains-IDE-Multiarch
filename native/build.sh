@@ -13,9 +13,10 @@ mkdir -p "$NATIVE_BUILD_DIR"
 
 ## libdbusmenu
 LIBDBUSMENU_DIR="$NATIVE_BUILD_DIR/libdbusmenu"
-rm -rf libdbusmenu
+rm -rf "$LIBDBUSMENU_DIR"
 git clone https://github.com/JetBrains/libdbusmenu.git "$LIBDBUSMENU_DIR"
 cd "$LIBDBUSMENU_DIR"
+git checkout 38d7a2ada4b2a08c535491d43a39825868f2b065
 ./configure --build "$OS_ARCH-unknown-linux-gnu" --target "$OS_ARCH-unknown-linux-gnu"
 cd "$LIBDBUSMENU_DIR/libdbusmenu-glib"
 make
