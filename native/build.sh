@@ -4,15 +4,14 @@ set -e
 
 NATIVE_DIR=$(dirname "$(realpath "$0")")
 NATIVE_BUILD_DIR="$NATIVE_DIR/build"
-PROJECT_ROOT=$(dirname "${NATIVE_DIR}")
-PROJECT_BUILD_DIR="$PROJECT_ROOT/build"
-OUTPUT_DIR="$NATIVE_BUILD_DIR/libs"
+OUTPUT_DIR="$NATIVE_DIR/out"
 
 OS_ARCH=$(uname -m)
 
 CC=${CC:-gcc}
 
 rm -rf "$NATIVE_BUILD_DIR"
+rm -rf "$OUTPUT_DIR"
 mkdir -p "$NATIVE_BUILD_DIR"
 mkdir -p "$OUTPUT_DIR"
 
@@ -42,7 +41,8 @@ $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"f93937d\"" -std=c11 \
 cargo build --release --manifest-path="$NATIVE_DIR/restarter/Cargo.toml"
 cp "$NATIVE_DIR/restarter/target/release/restarter" "$OUTPUT_DIR/restarter"
 
-##
+## repair-utility
+go build -C repair-utility -o "$OUTPUT_DIR/repair"
 
 ## XPlatLauncher
 cargo build --release --manifest-path="$NATIVE_DIR/XPlatLauncher/Cargo.toml"
