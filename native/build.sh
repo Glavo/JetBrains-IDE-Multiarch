@@ -52,3 +52,4 @@ cp "$NATIVE_DIR/XPlatLauncher/target/release/xplat-launcher" "$OUTPUT_DIR/xplat-
 NATIVES_ZIP="natives-$OS_ARCH.zip"
 rm -f "$NATIVES_ZIP"
 zip -j "$NATIVES_ZIP" "$OUTPUT_DIR"/*
+echo "All files are packaged into $(realpath "$NATIVES_ZIP")."
