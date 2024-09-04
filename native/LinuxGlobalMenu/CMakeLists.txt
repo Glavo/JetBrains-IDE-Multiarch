@@ -34,11 +34,11 @@ MESSAGE("LIB_GOBJ: " ${LIB_GOBJ})
 set(LIB_DBUSMENU "${PROJECT_SOURCE_DIR}/libdbusmenu-glib.a")
 
 set(GLIB_INCLUDE_DIRS /usr/include/glib-2.0 /usr/lib64/glib-2.0/include)
+set(DBUSMENU_GLIB_INCLUDE_DIRS /usr/include/libdbusmenu-glib-0.4)
+
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "riscv64")
     list(APPEND GLIB_INCLUDE_DIRS /usr/lib/riscv64-linux-gnu/glib-2.0/include)
-endif
-
-set(DBUSMENU_GLIB_INCLUDE_DIRS /usr/include/libdbusmenu-glib-0.4)
+endif()
 
 include_directories(
         ${GLIB_INCLUDE_DIRS}
