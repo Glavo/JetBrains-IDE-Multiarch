@@ -42,3 +42,5 @@ $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"f93937d\"" -std=c11 \
 cargo build --release --manifest-path="$NATIVE_DIR/restarter/Cargo.toml"
 cp "$NATIVE_DIR/restarter/target/release/restarter" "$OUTPUT_DIR/restarter"
 
+## XPlatLauncher
+cargo build --release --manifest-path="$NATIVE_DIR/XPlatLauncher/Cargo.toml"
