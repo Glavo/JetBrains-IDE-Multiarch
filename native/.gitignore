@@ -1,4 +1,5 @@
 /build
 /out
+/natives-*.zip
 
 LinuxGlobalMenu/libdbusmenu-glib.a

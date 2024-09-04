@@ -19,6 +19,7 @@ if (__DBUSMENU_HAVE_W_ALL)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 endif (__DBUSMENU_HAVE_W_ALL)
 
+MESSAGE("CMAKE_SYSTEM_PROCESSOR: " ${CMAKE_SYSTEM_PROCESSOR})
 
 find_library(LIB_GLIB NAMES glib libglib libglib-2.0.so.0)
 MESSAGE("LIB_GLIB: " ${LIB_GLIB})
@@ -33,6 +34,10 @@ MESSAGE("LIB_GOBJ: " ${LIB_GOBJ})
 set(LIB_DBUSMENU "${PROJECT_SOURCE_DIR}/libdbusmenu-glib.a")
 
 set(GLIB_INCLUDE_DIRS /usr/include/glib-2.0 /usr/lib64/glib-2.0/include)
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "riscv64")
+    list(APPEND GLIB_INCLUDE_DIRS /usr/lib/riscv64-linux-gnu/glib-2.0/include)
+endif
+
 set(DBUSMENU_GLIB_INCLUDE_DIRS /usr/include/libdbusmenu-glib-0.4)
 
 include_directories(
