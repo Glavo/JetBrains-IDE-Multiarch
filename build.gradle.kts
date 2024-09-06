@@ -13,9 +13,9 @@ plugins {
 group = "org.glavo"
 version = property("idea.version") as String
 
-val ijProductCode = property("idea.product_code") as String
 val downloadDir = layout.buildDirectory.dir("download").get()
 val baseArch = "aarch64"
+val ijProductCode = property("idea.product_code") as String
 val ijDir = downloadDir.dir("idea$ijProductCode-$version-$baseArch")
 
 var downloadIJ = tasks.create<Download>("downloadIJ") {

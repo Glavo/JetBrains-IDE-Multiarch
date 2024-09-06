@@ -74,21 +74,28 @@ public final class IJProcessor {
             }
         },
         LOCAL_LAUNCHER("bin/idea", "xplat-launcher"),
-        REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher"),
+        REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher", true),
         FSNOTIFIER("bin/fsnotifier", "fsnotifier"),
         ;
 
         private final String path;
         private final String replacement;
+        private final boolean iu;
 
         FileProcessor(String path) {
             this.path = path;
             this.replacement = null;
+            this.iu = false;
         }
 
         FileProcessor(String path, String replacement) {
+            this(path, replacement, false);
+        }
+
+        FileProcessor(String path, String replacement, boolean iu) {
             this.path = path;
             this.replacement = replacement;
+            this.iu = iu;
         }
 
         void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
@@ -101,23 +108,31 @@ public final class IJProcessor {
                 throw new GradleException("Missing " + replacement);
             }
 
-            // TODO
+            entry.setSize(replacementEntry.getSize());
+            entry.setCreationTime(replacementEntry.getCreationTime());
+            entry.setLastModifiedTime(replacementEntry.getLastModifiedTime());
+            entry.setLastAccessTime(replacementEntry.getLastAccessTime());
+
+            processor.outTar.putArchiveEntry(entry);
+            try (var input = processor.nativesZip.getInputStream(replacementEntry)) {
+                input.transferTo(processor.outTar);
+            }
+            processor.outTar.closeArchiveEntry();
         }
     }
 
     private final Platform platform;
+    private final String productCode;
     private final TarArchiveInputStream baseTar;
     private final ZipFile nativesZip;
     private final TarArchiveOutputStream outTar;
 
-    private final String path;
-
-    IJProcessor(Platform platform, TarArchiveInputStream baseTar, ZipFile nativesZip, TarArchiveOutputStream outTar, String path) {
+    IJProcessor(Platform platform, String productCode, TarArchiveInputStream baseTar, ZipFile nativesZip, TarArchiveOutputStream outTar) {
         this.platform = platform;
+        this.productCode = productCode;
         this.baseTar = baseTar;
         this.nativesZip = nativesZip;
         this.outTar = outTar;
-        this.path = path;
     }
 
     public void process() throws IOException {
@@ -133,6 +148,9 @@ public final class IJProcessor {
         var jbrPrefix = prefix + "/jbr";
 
         var set = EnumSet.allOf(FileProcessor.class);
+        if (!productCode.equals("IU")) {
+            set.removeIf(it -> it.iu);
+        }
         var processors = new HashMap<String, FileProcessor>();
         boolean processedJbr = false;
 
