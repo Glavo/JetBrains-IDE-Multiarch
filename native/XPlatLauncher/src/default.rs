@@ -64,7 +64,6 @@ impl LaunchConfiguration for DefaultLaunchConfiguration {
         debug!("Appending product-specific VM options");
         vm_options.extend_from_slice(&self.launch_info.additionalJvmArguments);
 
-
         for vm_option in vm_options.iter_mut() {
             *vm_option = vm_option
                 .replace(IDE_HOME_MACRO, &ide_home_path)
