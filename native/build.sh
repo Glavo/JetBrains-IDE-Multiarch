@@ -49,7 +49,7 @@ cargo build --release --manifest-path="$NATIVE_DIR/XPlatLauncher/Cargo.toml"
 cp "$NATIVE_DIR/XPlatLauncher/target/release/xplat-launcher" "$OUTPUT_DIR/xplat-launcher"
 
 ## package
-NATIVES_ZIP="natives-$OS_ARCH.zip"
+NATIVES_ZIP="natives-linux-$OS_ARCH.zip"
 rm -f "$NATIVES_ZIP"
 zip -j "$NATIVES_ZIP" "$OUTPUT_DIR"/*
 echo "All files are packaged into $(realpath "$NATIVES_ZIP")."

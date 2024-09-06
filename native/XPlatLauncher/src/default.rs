@@ -50,9 +50,12 @@ impl LaunchConfiguration for DefaultLaunchConfiguration {
 
         // error file locations go first (users should be able to override them)
         let user_home_path = get_user_home()?.to_string_checked()?;
+        let ide_home_path = self.ide_home.to_string_checked()?;
+        let ide_caches_path = self.user_caches_dir.to_string_checked()?;
         let slash = std::path::MAIN_SEPARATOR;
         vm_options.push(format!("-XX:ErrorFile={user_home_path}{slash}java_error_in_{}_%p.log", self.launcher_base_name));
         vm_options.push(format!("-XX:HeapDumpPath={user_home_path}{slash}java_error_in_{}.hprof", self.launcher_base_name));
+        vm_options.push(format!("-Didea.filewatcher.executable.path={ide_home_path}/bin/fsnotifier"));
 
         // collecting JVM options from user and distribution files
         self.collect_vm_options_from_files(&mut vm_options)?;
@@ -61,8 +64,7 @@ impl LaunchConfiguration for DefaultLaunchConfiguration {
         debug!("Appending product-specific VM options");
         vm_options.extend_from_slice(&self.launch_info.additionalJvmArguments);
 
-        let ide_home_path = self.ide_home.to_string_checked()?;
-        let ide_caches_path = self.user_caches_dir.to_string_checked()?;
+
         for vm_option in vm_options.iter_mut() {
             *vm_option = vm_option
                 .replace(IDE_HOME_MACRO, &ide_home_path)
