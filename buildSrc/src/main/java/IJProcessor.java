@@ -1,3 +1,4 @@
+import com.google.gson.*;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -13,29 +14,59 @@ import java.util.zip.ZipFile;
 public final class IJProcessor {
     private enum FileProcessor {
         PRODUCT_INFO("product-info.json") {
+            private static void processAdditionalJvmArguments(IJProcessor processor, JsonObject obj) {
+                JsonElement additionalJvmArgumentsElement = obj.get("additionalJvmArguments");
+                if (additionalJvmArgumentsElement == null) {
+                    return;
+                }
+
+                var arg = "-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch;
+
+                JsonArray additionalJvmArguments = additionalJvmArgumentsElement.getAsJsonArray();
+                for (int i = 0; i < additionalJvmArguments.size(); i++) {
+                    JsonElement element = additionalJvmArguments.get(i);
+                    if (element.getAsString().equals(arg)) {
+                        additionalJvmArguments.set(i, new JsonPrimitive("-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.arch.getName()));
+                        return;
+                    }
+                }
+            }
+
             @Override
             void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
-                var result = new StringBuilder();
-                var holder = new boolean[]{false};
+                var gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .create();
 
-                new String(processor.baseTar.readAllBytes()).lines().forEach(line -> {
-                    result.append(line);
-                    result.append('\n');
+                JsonObject productInfo = gson.fromJson(new String(processor.baseTar.readAllBytes()), JsonObject.class);
+                JsonObject result = new JsonObject();
 
-                    if (line.startsWith("  \"productCode\":")) {
-                        if (holder[0]) {
-                            throw new GradleException("Duplicate product code: " + line);
+
+                productInfo.asMap().forEach((key, value) -> {
+                    if (key.equals("productCode")) {
+                        result.add(key, value);
+                        result.addProperty("envVarBaseName", "IDEA");
+                    } else if (key.equals("launch")) {
+                        var launchArray = (JsonArray) value;
+                        if (launchArray.size() != 1) {
+                            throw new GradleException("Expected exactly one launch");
                         }
-                        holder[0] = true;
-                        result.append("  \"envVarBaseName\": \"IDEA\",\n");
+
+                        var launch = launchArray.get(0).getAsJsonObject();
+                        launch.addProperty("arch", processor.arch.getName());
+                        processAdditionalJvmArguments(processor, launch);
+
+                        for (JsonElement element : launch.getAsJsonArray("customCommands")) {
+                            processAdditionalJvmArguments(processor, element.getAsJsonObject());
+                        }
+
+                        result.add(key, value);
+                    } else {
+                        result.add(key, value);
                     }
                 });
 
-                if (!holder[0]) {
-                    throw new GradleException("No product code found");
-                }
-
-                var bytes = result.toString().getBytes(StandardCharsets.UTF_8);
+                var bytes = gson.toJson(productInfo).getBytes(StandardCharsets.UTF_8);
                 entry.setSize(bytes.length);
                 processor.outTar.putArchiveEntry(entry);
                 processor.outTar.write(bytes);
@@ -121,14 +152,16 @@ public final class IJProcessor {
         }
     }
 
-    private final Platform platform;
+    private final String baseArch;
+    private final Arch arch;
     private final String productCode;
     private final TarArchiveInputStream baseTar;
     private final ZipFile nativesZip;
     private final TarArchiveOutputStream outTar;
 
-    IJProcessor(Platform platform, String productCode, TarArchiveInputStream baseTar, ZipFile nativesZip, TarArchiveOutputStream outTar) {
-        this.platform = platform;
+    IJProcessor(String baseArch, Arch arch, String productCode, TarArchiveInputStream baseTar, ZipFile nativesZip, TarArchiveOutputStream outTar) {
+        this.baseArch = baseArch;
+        this.arch = arch;
         this.productCode = productCode;
         this.baseTar = baseTar;
         this.nativesZip = nativesZip;

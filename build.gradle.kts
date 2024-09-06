@@ -94,7 +94,7 @@ tasks.create("extractIJ") {
     }
 }
 
-for (platform in Platform.values()) {
+for (platform in Arch.values()) {
     tasks.create("createFor$platform") {
         doLast {
             useIJTar { tar ->

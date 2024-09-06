@@ -17,6 +17,4 @@ public enum Platform {
     public String getArch() {
         return arch;
     }
-
-
 }
