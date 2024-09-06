@@ -13,12 +13,13 @@ plugins {
 group = "org.glavo"
 version = property("idea.version") as String
 
+val ijProductCode = property("idea.product_code") as String
 val downloadDir = layout.buildDirectory.dir("download").get()
 val baseArch = "aarch64"
-val ijDir = downloadDir.dir("ideaIU-$version-$baseArch")
+val ijDir = downloadDir.dir("idea$ijProductCode-$version-$baseArch")
 
 var downloadIJ = tasks.create<Download>("downloadIJ") {
-    src("https://download.jetbrains.com/idea/ideaIU-$version-$baseArch.tar.gz")
+    src("https://download.jetbrains.com/idea/idea$ijProductCode-$version-$baseArch.tar.gz")
     dest(downloadDir)
     overwrite(false)
 }
