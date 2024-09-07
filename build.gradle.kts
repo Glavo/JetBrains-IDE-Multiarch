@@ -94,7 +94,9 @@ tasks.create("extractIJ") {
     }
 }
 
-for (platform in Arch.values()) {
+val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
+
+for (platform in arches) {
     tasks.create("createFor$platform") {
         doLast {
             useIJTar { tar ->

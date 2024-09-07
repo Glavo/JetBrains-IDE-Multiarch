@@ -1,6 +1,7 @@
 import java.util.Locale;
 
 public enum Arch {
+    AARCH64,
     RISCV64,
     LOONGARCH64;
 

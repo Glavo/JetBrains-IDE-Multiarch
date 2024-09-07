@@ -20,7 +20,7 @@ public final class IJProcessor {
                     return;
                 }
 
-                var arg = "-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch;
+                var arg = "-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch.getName();
 
                 JsonArray additionalJvmArguments = additionalJvmArgumentsElement.getAsJsonArray();
                 for (int i = 0; i < additionalJvmArguments.size(); i++) {
@@ -40,7 +40,6 @@ public final class IJProcessor {
 
                 JsonObject productInfo = gson.fromJson(new String(processor.baseTar.readAllBytes()), JsonObject.class);
                 JsonObject result = new JsonObject();
-
 
                 productInfo.asMap().forEach((key, value) -> {
                     if (key.equals("productCode")) {
@@ -66,7 +65,7 @@ public final class IJProcessor {
                     }
                 });
 
-                var bytes = gson.toJson(productInfo).getBytes(StandardCharsets.UTF_8);
+                var bytes = gson.toJson(result).getBytes(StandardCharsets.UTF_8);
                 entry.setSize(bytes.length);
                 processor.outTar.putArchiveEntry(entry);
                 processor.outTar.write(bytes);
@@ -152,18 +151,19 @@ public final class IJProcessor {
         }
     }
 
-    private final String baseArch;
-    private final Arch arch;
+    private final Arch baseArch;
     private final String productCode;
     private final TarArchiveInputStream baseTar;
+    private final Arch arch;
     private final ZipFile nativesZip;
     private final TarArchiveOutputStream outTar;
 
-    IJProcessor(String baseArch, Arch arch, String productCode, TarArchiveInputStream baseTar, ZipFile nativesZip, TarArchiveOutputStream outTar) {
+    public IJProcessor(Arch baseArch, String productCode, TarArchiveInputStream baseTar,
+                       Arch arch, ZipFile nativesZip, TarArchiveOutputStream outTar) {
         this.baseArch = baseArch;
-        this.arch = arch;
         this.productCode = productCode;
         this.baseTar = baseTar;
+        this.arch = arch;
         this.nativesZip = nativesZip;
         this.outTar = outTar;
     }
@@ -187,7 +187,7 @@ public final class IJProcessor {
         var processors = new HashMap<String, FileProcessor>();
         boolean processedJbr = false;
 
-        for (FileProcessor processor : FileProcessor.values()) {
+        for (FileProcessor processor : set) {
             processors.put(prefix + processor.path, processor);
         }
 
