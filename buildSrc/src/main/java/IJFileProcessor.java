@@ -1,9 +1,12 @@
 import com.google.gson.*;
+import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.gradle.api.GradleException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 
 enum IJFileProcessor {
@@ -71,22 +74,30 @@ enum IJFileProcessor {
         void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
             var result = new StringBuilder();
 
-            var holder = new boolean[]{false, false};
-
-            new String(processor.baseTar.readAllBytes()).lines().forEach(line -> {
-                if (line.equals("  ${VM_OPTIONS} \\")) {
-                    if (holder[0]) {
-                        throw new GradleException("Duplicate VM options: " + line);
+            boolean foundVMOptions = false;
+            for (String line : new String(processor.baseTar.readAllBytes()).lines().toList()) {
+                if (line.contains("-Didea.vendor.name=JetBrains") && line.endsWith("\\")) {
+                    if (foundVMOptions) {
+                        throw new GradleException("Duplicate JVM options");
                     }
-                    holder[0] = true;
-                    result.append("  -Didea.filewatcher.executable.path=${IDE_HOME}/bin/fsnotifier\\");
+                    foundVMOptions = true;
+
+                    var args = MutableList.from(List.of(line.substring(0, line.length() - 1).trim().split(" ")));
+                    args.insert(1, "\"-Didea.filewatcher.executable.path=${IDE_HOME}/bin/fsnotifier\"");
+
+                    int idx = args.indexOf("\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch.getName() + "\"");
+                    if (idx < 0) {
+                        throw new GradleException("Missing jna option");
+                    }
+                    args.set(idx, "\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.arch.getName() + "\"");
+                    args.joinTo(result, " ", "  ", " \\\n");
+                } else {
+                    result.append(line);
+                    result.append('\n');
                 }
+            }
 
-                result.append(line);
-                result.append('\n');
-            });
-
-            if (!holder[0]) {
+            if (!foundVMOptions) {
                 throw new GradleException("No VM options found");
             }
 
