@@ -1,9 +1,9 @@
 .gradle
 build/
 
-
 ### IntelliJ IDEA ###
 .idea/
+*.iml
 
 ### VS Code ###
 .vscode/
