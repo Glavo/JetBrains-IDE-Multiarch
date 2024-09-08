@@ -6,12 +6,10 @@ import org.gradle.api.GradleException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -151,8 +149,16 @@ enum IJFileProcessor {
                         }
                     }
                 }
-            } else {
 
+                TarArchiveEntry newEntry = new TarArchiveEntry(path);
+                newEntry.setSize(buffer.size());
+                processor.outTar.putArchiveEntry(newEntry);
+                processor.outTar.write(buffer.toByteArray());
+                processor.outTar.closeArchiveEntry();
+            } else {
+                processor.outTar.putArchiveEntry(entry);
+                processor.baseTar.transferTo(processor.outTar);
+                processor.outTar.closeArchiveEntry();
             }
         }
     },
