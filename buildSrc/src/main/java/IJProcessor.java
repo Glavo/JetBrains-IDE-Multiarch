@@ -27,7 +27,7 @@ public final class IJProcessor {
         this.outTar = outTar;
     }
 
-    public void process() throws IOException {
+    public void process() throws Throwable {
         String prefix;
         {
             TarArchiveEntry it = baseTar.getNextEntry();

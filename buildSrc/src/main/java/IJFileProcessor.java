@@ -3,11 +3,19 @@ import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.gradle.api.GradleException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 enum IJFileProcessor {
     PRODUCT_INFO("product-info.json") {
@@ -110,8 +118,42 @@ enum IJFileProcessor {
     },
     UTIL_JAR("lib/util.jar") {
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
-            // TODO
+        void process(IJProcessor processor, TarArchiveEntry entry) throws Throwable {
+            if (processor.arch == Arch.LOONGARCH64) {
+                var buffer = new ByteArrayOutputStream();
+                try (var input = new ZipInputStream(new ByteArrayInputStream(processor.baseTar.readAllBytes()));
+                     var output = new ZipOutputStream(buffer)) {
+
+                    boolean foundOSFacadeImpl = false;
+                    ZipEntry zipEntry;
+                    while ((zipEntry = input.getNextEntry()) != null) {
+                        if (zipEntry.getName().equals("com/pty4j/unix/linux/OSFacadeImpl.class")) {
+                            if (foundOSFacadeImpl) {
+                                throw new GradleException("Duplicate OSFacadeImpl");
+                            }
+                            foundOSFacadeImpl = true;
+
+                            //noinspection DataFlowIssue
+                            Path replacement = Path.of(IJFileProcessor.class.getResource("OSFacadeImpl.class.bin").toURI());
+                            FileTime time = Files.getLastModifiedTime(replacement);
+                            ZipEntry newEntry = new ZipEntry(zipEntry.getName());
+                            newEntry.setCreationTime(time);
+                            newEntry.setLastModifiedTime(time);
+                            newEntry.setSize(Files.size(replacement));
+
+                            output.putNextEntry(newEntry);
+                            Files.copy(replacement, output);
+                            output.close();
+                        } else {
+                            output.putNextEntry(zipEntry);
+                            input.transferTo(output);
+                            output.closeEntry();
+                        }
+                    }
+                }
+            } else {
+
+            }
         }
     },
     LOCAL_LAUNCHER("bin/idea", "xplat-launcher"),
@@ -139,7 +181,7 @@ enum IJFileProcessor {
         this.iu = iu;
     }
 
-    void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
+    void process(IJProcessor processor, TarArchiveEntry entry) throws Throwable {
         if (replacement == null) {
             throw new AssertionError("replacement is null");
         }
