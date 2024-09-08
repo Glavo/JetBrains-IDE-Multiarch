@@ -108,6 +108,12 @@ enum IJFileProcessor {
             processor.outTar.closeArchiveEntry();
         }
     },
+    UTIL_JAR("lib/util.jar") {
+        @Override
+        void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
+            // TODO
+        }
+    },
     LOCAL_LAUNCHER("bin/idea", "xplat-launcher"),
     REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher", true),
     FSNOTIFIER("bin/fsnotifier", "fsnotifier"),
