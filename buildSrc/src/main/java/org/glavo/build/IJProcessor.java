@@ -8,7 +8,6 @@ import org.gradle.api.Task;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,7 +18,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipFile;
 
-public final class IJProcessor implements Closeable {
+public final class IJProcessor implements AutoCloseable {
 
     static final Logger LOGGER = Logging.getLogger(IJProcessor.class);
 
@@ -35,6 +34,8 @@ public final class IJProcessor implements Closeable {
     final TarArchiveInputStream tarInput;
     final TarArchiveOutputStream tarOutput;
 
+    private final OpenHelper helper = new OpenHelper();
+
     public IJProcessor(Task task,
                        Arch baseArch, String productCode, Path baseTar,
                        Arch arch, Path nativesZipFile, Path outTar) throws Throwable {
@@ -46,7 +47,6 @@ public final class IJProcessor implements Closeable {
         this.outTar = outTar;
         this.nativesZipName = nativesZipFile.getFileName().toString();
 
-        var helper = new OpenHelper();
         try {
             this.nativesZip = helper.register(new ZipFile(nativesZipFile.toFile()));
             this.tarInput = helper.register(new TarArchiveInputStream(
@@ -127,7 +127,7 @@ public final class IJProcessor implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
-
+    public void close() throws Exception {
+        helper.close();
     }
 }
