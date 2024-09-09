@@ -1,3 +1,5 @@
+package org.glavo.build;
+
 public enum Platform {
     LINUX_LOONGARCH64("linux", "loongarch64"),
     LINUX_RISCV64("linux", "riscv64");

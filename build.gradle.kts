@@ -1,6 +1,8 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
+import org.glavo.build.Arch
+import org.glavo.build.IJProcessor
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -43,7 +45,10 @@ inline fun openTarInputStream(file: Path, action: (TarArchiveInputStream) -> Uni
 inline fun openTarOutputStream(file: Path, action: (TarArchiveOutputStream) -> Unit) {
     Files.newOutputStream(file, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING).use { rawOutput ->
         GZIPOutputStream(rawOutput).use { gzipOutput ->
-            TarArchiveOutputStream(gzipOutput).use(action)
+            TarArchiveOutputStream(gzipOutput).use { tarOutputStream ->
+                tarOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX)
+                action.invoke(tarOutputStream)
+            }
         }
     }
 }
@@ -113,7 +118,7 @@ val targetDir = layout.buildDirectory.dir("target").get()
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 
 for (arch in arches) {
-    tasks.create("createFor$arch") {
+    val createTask = tasks.create("createFor$arch") {
         dependsOn(downloadIJ)
 
         val nativesZip = layout.projectDirectory.dir("resources").file("natives-linux-${arch.getName()}.zip")
@@ -126,7 +131,11 @@ for (arch in arches) {
             openTarInputStream(ijTar) { baseTar ->
                 openTarOutputStream(output.asFile.toPath()) { targetTar ->
                     ZipFile(nativesZip.asFile).use { nativesZipInput ->
-                        IJProcessor(baseArch, ijProductCode, baseTar, arch, nativesZipInput, targetTar).process()
+                        IJProcessor(
+                            project, this,
+                            baseArch, ijProductCode, baseTar,
+                            arch, nativesZipInput, targetTar
+                        ).process()
                     }
                 }
             }

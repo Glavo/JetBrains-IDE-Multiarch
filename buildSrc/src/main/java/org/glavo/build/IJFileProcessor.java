@@ -1,3 +1,5 @@
+package org.glavo.build;
+
 import com.google.gson.*;
 import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;

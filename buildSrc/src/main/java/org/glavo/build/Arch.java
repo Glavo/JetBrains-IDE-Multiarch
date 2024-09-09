@@ -1,3 +1,5 @@
+package org.glavo.build;
+
 import java.util.Locale;
 
 public enum Arch {

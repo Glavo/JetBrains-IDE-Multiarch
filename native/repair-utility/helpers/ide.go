@@ -24,7 +24,7 @@ type IdeInfo struct {
   IsRepairBundled   bool
   Launch            []struct {
     Os                     string   `json:"os"`
-    Arch                   string   `json:"arch"`
+    org.glavo.build.Arch                   string   `json:"arch"`
     LauncherPath           string   `json:"launcherPath"`
     JavaExecutablePath     string   `json:"javaExecutablePath"`
     VmOptionsFilePath      string   `json:"vmOptionsFilePath"`
