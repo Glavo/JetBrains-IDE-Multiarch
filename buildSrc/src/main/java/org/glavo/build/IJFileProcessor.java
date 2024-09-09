@@ -73,8 +73,9 @@ enum IJFileProcessor {
             });
 
             var bytes = gson.toJson(result).getBytes(StandardCharsets.UTF_8);
-            entry.setSize(bytes.length);
-            processor.tarOutput.putArchiveEntry(entry);
+            var newEntry = new TarArchiveEntry(entry.getName());
+            newEntry.setSize(bytes.length);
+            processor.tarOutput.putArchiveEntry(newEntry);
             processor.tarOutput.write(bytes);
             processor.tarOutput.closeArchiveEntry();
         }
@@ -112,8 +113,9 @@ enum IJFileProcessor {
             }
 
             var bytes = result.toString().getBytes(StandardCharsets.UTF_8);
-            entry.setSize(bytes.length);
-            processor.tarOutput.putArchiveEntry(entry);
+            var newEntry = new TarArchiveEntry(entry.getName());
+            newEntry.setSize(bytes.length);
+            processor.tarOutput.putArchiveEntry(newEntry);
             processor.tarOutput.write(bytes);
             processor.tarOutput.closeArchiveEntry();
         }
@@ -207,14 +209,15 @@ enum IJFileProcessor {
             throw new GradleException("Missing " + replacement);
         }
 
-        LOGGER.lifecycle("Replace {} with {}/{}", entry.getName(), processor.nativesZipName, replacement);
+        LOGGER.info("Replace {} with {}/{}", entry.getName(), processor.nativesZipName, replacement);
 
-        entry.setSize(replacementEntry.getSize());
-        entry.setCreationTime(replacementEntry.getCreationTime());
-        entry.setLastModifiedTime(replacementEntry.getLastModifiedTime());
-        entry.setLastAccessTime(replacementEntry.getLastAccessTime());
+        var newEntry = new TarArchiveEntry(entry.getName());
+        newEntry.setSize(replacementEntry.getSize());
+        newEntry.setCreationTime(replacementEntry.getCreationTime());
+        newEntry.setLastModifiedTime(replacementEntry.getLastModifiedTime());
+        newEntry.setLastAccessTime(replacementEntry.getLastAccessTime());
 
-        processor.tarOutput.putArchiveEntry(entry);
+        processor.tarOutput.putArchiveEntry(newEntry);
         try (var input = processor.nativesZip.getInputStream(replacementEntry)) {
             input.transferTo(processor.tarOutput);
         }

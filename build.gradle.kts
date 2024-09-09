@@ -1,13 +1,10 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
 import org.glavo.build.Arch
 import org.glavo.build.IJProcessor
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardOpenOption
 import java.util.zip.GZIPInputStream
-import java.util.zip.GZIPOutputStream
 import kotlin.io.path.exists
 import kotlin.io.path.outputStream
 
@@ -37,22 +34,6 @@ inline fun openTarInputStream(file: Path, action: (TarArchiveInputStream) -> Uni
     Files.newInputStream(file).use { rawInput ->
         GZIPInputStream(rawInput).use { gzipInput ->
             TarArchiveInputStream(gzipInput).use(action)
-        }
-    }
-}
-
-inline fun openTarOutputStream(file: Path, action: (TarArchiveOutputStream) -> Unit) {
-    Files.newOutputStream(
-        file,
-        StandardOpenOption.CREATE,
-        StandardOpenOption.WRITE,
-        StandardOpenOption.TRUNCATE_EXISTING
-    ).use { rawOutput ->
-        GZIPOutputStream(rawOutput).use { gzipOutput ->
-            TarArchiveOutputStream(gzipOutput).use { tarOutputStream ->
-                tarOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX)
-                action.invoke(tarOutputStream)
-            }
         }
     }
 }
@@ -122,7 +103,7 @@ val targetDir = layout.buildDirectory.dir("target").get()
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 
 for (arch in arches) {
-    val createTask = tasks.create("createFor$arch") {
+    tasks.create("createFor$arch") {
         dependsOn(downloadIJ)
 
         val nativesZip = layout.projectDirectory.dir("resources").file("natives-linux-${arch.getName()}.zip")

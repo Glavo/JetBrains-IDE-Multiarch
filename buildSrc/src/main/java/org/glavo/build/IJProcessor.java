@@ -54,12 +54,17 @@ public final class IJProcessor implements Closeable {
                             helper.register(Files.newInputStream(baseTar))))));
             this.tarOutput = helper.register(new TarArchiveOutputStream(
                     helper.register(new GZIPOutputStream(
-                            helper.register(Files.newOutputStream(baseTar,
+                            helper.register(Files.newOutputStream(outTar,
                                     StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING))))));
+            tarOutput.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
         } catch (Throwable e) {
             helper.onException(e);
             throw e;
         }
+    }
+
+    private void copyJRE() throws IOException {
+        LOGGER.lifecycle("Copying JRE");
     }
 
     public void process() throws Throwable {
@@ -74,7 +79,7 @@ public final class IJProcessor implements Closeable {
 
         LOGGER.lifecycle("Processing {}", prefix);
 
-        var jbrPrefix = prefix + "/jbr";
+        var jbrPrefix = prefix + "jbr/";
 
         var set = EnumSet.allOf(IJFileProcessor.class);
         if (!productCode.equals("IU")) {
@@ -94,12 +99,20 @@ public final class IJProcessor implements Closeable {
             if (path.startsWith(jbrPrefix)) {
                 if (path.equals(jbrPrefix)) {
                     processedJbr = true;
-                    // TODO
+                    copyJRE();
                 } else {
+                    LOGGER.info("Skip JBR entry: {}", path);
                 }
             } else if (processors.get(path) instanceof IJFileProcessor processor) {
+                LOGGER.lifecycle("Processing {}", path);
                 processor.process(this, entry);
+                set.remove(processor);
+            } else if (entry.isSymbolicLink()) {
+                LOGGER.info("Copying symbolic link {} -> {}", path, entry.getLinkName());
+                tarOutput.putArchiveEntry(entry);
+                tarOutput.closeArchiveEntry();
             } else {
+                LOGGER.info("Copying {}", path);
                 tarOutput.putArchiveEntry(entry);
                 tarInput.transferTo(tarOutput);
                 tarOutput.closeArchiveEntry();
