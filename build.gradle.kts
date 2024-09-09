@@ -1,8 +1,12 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
+import java.util.zip.ZipFile
 import kotlin.io.path.exists
 import kotlin.io.path.outputStream
 
@@ -14,22 +18,32 @@ group = "org.glavo"
 version = property("idea.version") as String
 
 val downloadDir = layout.buildDirectory.dir("download").get()
-val baseArch = "aarch64"
+val baseArch = Arch.AARCH64
+val baseArchName = baseArch.getName()
 val ijProductCode = property("idea.product_code") as String
-val ijDir = downloadDir.dir("idea$ijProductCode-$version-$baseArch")
+val ijDir = downloadDir.dir("idea$ijProductCode-$version-$baseArchName")
 
 var downloadIJ = tasks.create<Download>("downloadIJ") {
-    src("https://download.jetbrains.com/idea/idea$ijProductCode-$version-$baseArch.tar.gz")
+    src("https://download.jetbrains.com/idea/idea$ijProductCode-$version-$baseArchName.tar.gz")
     dest(downloadDir)
     overwrite(false)
 }
 
-inline fun useIJTar(action: (TarArchiveInputStream) -> Unit) {
-    downloadIJ.outputFiles.first().inputStream().use { rawInput ->
+val ijTar: Path
+    get() = downloadIJ.outputFiles.first().toPath()
+
+inline fun openTarInputStream(file: Path, action: (TarArchiveInputStream) -> Unit) {
+    Files.newInputStream(file).use { rawInput ->
         GZIPInputStream(rawInput).use { gzipInput ->
-            TarArchiveInputStream(gzipInput).use { tar ->
-                action(tar)
-            }
+            TarArchiveInputStream(gzipInput).use(action)
+        }
+    }
+}
+
+inline fun openTarOutputStream(file: Path, action: (TarArchiveOutputStream) -> Unit) {
+    Files.newOutputStream(file, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING).use { rawOutput ->
+        GZIPOutputStream(rawOutput).use { gzipOutput ->
+            TarArchiveOutputStream(gzipOutput).use(action)
         }
     }
 }
@@ -47,7 +61,7 @@ tasks.create("extractIJ") {
         targetDir.toFile().deleteRecursively()
         Files.createDirectories(targetDir)
 
-        useIJTar { tar ->
+        openTarInputStream(ijTar) { tar ->
             val prefix = tar.nextEntry.let {
                 if (it == null || !it.isDirectory || it.name.count { ch -> ch == '/' } != 1) {
                     throw GradleException("Invalid directory entry: ${it.name}")
@@ -94,15 +108,27 @@ tasks.create("extractIJ") {
     }
 }
 
+val targetDir = layout.buildDirectory.dir("target").get()
+
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 
-for (platform in arches) {
-    tasks.create("createFor$platform") {
+for (arch in arches) {
+    tasks.create("createFor$arch") {
+        dependsOn(downloadIJ)
+
+        val nativesZip = layout.projectDirectory.dir("resources").file("natives-linux-${arch.getName()}.zip")
+        val output = targetDir.file("idea$ijProductCode-$version-${arch.getName()}.tar.gz")
+
+        inputs.files(ijTar, nativesZip)
+        outputs.file(output)
+
         doLast {
-            useIJTar { tar ->
-
-
-
+            openTarInputStream(ijTar) { baseTar ->
+                openTarOutputStream(output.asFile.toPath()) { targetTar ->
+                    ZipFile(nativesZip.asFile).use { nativesZipInput ->
+                        IJProcessor(baseArch, ijProductCode, baseTar, arch, nativesZipInput, targetTar).process()
+                    }
+                }
             }
         }
     }
