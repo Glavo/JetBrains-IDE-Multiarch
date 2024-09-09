@@ -94,7 +94,7 @@ enum IJFileProcessor {
                     foundVMOptions = true;
 
                     var args = MutableList.from(List.of(line.substring(0, line.length() - 1).trim().split(" ")));
-                    args.insert(1, "\"-Didea.filewatcher.executable.path=${IDE_HOME}/bin/fsnotifier\"");
+                    args.insert(1, "\"-Didea.filewatcher.executable.path=$IDE_HOME/bin/fsnotifier\"");
 
                     int idx = args.indexOf("\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch.getName() + "\"");
                     if (idx < 0) {

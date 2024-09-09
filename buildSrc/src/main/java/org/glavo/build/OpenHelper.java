@@ -12,9 +12,9 @@ final class OpenHelper {
     }
 
     void onException(Throwable exception) {
-        for (AutoCloseable closeable : allCloseable) {
+        for (int i = allCloseable.size() - 1; i >= 0; i--) {
             try {
-                closeable.close();
+                allCloseable.get(i).close();
             } catch (Throwable otherException) {
                 exception.addSuppressed(otherException);
             }
@@ -23,9 +23,9 @@ final class OpenHelper {
 
     void close() throws Exception {
         List<Throwable> exceptions = null;
-        for (AutoCloseable closeable : allCloseable) {
+        for (int i = allCloseable.size() - 1; i >= 0; i--) {
             try {
-                closeable.close();
+                allCloseable.get(i).close();
             } catch (Throwable otherException) {
                 if (exceptions == null)
                     exceptions = new ArrayList<>();
