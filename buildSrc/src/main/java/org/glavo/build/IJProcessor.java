@@ -4,51 +4,75 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.gradle.api.GradleException;
-import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 
+import java.io.Closeable;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipFile;
 
-public final class IJProcessor {
+public final class IJProcessor implements Closeable {
 
-    final Project project;
+    static final Logger LOGGER = Logging.getLogger(IJProcessor.class);
+
     final Task task;
     final Arch baseArch;
+    final Path baseTar;
     final String productCode;
-    final TarArchiveInputStream baseTar;
     final Arch arch;
-    final ZipFile nativesZip;
-    final TarArchiveOutputStream outTar;
+    final Path outTar;
 
-    public IJProcessor(Project project, Task task,
-                       Arch baseArch, String productCode, TarArchiveInputStream baseTar,
-                       Arch arch, ZipFile nativesZip, TarArchiveOutputStream outTar) {
-        this.project = project;
+    final String nativesZipName;
+    final ZipFile nativesZip;
+    final TarArchiveInputStream tarInput;
+    final TarArchiveOutputStream tarOutput;
+
+    public IJProcessor(Task task,
+                       Arch baseArch, String productCode, Path baseTar,
+                       Arch arch, Path nativesZipFile, Path outTar) throws Throwable {
         this.task = task;
         this.baseArch = baseArch;
         this.productCode = productCode;
         this.baseTar = baseTar;
         this.arch = arch;
-        this.nativesZip = nativesZip;
         this.outTar = outTar;
-    }
+        this.nativesZipName = nativesZipFile.getFileName().toString();
 
-    Logger getLogger() {
-        return project.getLogger();
+        var helper = new OpenHelper();
+        try {
+            this.nativesZip = helper.register(new ZipFile(nativesZipFile.toFile()));
+            this.tarInput = helper.register(new TarArchiveInputStream(
+                    helper.register(new GZIPInputStream(
+                            helper.register(Files.newInputStream(baseTar))))));
+            this.tarOutput = helper.register(new TarArchiveOutputStream(
+                    helper.register(new GZIPOutputStream(
+                            helper.register(Files.newOutputStream(baseTar,
+                                    StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING))))));
+        } catch (Throwable e) {
+            helper.onException(e);
+            throw e;
+        }
     }
 
     public void process() throws Throwable {
         String prefix;
         {
-            TarArchiveEntry it = baseTar.getNextEntry();
+            TarArchiveEntry it = tarInput.getNextEntry();
             if (it == null || !it.isDirectory()) {
                 throw new GradleException("Invalid directory entry: ${it.name}");
             }
             prefix = it.getName();
         }
+
+        LOGGER.lifecycle("Processing {}", prefix);
 
         var jbrPrefix = prefix + "/jbr";
 
@@ -64,21 +88,21 @@ public final class IJProcessor {
         }
 
         TarArchiveEntry entry;
-        while ((entry = baseTar.getNextEntry()) != null) {
+        while ((entry = tarInput.getNextEntry()) != null) {
             String path = entry.getName();
 
             if (path.startsWith(jbrPrefix)) {
                 if (path.equals(jbrPrefix)) {
                     processedJbr = true;
                     // TODO
+                } else {
                 }
-
             } else if (processors.get(path) instanceof IJFileProcessor processor) {
                 processor.process(this, entry);
             } else {
-                outTar.putArchiveEntry(entry);
-                baseTar.transferTo(outTar);
-                outTar.closeArchiveEntry();
+                tarOutput.putArchiveEntry(entry);
+                tarInput.transferTo(tarOutput);
+                tarOutput.closeArchiveEntry();
             }
         }
 
@@ -87,5 +111,10 @@ public final class IJProcessor {
         } else if (!processedJbr) {
             throw new GradleException("No JBR found");
         }
+    }
+
+    @Override
+    public void close() throws IOException {
+
     }
 }

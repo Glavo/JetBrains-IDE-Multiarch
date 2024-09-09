@@ -17,6 +17,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import static org.glavo.build.IJProcessor.LOGGER;
+
 enum IJFileProcessor {
     PRODUCT_INFO("product-info.json") {
         private static void processAdditionalJvmArguments(IJProcessor processor, JsonObject obj) {
@@ -43,7 +45,7 @@ enum IJFileProcessor {
                     .setPrettyPrinting()
                     .create();
 
-            JsonObject productInfo = gson.fromJson(new String(processor.baseTar.readAllBytes()), JsonObject.class);
+            JsonObject productInfo = gson.fromJson(new String(processor.tarInput.readAllBytes()), JsonObject.class);
             JsonObject result = new JsonObject();
 
             productInfo.asMap().forEach((key, value) -> {
@@ -72,9 +74,9 @@ enum IJFileProcessor {
 
             var bytes = gson.toJson(result).getBytes(StandardCharsets.UTF_8);
             entry.setSize(bytes.length);
-            processor.outTar.putArchiveEntry(entry);
-            processor.outTar.write(bytes);
-            processor.outTar.closeArchiveEntry();
+            processor.tarOutput.putArchiveEntry(entry);
+            processor.tarOutput.write(bytes);
+            processor.tarOutput.closeArchiveEntry();
         }
     },
     IDEA_SH("bin/idea.sh") {
@@ -83,7 +85,7 @@ enum IJFileProcessor {
             var result = new StringBuilder();
 
             boolean foundVMOptions = false;
-            for (String line : new String(processor.baseTar.readAllBytes()).lines().toList()) {
+            for (String line : new String(processor.tarInput.readAllBytes()).lines().toList()) {
                 if (line.contains("-Didea.vendor.name=JetBrains") && line.endsWith("\\")) {
                     if (foundVMOptions) {
                         throw new GradleException("Duplicate JVM options");
@@ -111,9 +113,9 @@ enum IJFileProcessor {
 
             var bytes = result.toString().getBytes(StandardCharsets.UTF_8);
             entry.setSize(bytes.length);
-            processor.outTar.putArchiveEntry(entry);
-            processor.outTar.write(bytes);
-            processor.outTar.closeArchiveEntry();
+            processor.tarOutput.putArchiveEntry(entry);
+            processor.tarOutput.write(bytes);
+            processor.tarOutput.closeArchiveEntry();
         }
     },
     UTIL_JAR("lib/util.jar") {
@@ -121,7 +123,7 @@ enum IJFileProcessor {
         void process(IJProcessor processor, TarArchiveEntry entry) throws Throwable {
             if (processor.arch == Arch.LOONGARCH64) {
                 var buffer = new ByteArrayOutputStream();
-                try (var input = new ZipInputStream(new ByteArrayInputStream(processor.baseTar.readAllBytes()));
+                try (var input = new ZipInputStream(new ByteArrayInputStream(processor.tarInput.readAllBytes()));
                      var output = new ZipOutputStream(buffer)) {
 
                     boolean foundOSFacadeImpl = false;
@@ -160,13 +162,13 @@ enum IJFileProcessor {
 
                 TarArchiveEntry newEntry = new TarArchiveEntry(path);
                 newEntry.setSize(buffer.size());
-                processor.outTar.putArchiveEntry(newEntry);
-                processor.outTar.write(buffer.toByteArray());
-                processor.outTar.closeArchiveEntry();
+                processor.tarOutput.putArchiveEntry(newEntry);
+                processor.tarOutput.write(buffer.toByteArray());
+                processor.tarOutput.closeArchiveEntry();
             } else {
-                processor.outTar.putArchiveEntry(entry);
-                processor.baseTar.transferTo(processor.outTar);
-                processor.outTar.closeArchiveEntry();
+                processor.tarOutput.putArchiveEntry(entry);
+                processor.tarInput.transferTo(processor.tarOutput);
+                processor.tarOutput.closeArchiveEntry();
             }
         }
     },
@@ -205,15 +207,17 @@ enum IJFileProcessor {
             throw new GradleException("Missing " + replacement);
         }
 
+        LOGGER.lifecycle("Replace {} with {}/{}", entry.getName(), processor.nativesZipName, replacement);
+
         entry.setSize(replacementEntry.getSize());
         entry.setCreationTime(replacementEntry.getCreationTime());
         entry.setLastModifiedTime(replacementEntry.getLastModifiedTime());
         entry.setLastAccessTime(replacementEntry.getLastAccessTime());
 
-        processor.outTar.putArchiveEntry(entry);
+        processor.tarOutput.putArchiveEntry(entry);
         try (var input = processor.nativesZip.getInputStream(replacementEntry)) {
-            input.transferTo(processor.outTar);
+            input.transferTo(processor.tarOutput);
         }
-        processor.outTar.closeArchiveEntry();
+        processor.tarOutput.closeArchiveEntry();
     }
 }

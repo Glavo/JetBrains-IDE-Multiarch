@@ -8,7 +8,6 @@ import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
-import java.util.zip.ZipFile
 import kotlin.io.path.exists
 import kotlin.io.path.outputStream
 
@@ -43,7 +42,12 @@ inline fun openTarInputStream(file: Path, action: (TarArchiveInputStream) -> Uni
 }
 
 inline fun openTarOutputStream(file: Path, action: (TarArchiveOutputStream) -> Unit) {
-    Files.newOutputStream(file, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING).use { rawOutput ->
+    Files.newOutputStream(
+        file,
+        StandardOpenOption.CREATE,
+        StandardOpenOption.WRITE,
+        StandardOpenOption.TRUNCATE_EXISTING
+    ).use { rawOutput ->
         GZIPOutputStream(rawOutput).use { gzipOutput ->
             TarArchiveOutputStream(gzipOutput).use { tarOutputStream ->
                 tarOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX)
@@ -128,17 +132,11 @@ for (arch in arches) {
         outputs.file(output)
 
         doLast {
-            openTarInputStream(ijTar) { baseTar ->
-                openTarOutputStream(output.asFile.toPath()) { targetTar ->
-                    ZipFile(nativesZip.asFile).use { nativesZipInput ->
-                        IJProcessor(
-                            project, this,
-                            baseArch, ijProductCode, baseTar,
-                            arch, nativesZipInput, targetTar
-                        ).process()
-                    }
-                }
-            }
+            IJProcessor(
+                this,
+                baseArch, ijProductCode, ijTar,
+                arch, nativesZip.asFile.toPath(), output.asFile.toPath()
+            ).process()
         }
     }
 }
