@@ -111,6 +111,10 @@ public final class IJProcessor implements AutoCloseable {
                 LOGGER.info("Copying symbolic link {} -> {}", path, entry.getLinkName());
                 tarOutput.putArchiveEntry(entry);
                 tarOutput.closeArchiveEntry();
+            } else if (entry.isDirectory()) {
+                LOGGER.info("Copying directory entry {}", path);
+                tarOutput.putArchiveEntry(entry);
+                tarOutput.closeArchiveEntry();
             } else {
                 LOGGER.info("Copying {}", path);
                 tarOutput.putArchiveEntry(entry);

@@ -117,7 +117,7 @@ for (arch in arches) {
                 this,
                 baseArch, ijProductCode, ijTar,
                 arch, nativesZip.asFile.toPath(), output.asFile.toPath()
-            ).apply { process() }
+            ).use { it.process() }
         }
     }
 }
