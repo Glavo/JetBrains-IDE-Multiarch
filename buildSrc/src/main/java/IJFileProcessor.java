@@ -134,19 +134,25 @@ enum IJFileProcessor {
                             //noinspection DataFlowIssue
                             Path replacement = Path.of(IJFileProcessor.class.getResource("OSFacadeImpl.class.bin").toURI());
                             FileTime time = Files.getLastModifiedTime(replacement);
+                            byte[] bytes = Files.readAllBytes(replacement);
+
                             ZipEntry newEntry = new ZipEntry(zipEntry.getName());
                             newEntry.setCreationTime(time);
                             newEntry.setLastModifiedTime(time);
-                            newEntry.setSize(Files.size(replacement));
+                            newEntry.setSize(bytes.length);
 
                             output.putNextEntry(newEntry);
-                            Files.copy(replacement, output);
+                            output.write(bytes);
                             output.close();
                         } else {
                             output.putNextEntry(zipEntry);
                             input.transferTo(output);
                             output.closeEntry();
                         }
+                    }
+
+                    if (!foundOSFacadeImpl) {
+                        throw new GradleException("OSFacadeImpl not found");
                     }
                 }
 
