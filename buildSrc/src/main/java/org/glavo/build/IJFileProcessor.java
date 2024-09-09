@@ -43,6 +43,7 @@ enum IJFileProcessor {
         void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
             var gson = new GsonBuilder()
                     .setPrettyPrinting()
+                    .disableHtmlEscaping()
                     .create();
 
             JsonObject productInfo = gson.fromJson(new String(processor.tarInput.readAllBytes()), JsonObject.class);
