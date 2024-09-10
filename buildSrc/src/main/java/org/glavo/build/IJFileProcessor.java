@@ -2,7 +2,6 @@ package org.glavo.build;
 
 import com.google.gson.*;
 import com.sun.jna.Native;
-import javafx.scene.shape.Arc;
 import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.gradle.api.GradleException;
@@ -172,7 +171,12 @@ enum IJFileProcessor {
         }
     },
     LOCAL_LAUNCHER("bin/idea", "xplat-launcher"),
-    REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher", true),
+    REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher") {
+        @Override
+        boolean isSupported(IJProcessor processor) {
+            return processor.productCode.equals("IU");
+        }
+    },
     FSNOTIFIER("bin/fsnotifier", "fsnotifier"),
     JNIDISPATCH("lib/jna/*/libjnidispatch.so", "libjnidispatch.so") {
         private static String getPath(Arch arch, String ijDirPrefix) {
@@ -207,22 +211,23 @@ enum IJFileProcessor {
 
     final String path;
     final String replacement;
-    final boolean iu;
 
     IJFileProcessor(String path) {
         this.path = path;
         this.replacement = null;
-        this.iu = false;
     }
 
     IJFileProcessor(String path, String replacement) {
-        this(path, replacement, false);
-    }
-
-    IJFileProcessor(String path, String replacement, boolean iu) {
         this.path = path;
         this.replacement = replacement;
-        this.iu = iu;
+    }
+
+    String getPath(IJProcessor processor, String ijDirPrefix) {
+        return ijDirPrefix + path;
+    }
+
+    boolean isSupported(IJProcessor processor) {
+        return true;
     }
 
     void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
@@ -243,9 +248,5 @@ enum IJFileProcessor {
             input.transferTo(processor.tarOutput);
         }
         processor.tarOutput.closeArchiveEntry();
-    }
-
-    String getPath(IJProcessor processor, String ijDirPrefix) {
-        return ijDirPrefix + path;
     }
 }

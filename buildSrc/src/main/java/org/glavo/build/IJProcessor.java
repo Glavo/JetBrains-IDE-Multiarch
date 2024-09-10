@@ -109,16 +109,17 @@ public final class IJProcessor implements AutoCloseable {
 
         var jbrPrefix = prefix + "jbr/";
 
-        var set = EnumSet.allOf(IJFileProcessor.class);
-        if (!productCode.equals("IU")) {
-            set.removeIf(it -> it.iu);
-        }
+        var set = EnumSet.noneOf(IJFileProcessor.class);
         var processors = new HashMap<String, IJFileProcessor>();
-        boolean processedJbr = false;
 
         for (IJFileProcessor processor : set) {
-            processors.put(processor.getPath(this, prefix), processor);
+            if (processor.isSupported(this)) {
+                set.add(processor);
+                processors.put(processor.getPath(this, prefix), processor);
+            }
         }
+
+        boolean processedJbr = false;
 
         TarArchiveEntry entry;
         while ((entry = tarInput.getNextEntry()) != null) {
