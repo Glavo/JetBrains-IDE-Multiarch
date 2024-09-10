@@ -69,7 +69,9 @@ public final class IJProcessor implements AutoCloseable {
         }
     }
 
-    private void copyJRE(TarArchiveInputStream jreTar) throws IOException {
+    private void copyJRE(String jbrPrefix, TarArchiveInputStream jreTar) throws IOException {
+        assert jreFile != null;
+
         TarArchiveEntry entry = jreTar.getNextEntry();
         if (entry == null) {
             throw new GradleException(jreFile + " is empty");
@@ -79,9 +81,19 @@ public final class IJProcessor implements AutoCloseable {
         }
 
         String prefix = entry.getName();
-        while ((entry = jreTar.getNextEntry()) != null) {
-            LOGGER.lifecycle(">>> {}", entry.getName());
-        }
+
+        do {
+            if (!entry.getName().startsWith(prefix)) {
+                throw new GradleException("Invalid directory entry: " + entry.getName());
+            }
+            String newName = jbrPrefix + entry.getName().substring(prefix.length());
+
+            LOGGER.info("Copying {}/{} to {}", jreFile.getFileName(), entry.getName(), newName);
+            entry.setName(newName);
+            tarOutput.putArchiveEntry(entry);
+            jreTar.transferTo(tarOutput);
+            tarOutput.closeArchiveEntry();
+        } while ((entry = jreTar.getNextEntry()) != null);
     }
 
     public void process() throws Throwable {
@@ -121,7 +133,7 @@ public final class IJProcessor implements AutoCloseable {
                     } else {
                         LOGGER.lifecycle("Copying JRE from {}", jreFile);
                         try (var jreTar = new TarArchiveInputStream(new GZIPInputStream(Files.newInputStream(jreFile)))) {
-                            copyJRE(jreTar);
+                            copyJRE(jbrPrefix, jreTar);
                         }
                     }
                 } else {
@@ -133,10 +145,6 @@ public final class IJProcessor implements AutoCloseable {
                 set.remove(processor);
             } else if (entry.isSymbolicLink()) {
                 LOGGER.info("Copying symbolic link {} -> {}", path, entry.getLinkName());
-                tarOutput.putArchiveEntry(entry);
-                tarOutput.closeArchiveEntry();
-            } else if (entry.isDirectory()) {
-                LOGGER.info("Copying directory entry {}", path);
                 tarOutput.putArchiveEntry(entry);
                 tarOutput.closeArchiveEntry();
             } else {
