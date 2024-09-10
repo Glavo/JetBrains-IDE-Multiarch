@@ -1,6 +1,8 @@
 package org.glavo.build;
 
 import com.google.gson.*;
+import com.sun.jna.Native;
+import javafx.scene.shape.Arc;
 import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.gradle.api.GradleException;
@@ -9,10 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.FileTime;
-import java.time.Instant;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -42,7 +40,7 @@ enum IJFileProcessor {
         }
 
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
+        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws IOException {
             var gson = new GsonBuilder()
                     .setPrettyPrinting()
                     .disableHtmlEscaping()
@@ -84,7 +82,7 @@ enum IJFileProcessor {
     },
     IDEA_SH("bin/idea.sh") {
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry) throws IOException {
+        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws IOException {
             var result = new StringBuilder();
 
             boolean foundVMOptions = false;
@@ -123,7 +121,7 @@ enum IJFileProcessor {
     },
     UTIL_JAR("lib/util.jar") {
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry) throws Throwable {
+        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
             if (processor.arch == Arch.LOONGARCH64) {
                 var buffer = new ByteArrayOutputStream();
                 try (var input = new ZipInputStream(new ByteArrayInputStream(processor.tarInput.readAllBytes()));
@@ -139,7 +137,7 @@ enum IJFileProcessor {
                             foundOSFacadeImpl = true;
 
                             byte[] bytes;
-                            try (var stream =IJFileProcessor.class.getResourceAsStream("OSFacadeImpl.class.bin")) {
+                            try (var stream = IJFileProcessor.class.getResourceAsStream("OSFacadeImpl.class.bin")) {
                                 //noinspection DataFlowIssue
                                 bytes = stream.readAllBytes();
                             }
@@ -176,7 +174,36 @@ enum IJFileProcessor {
     LOCAL_LAUNCHER("bin/idea", "xplat-launcher"),
     REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher", true),
     FSNOTIFIER("bin/fsnotifier", "fsnotifier"),
-    ;
+    JNIDISPATCH("lib/jna/*/libjnidispatch.so", "libjnidispatch.so") {
+        private static String getPath(Arch arch, String ijDirPrefix) {
+            return ijDirPrefix + "lib/jna/" + arch.normalize() + "/libjnidispatch.so";
+        }
+
+        @Override
+        String getPath(IJProcessor processor, String ijDirPrefix) {
+            return getPath(processor.baseArch, ijDirPrefix);
+        }
+
+        @Override
+        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
+            LOGGER.lifecycle("Replace libjnidispatch.so ({} -> {})", getPath(processor.baseArch, ijDirPrefix), getPath(processor.arch, ijDirPrefix));
+
+            String jniDispatchPath = "linux-%s/libjnidispatch.so".formatted(processor.arch.normalize());
+            byte[] bytes;
+            try (var stream = Native.class.getResourceAsStream(jniDispatchPath)) {
+                if (stream == null) {
+                    throw new GradleException(jniDispatchPath + " not found");
+                }
+
+                bytes = stream.readAllBytes();
+            }
+
+            var newEntry = Utils.copyTarEntry(entry, getPath(processor.arch, ijDirPrefix), bytes.length);
+            processor.tarOutput.putArchiveEntry(newEntry);
+            processor.tarOutput.write(bytes);
+            processor.tarOutput.closeArchiveEntry();
+        }
+    };
 
     final String path;
     final String replacement;
@@ -198,28 +225,27 @@ enum IJFileProcessor {
         this.iu = iu;
     }
 
-    void process(IJProcessor processor, TarArchiveEntry entry) throws Throwable {
+    void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
         if (replacement == null) {
             throw new AssertionError("replacement is null");
         }
+
+        LOGGER.info("Replace {} with {}/{}", entry.getName(), processor.nativesZipName, replacement);
 
         ZipEntry replacementEntry = processor.nativesZip.getEntry(replacement);
         if (replacementEntry == null) {
             throw new GradleException("Missing " + replacement);
         }
 
-        LOGGER.info("Replace {} with {}/{}", entry.getName(), processor.nativesZipName, replacement);
-
-        var newEntry = new TarArchiveEntry(entry.getName());
-        newEntry.setSize(replacementEntry.getSize());
-        newEntry.setCreationTime(replacementEntry.getCreationTime());
-        newEntry.setLastModifiedTime(replacementEntry.getLastModifiedTime());
-        newEntry.setLastAccessTime(replacementEntry.getLastAccessTime());
-
+        var newEntry = Utils.copyTarEntry(entry, replacementEntry.getSize());
         processor.tarOutput.putArchiveEntry(newEntry);
         try (var input = processor.nativesZip.getInputStream(replacementEntry)) {
             input.transferTo(processor.tarOutput);
         }
         processor.tarOutput.closeArchiveEntry();
+    }
+
+    String getPath(IJProcessor processor, String ijDirPrefix) {
+        return ijDirPrefix + path;
     }
 }

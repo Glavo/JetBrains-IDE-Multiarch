@@ -117,7 +117,7 @@ public final class IJProcessor implements AutoCloseable {
         boolean processedJbr = false;
 
         for (IJFileProcessor processor : set) {
-            processors.put(prefix + processor.path, processor);
+            processors.put(processor.getPath(this, prefix), processor);
         }
 
         TarArchiveEntry entry;
@@ -140,7 +140,7 @@ public final class IJProcessor implements AutoCloseable {
                 }
             } else if (processors.get(path) instanceof IJFileProcessor processor) {
                 LOGGER.lifecycle("Processing {}", path);
-                processor.process(this, entry);
+                processor.process(this, entry, prefix);
                 set.remove(processor);
             } else if (entry.isSymbolicLink()) {
                 LOGGER.info("Copying symbolic link {} -> {}", path, entry.getLinkName());
