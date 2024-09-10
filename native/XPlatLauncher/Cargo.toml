@@ -55,11 +55,11 @@ winresource = "0.1.17"
 
 [package.metadata.winresource]
 CompanyName = "JetBrains s.r.o."
-FileDescription = "IntelliJ org.glavo.build.Platform Windows Launcher"
+FileDescription = "IntelliJ Platform Windows Launcher"
 LegalCopyright = "Copyright 2000-2024 JetBrains s.r.o."
 InternalName = "WinLauncher.exe"
 OriginalFilename = "WinLauncher.exe"
-ProductName = "IntelliJ org.glavo.build.Platform"
+ProductName = "IntelliJ Platform"
 
 [dev-dependencies]
 tempfile = "3.10.1"
