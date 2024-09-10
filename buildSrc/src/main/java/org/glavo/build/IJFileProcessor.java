@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -137,19 +138,18 @@ enum IJFileProcessor {
                             }
                             foundOSFacadeImpl = true;
 
-                            //noinspection DataFlowIssue
-                            Path replacement = Path.of(IJFileProcessor.class.getResource("OSFacadeImpl.class.bin").toURI());
-                            FileTime time = Files.getLastModifiedTime(replacement);
-                            byte[] bytes = Files.readAllBytes(replacement);
+                            byte[] bytes;
+                            try (var stream =IJFileProcessor.class.getResourceAsStream("OSFacadeImpl.class.bin")) {
+                                //noinspection DataFlowIssue
+                                bytes = stream.readAllBytes();
+                            }
 
                             ZipEntry newEntry = new ZipEntry(zipEntry.getName());
-                            newEntry.setCreationTime(time);
-                            newEntry.setLastModifiedTime(time);
                             newEntry.setSize(bytes.length);
 
                             output.putNextEntry(newEntry);
                             output.write(bytes);
-                            output.close();
+                            output.closeEntry();
                         } else {
                             output.putNextEntry(zipEntry);
                             input.transferTo(output);
