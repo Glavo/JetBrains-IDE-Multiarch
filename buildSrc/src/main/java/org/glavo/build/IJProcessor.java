@@ -112,7 +112,7 @@ public final class IJProcessor implements AutoCloseable {
         var set = EnumSet.noneOf(IJFileProcessor.class);
         var processors = new HashMap<String, IJFileProcessor>();
 
-        for (IJFileProcessor processor : set) {
+        for (IJFileProcessor processor : IJFileProcessor.values()) {
             if (processor.isSupported(this)) {
                 set.add(processor);
                 processors.put(processor.getPath(this, prefix), processor);

@@ -178,7 +178,7 @@ enum IJFileProcessor {
         }
     },
     FSNOTIFIER("bin/fsnotifier", "fsnotifier"),
-    JNIDISPATCH("lib/jna/*/libjnidispatch.so", "libjnidispatch.so") {
+    LIBJNIDISPATCH("lib/jna/$ARCH/libjnidispatch.so", "libjnidispatch.so") {
         private static String getPath(Arch arch, String ijDirPrefix) {
             return ijDirPrefix + "lib/jna/" + arch.normalize() + "/libjnidispatch.so";
         }
@@ -205,6 +205,34 @@ enum IJFileProcessor {
             var newEntry = Utils.copyTarEntry(entry, getPath(processor.arch, ijDirPrefix), bytes.length);
             processor.tarOutput.putArchiveEntry(newEntry);
             processor.tarOutput.write(bytes);
+            processor.tarOutput.closeArchiveEntry();
+        }
+    },
+    LIBPTY("lib/pty4j/linux/$ARCH/libpty.so", "libpty.so") {
+        private static String getPath(Arch arch, String ijDirPrefix) {
+            return ijDirPrefix + "lib/pty4j/linux/" + arch.normalize() + "/libpty.so";
+        }
+
+        @Override
+        String getPath(IJProcessor processor, String ijDirPrefix) {
+            return getPath(processor.baseArch, ijDirPrefix);
+        }
+
+        @Override
+        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
+            LOGGER.lifecycle("Replace libpty.so ({} -> {})", getPath(processor.baseArch, ijDirPrefix), getPath(processor.arch, ijDirPrefix));
+
+            //noinspection DataFlowIssue
+            ZipEntry replacementEntry = processor.nativesZip.getEntry(replacement);
+            if (replacementEntry == null) {
+                throw new GradleException("Missing " + replacement);
+            }
+
+            var newEntry = Utils.copyTarEntry(entry, getPath(processor.arch, ijDirPrefix), replacementEntry.getSize());
+            processor.tarOutput.putArchiveEntry(newEntry);
+            try (var input = processor.nativesZip.getInputStream(replacementEntry)) {
+                input.transferTo(processor.tarOutput);
+            }
             processor.tarOutput.closeArchiveEntry();
         }
     };
