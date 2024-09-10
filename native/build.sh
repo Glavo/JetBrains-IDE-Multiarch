@@ -48,6 +48,13 @@ go build -C repair-utility -o "$OUTPUT_DIR/repair"
 cargo build --release --manifest-path="$NATIVE_DIR/XPlatLauncher/Cargo.toml"
 cp "$NATIVE_DIR/XPlatLauncher/target/release/xplat-launcher" "$OUTPUT_DIR/xplat-launcher"
 
+## pty4j
+PTY4J_DIR="$NATIVE_DIR/pty4j"
+$CC -shared -o "$OUTPUT_DIR/libpty.so" -fPIC -D_REENTRANT -D_GNU_SOURCE -I "$PTY4J_DIR" \
+  "$PTY4J_DIR/exec_pty.c" \
+  "$PTY4J_DIR/openpty.c" \
+  "$PTY4J_DIR/pfind.c"
+
 ## package
 NATIVES_ZIP="natives-linux-$OS_ARCH.zip"
 rm -f "$NATIVES_ZIP"
