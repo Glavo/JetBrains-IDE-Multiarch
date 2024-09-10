@@ -1,5 +1,6 @@
 package org.glavo.build;
 
+import kala.collection.primitive.CharSeq;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -7,6 +8,7 @@ import org.gradle.api.GradleException;
 import org.gradle.api.Task;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,6 +29,7 @@ public final class IJProcessor implements AutoCloseable {
     final Path baseTar;
     final String productCode;
     final Arch arch;
+    final @Nullable Path jreFile;
     final Path outTar;
 
     final String nativesZipName;
@@ -38,12 +41,15 @@ public final class IJProcessor implements AutoCloseable {
 
     public IJProcessor(Task task,
                        Arch baseArch, String productCode, Path baseTar,
-                       Arch arch, Path nativesZipFile, Path outTar) throws Throwable {
+                       Arch arch, Path nativesZipFile,
+                       @Nullable Path jreFile,
+                       Path outTar) throws Throwable {
         this.task = task;
         this.baseArch = baseArch;
         this.productCode = productCode;
         this.baseTar = baseTar;
         this.arch = arch;
+        this.jreFile = jreFile;
         this.outTar = outTar;
         this.nativesZipName = nativesZipFile.getFileName().toString();
 
@@ -63,8 +69,19 @@ public final class IJProcessor implements AutoCloseable {
         }
     }
 
-    private void copyJRE() throws IOException {
-        LOGGER.lifecycle("Copying JRE");
+    private void copyJRE(TarArchiveInputStream jreTar) throws IOException {
+        TarArchiveEntry entry = jreTar.getNextEntry();
+        if (entry == null) {
+            throw new GradleException(jreFile + " is empty");
+        }
+        if (!entry.isDirectory() || entry.getName().chars().filter(c -> c == '/').count() != 1) {
+            throw new GradleException("Invalid directory entry: " + entry.getName());
+        }
+
+        String prefix = entry.getName();
+        while ((entry = jreTar.getNextEntry()) != null) {
+            LOGGER.lifecycle(">>> {}", entry.getName());
+        }
     }
 
     public void process() throws Throwable {
@@ -99,7 +116,14 @@ public final class IJProcessor implements AutoCloseable {
             if (path.startsWith(jbrPrefix)) {
                 if (path.equals(jbrPrefix)) {
                     processedJbr = true;
-                    copyJRE();
+                    if (jreFile == null) {
+                        LOGGER.warn("No JRE provided");
+                    } else {
+                        LOGGER.lifecycle("Copying JRE from {}", jreFile);
+                        try (var jreTar = new TarArchiveInputStream(new GZIPInputStream(Files.newInputStream(jreFile)))) {
+                            copyJRE(jreTar);
+                        }
+                    }
                 } else {
                     LOGGER.info("Skip JBR entry: {}", path);
                 }

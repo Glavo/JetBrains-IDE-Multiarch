@@ -6,7 +6,6 @@
 * [repair-utility](./repair-utility): `5b258db4987eb9de11949fe29baa52e9437f3db8`
 * [XPlatLauncher](./XPlatLauncher): `d23d55e2a83ac98bf5921760d237991eff3bfbc1`
   * [Cargo.toml](./XPlatLauncher/Cargo.toml): L24~L25
-
   
 ## [pty4j](https://github.com/JetBrains/pty4j/tree/master/native)
 

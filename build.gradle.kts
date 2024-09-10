@@ -17,7 +17,7 @@ version = property("idea.version") as String
 
 val downloadDir = layout.buildDirectory.dir("download").get()
 val baseArch = Arch.AARCH64
-val baseArchName = baseArch.getName()
+val baseArchName = baseArch.normalize()
 val ijProductCode = property("idea.product_code") as String
 val ijDir = downloadDir.dir("idea$ijProductCode-$version-$baseArchName")
 
@@ -103,11 +103,24 @@ val targetDir = layout.buildDirectory.dir("target").get()
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 
 for (arch in arches) {
+    val downloadJRE = findProperty("idea.jdk.linux.${arch.normalize()}.url")?.let { url ->
+        tasks.create<Download>("downloadJREFor${arch.normalize()}") {
+            src(url)
+            dest(downloadDir)
+            overwrite(false)
+        }
+    }
+
     tasks.create("createFor$arch") {
         dependsOn(downloadIJ)
 
-        val nativesZip = layout.projectDirectory.dir("resources").file("natives-linux-${arch.getName()}.zip")
-        val output = targetDir.file("idea$ijProductCode-$version-${arch.getName()}.tar.gz")
+        val jreFile = downloadJRE?.let {
+            dependsOn(it)
+            it.outputFiles.first().toPath()
+        }
+
+        val nativesZip = layout.projectDirectory.dir("resources").file("natives-linux-${arch.normalize()}.zip")
+        val output = targetDir.file("idea$ijProductCode-$version-${arch.normalize()}.tar.gz")
 
         inputs.files(ijTar, nativesZip)
         outputs.file(output)
@@ -116,7 +129,8 @@ for (arch in arches) {
             IJProcessor(
                 this,
                 baseArch, ijProductCode, ijTar,
-                arch, nativesZip.asFile.toPath(), output.asFile.toPath()
+                arch, nativesZip.asFile.toPath(), jreFile,
+                output.asFile.toPath()
             ).use { it.process() }
         }
     }

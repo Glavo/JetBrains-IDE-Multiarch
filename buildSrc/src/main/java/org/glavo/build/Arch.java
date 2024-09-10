@@ -7,7 +7,7 @@ public enum Arch {
     RISCV64,
     LOONGARCH64;
 
-    public String getName() {
+    public String normalize() {
         return this.name().toLowerCase(Locale.ROOT);
     }
 }

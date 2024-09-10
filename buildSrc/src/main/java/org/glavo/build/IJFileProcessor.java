@@ -27,13 +27,13 @@ enum IJFileProcessor {
                 return;
             }
 
-            var arg = "-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch.getName();
+            var arg = "-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch.normalize();
 
             JsonArray additionalJvmArguments = additionalJvmArgumentsElement.getAsJsonArray();
             for (int i = 0; i < additionalJvmArguments.size(); i++) {
                 JsonElement element = additionalJvmArguments.get(i);
                 if (element.getAsString().equals(arg)) {
-                    additionalJvmArguments.set(i, new JsonPrimitive("-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.arch.getName()));
+                    additionalJvmArguments.set(i, new JsonPrimitive("-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.arch.normalize()));
                     return;
                 }
             }
@@ -60,7 +60,7 @@ enum IJFileProcessor {
                     }
 
                     var launch = launchArray.get(0).getAsJsonObject();
-                    launch.addProperty("arch", processor.arch.getName());
+                    launch.addProperty("arch", processor.arch.normalize());
                     processAdditionalJvmArguments(processor, launch);
 
                     for (JsonElement element : launch.getAsJsonArray("customCommands")) {
@@ -74,8 +74,7 @@ enum IJFileProcessor {
             });
 
             var bytes = gson.toJson(result).getBytes(StandardCharsets.UTF_8);
-            var newEntry = new TarArchiveEntry(entry.getName());
-            newEntry.setSize(bytes.length);
+            var newEntry = Utils.copyTarEntry(entry, bytes.length);
             processor.tarOutput.putArchiveEntry(newEntry);
             processor.tarOutput.write(bytes);
             processor.tarOutput.closeArchiveEntry();
@@ -97,11 +96,11 @@ enum IJFileProcessor {
                     var args = MutableList.from(List.of(line.substring(0, line.length() - 1).trim().split(" ")));
                     args.insert(1, "\"-Didea.filewatcher.executable.path=$IDE_HOME/bin/fsnotifier\"");
 
-                    int idx = args.indexOf("\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch.getName() + "\"");
+                    int idx = args.indexOf("\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.baseArch.normalize() + "\"");
                     if (idx < 0) {
                         throw new GradleException("Missing jna option");
                     }
-                    args.set(idx, "\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.arch.getName() + "\"");
+                    args.set(idx, "\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.arch.normalize() + "\"");
                     args.joinTo(result, " ", "  ", " \\\n");
                 } else {
                     result.append(line);
@@ -114,8 +113,7 @@ enum IJFileProcessor {
             }
 
             var bytes = result.toString().getBytes(StandardCharsets.UTF_8);
-            var newEntry = new TarArchiveEntry(entry.getName());
-            newEntry.setSize(bytes.length);
+            var newEntry = Utils.copyTarEntry(entry, bytes.length);
             processor.tarOutput.putArchiveEntry(newEntry);
             processor.tarOutput.write(bytes);
             processor.tarOutput.closeArchiveEntry();
@@ -163,8 +161,7 @@ enum IJFileProcessor {
                     }
                 }
 
-                TarArchiveEntry newEntry = new TarArchiveEntry(path);
-                newEntry.setSize(buffer.size());
+                var newEntry = Utils.copyTarEntry(entry, buffer.size());
                 processor.tarOutput.putArchiveEntry(newEntry);
                 processor.tarOutput.write(buffer.toByteArray());
                 processor.tarOutput.closeArchiveEntry();
