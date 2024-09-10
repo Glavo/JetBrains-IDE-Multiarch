@@ -1,6 +1,5 @@
 package org.glavo.build;
 
-import kala.collection.primitive.CharSeq;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;

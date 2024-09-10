@@ -34,6 +34,7 @@ enum IJFileProcessor {
                 JsonElement element = additionalJvmArguments.get(i);
                 if (element.getAsString().equals(arg)) {
                     additionalJvmArguments.set(i, new JsonPrimitive("-Djna.boot.library.path=$IDE_HOME/lib/jna/" + processor.arch.normalize()));
+                    additionalJvmArguments.asList().add(i + 1, new JsonPrimitive("-Didea.filewatcher.executable.path=$IDE_HOME/bin/fsnotifier"));
                     return;
                 }
             }
