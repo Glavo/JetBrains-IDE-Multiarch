@@ -75,11 +75,13 @@ public final class IJProcessor implements AutoCloseable {
         if (entry == null) {
             throw new GradleException(jreFile + " is empty");
         }
-        if (!entry.isDirectory() || entry.getName().chars().filter(c -> c == '/').count() != 1) {
-            throw new GradleException("Invalid directory entry: " + entry.getName());
+
+        int idx = entry.getName().indexOf('/');
+        if (idx < 0) {
+            throw new GradleException("Invalid first entry: " + entry.getName());
         }
 
-        String prefix = entry.getName();
+        String prefix = entry.getName().substring(0, idx + 1);
 
         do {
             if (!entry.getName().startsWith(prefix)) {

@@ -119,11 +119,16 @@ for (arch in arches) {
             it.outputFiles.first().toPath()
         }
 
+        val versionAdditional = project.property("idea.version.additional") as String
         val nativesZip = layout.projectDirectory.dir("resources").file("natives-linux-${arch.normalize()}.zip")
-        val output = targetDir.file("idea$ijProductCode-$version-${arch.normalize()}.tar.gz")
+        val output = targetDir.file("idea$ijProductCode-$version+$versionAdditional-${arch.normalize()}.tar.gz")
 
         inputs.files(ijTar, nativesZip)
         outputs.file(output)
+
+        if (jreFile != null) {
+            inputs.file(jreFile)
+        }
 
         doLast {
             IJProcessor(
