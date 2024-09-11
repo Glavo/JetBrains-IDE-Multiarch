@@ -4,4 +4,8 @@ This project provides IntelliJ IDEA distribution for Linux LoongArch64 and Linux
 
 ## Download
 
-See the [release page.
+See the [release page](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases).
+
+## TODO
+
+* Distributed with JBR.
