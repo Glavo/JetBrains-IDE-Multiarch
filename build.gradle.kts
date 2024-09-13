@@ -2,6 +2,7 @@ import de.undercouch.gradle.tasks.download.Download
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.glavo.build.Arch
 import org.glavo.build.IJProcessor
+import org.glavo.build.tasks.GenerateReadMe
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.zip.GZIPInputStream
@@ -139,4 +140,10 @@ for (arch in arches) {
             ).use { it.process() }
         }
     }
+}
+
+tasks.create<GenerateReadMe>("generateReadMe") {
+    templateFile.set(project.file("README.md.template"))
+    propertiesFile.set(project.file("README.properties"))
+    outputFile.set(project.file("README.md"))
 }

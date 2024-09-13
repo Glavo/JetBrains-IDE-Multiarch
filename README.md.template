@@ -1,0 +1,25 @@
+# IntelliJ IDEA for Linux LoongArch64/RISC-V 64
+
+This project provides IntelliJ IDEA distributions for more architectures. 
+
+Currently supported platforms:
+
+* Linux LoongArch64 (New World)
+* Linux RISC-V 64
+
+## Download
+
+Download IntelliJ IDEA Community Edition ${idea.version}: 
+
+* Linux LoongArch64: [ideaIC-${idea.version}+${idea.version.additional}-loongarch64.tar.gz](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases/download/idea%2F${idea.version}%2B${idea.version.additional}/ideaIC-${idea.version}+${idea.version.additional}-loongarch64.tar.gz) 
+* Linux RISC-V 64: [ideaIC-${idea.version}+${idea.version.additional}-riscv64.tar.gz](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases/download/idea%2F${idea.version}%2B${idea.version.additional}/ideaIC-${idea.version}+${idea.version.additional}-riscv64.tar.gz)
+
+## To-do list
+
+* Distributed with JBR.
+
+## Especially thanks
+
+<img alt="PLCT Logo" src="./PLCT.svg" width="200" height="200">
+
+Thanks to [PLCT Lab](https://plctlab.org) for supporting me.

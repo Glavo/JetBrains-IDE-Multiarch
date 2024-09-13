@@ -9,7 +9,10 @@ Currently supported platforms:
 
 ## Download
 
-See the [release page](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases).
+Download IntelliJ IDEA Community Edition 2024.2.1: 
+
+* Linux LoongArch64: [ideaIC-2024.2.1+0-loongarch64.tar.gz](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases/download/idea%2F2024.2.1%2B0/ideaIC-2024.2.1+0-loongarch64.tar.gz) 
+* Linux RISC-V 64: [ideaIC-2024.2.1+0-riscv64.tar.gz](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases/download/idea%2F2024.2.1%2B0/ideaIC-2024.2.1+0-riscv64.tar.gz)
 
 ## To-do list
 
