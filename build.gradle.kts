@@ -143,7 +143,7 @@ for (arch in arches) {
 }
 
 tasks.create<GenerateReadMe>("generateReadMe") {
-    templateFile.set(project.file("README.md.template"))
-    propertiesFile.set(project.file("README.properties"))
+    templateFile.set(project.file("template/README.md.template"))
+    propertiesFile.set(project.file("template/README.properties"))
     outputFile.set(project.file("README.md"))
 }
