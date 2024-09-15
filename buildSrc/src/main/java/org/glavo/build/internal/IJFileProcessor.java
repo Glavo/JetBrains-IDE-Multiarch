@@ -150,7 +150,7 @@ enum IJFileProcessor {
                             output.closeEntry();
                         } else {
                             output.putNextEntry(zipEntry);
-                            input.transferTo(output);
+                            processor.copy(input, output);
                             output.closeEntry();
                         }
                     }
@@ -166,7 +166,7 @@ enum IJFileProcessor {
                 processor.tarOutput.closeArchiveEntry();
             } else {
                 processor.tarOutput.putArchiveEntry(entry);
-                processor.tarInput.transferTo(processor.tarOutput);
+                processor.copy(processor.tarInput, processor.tarOutput);
                 processor.tarOutput.closeArchiveEntry();
             }
         }
@@ -234,7 +234,7 @@ enum IJFileProcessor {
             var newEntry = Utils.copyTarEntry(entry, getPath(processor.arch, ijDirPrefix), replacementEntry.getSize());
             processor.tarOutput.putArchiveEntry(newEntry);
             try (var input = processor.nativesZip.getInputStream(replacementEntry)) {
-                input.transferTo(processor.tarOutput);
+                processor.copy(input, processor.tarOutput);
             }
             processor.tarOutput.closeArchiveEntry();
         }
@@ -276,7 +276,7 @@ enum IJFileProcessor {
         var newEntry = Utils.copyTarEntry(entry, replacementEntry.getSize());
         processor.tarOutput.putArchiveEntry(newEntry);
         try (var input = processor.nativesZip.getInputStream(replacementEntry)) {
-            input.transferTo(processor.tarOutput);
+            processor.copy(input, processor.tarOutput);
         }
         processor.tarOutput.closeArchiveEntry();
     }

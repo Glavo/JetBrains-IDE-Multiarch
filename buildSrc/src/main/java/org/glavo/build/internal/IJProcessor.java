@@ -12,6 +12,8 @@ import org.gradle.api.logging.Logging;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -37,6 +39,9 @@ public final class IJProcessor implements AutoCloseable {
     final ZipFile nativesZip;
     final TarArchiveInputStream tarInput;
     final TarArchiveOutputStream tarOutput;
+
+    private static final int BUFFER_SIZE = 32 * 1024;
+    private final byte[] buffer = new byte[BUFFER_SIZE];
 
     private final OpenHelper helper = new OpenHelper();
 
@@ -66,6 +71,13 @@ public final class IJProcessor implements AutoCloseable {
         }
     }
 
+    void copy(InputStream input, OutputStream output) throws IOException {
+        int read;
+        while ((read = input.read(buffer, 0, BUFFER_SIZE)) >= 0) {
+            output.write(buffer, 0, read);
+        }
+    }
+
     private void copyJRE(String jbrPrefix, TarArchiveInputStream jreTar) throws IOException {
         assert jreFile != null;
 
@@ -90,7 +102,7 @@ public final class IJProcessor implements AutoCloseable {
             LOGGER.info("Copying {}/{} to {}", jreFile.getFileName(), entry.getName(), newName);
             entry.setName(newName);
             tarOutput.putArchiveEntry(entry);
-            jreTar.transferTo(tarOutput);
+            copy(jreTar, tarOutput);
             tarOutput.closeArchiveEntry();
         } while ((entry = jreTar.getNextEntry()) != null);
     }
@@ -150,7 +162,7 @@ public final class IJProcessor implements AutoCloseable {
             } else {
                 LOGGER.info("Copying {}", path);
                 tarOutput.putArchiveEntry(entry);
-                tarInput.transferTo(tarOutput);
+                copy(tarInput, tarOutput);
                 tarOutput.closeArchiveEntry();
             }
         }
