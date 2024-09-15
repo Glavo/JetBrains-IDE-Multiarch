@@ -8,5 +8,3 @@ Exec=${idea.path}/bin/idea %F
 Icon=${idea.path}/bin/idea.svg
 Categories=TextEditor;Development;IDE;Java;Kotlin;
 Keywords=jetbrains;intellij;idea;java;kotlin;ide
-
-[Desktop Action new-]

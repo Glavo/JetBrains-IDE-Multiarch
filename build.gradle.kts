@@ -66,3 +66,4 @@ tasks.create<GenerateReadMe>("generateReadMe") {
     propertiesFile.set(project.file("template/README.properties"))
     outputFile.set(project.file("README.md"))
 }
+
