@@ -28,21 +28,13 @@ var downloadIJ = tasks.create<Download>("downloadIJ") {
     overwrite(false)
 }
 
-val ijTar: Path
-    get() = downloadIJ.outputFiles.first().toPath()
-
-inline fun openTarInputStream(file: Path, action: (TarArchiveInputStream) -> Unit) {
-    Files.newInputStream(file).use { rawInput ->
-        GZIPInputStream(rawInput).use { gzipInput ->
-            TarArchiveInputStream(gzipInput).use(action)
-        }
-    }
-}
+val ijTar: File
+    get() = downloadIJ.outputFiles.first()
 
 tasks.create<ExtractIntelliJ>("extractIntelliJ") {
     dependsOn(downloadIJ)
 
-    sourceFile.set(ijTar.toFile())
+    sourceFile.set(ijTar)
     targetDir.set(ijDir.asFile)
 }
 
@@ -66,7 +58,7 @@ for (targetArch in arches) {
 
         baseArch.set(ijBaseArch)
         productCode.set(ijProductCode)
-        baseTar.set(ijTar.toFile())
+        baseTar.set(ijTar)
 
         arch.set(targetArch)
         nativesZipFile.set(layout.projectDirectory.dir("resources").file("natives-linux-${targetArch.normalize()}.zip").asFile)
