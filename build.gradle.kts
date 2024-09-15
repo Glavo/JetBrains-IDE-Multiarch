@@ -1,12 +1,8 @@
 import de.undercouch.gradle.tasks.download.Download
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.glavo.build.Arch
 import org.glavo.build.tasks.ExtractIntelliJ
 import org.glavo.build.tasks.GenerateReadMe
 import org.glavo.build.tasks.TransformIntelliJ
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.zip.GZIPInputStream
 
 plugins {
     id("de.undercouch.download") version "5.6.0"
