@@ -180,6 +180,7 @@ enum IJFileProcessor {
     },
     FSNOTIFIER("bin/fsnotifier", "fsnotifier"),
     RESTARTER("bin/restarter", "restarter"),
+    LIBDBM("bin/libdbm.so", "libdbm.so"),
     LIBJNIDISPATCH("lib/jna/$ARCH/libjnidispatch.so", "libjnidispatch.so") {
         private static String getPath(Arch arch, String ijDirPrefix) {
             return ijDirPrefix + "lib/jna/" + arch.normalize() + "/libjnidispatch.so";
