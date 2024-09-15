@@ -13,13 +13,12 @@ version = property("idea.version") as String
 
 val downloadDir = layout.buildDirectory.dir("download").get()
 val ijBaseArch = Arch.AARCH64
-val ijBaseArchName = ijBaseArch.normalize()
 val ijProductCode = property("idea.product_code") as String
-val ijDir = downloadDir.dir("idea$ijProductCode-$version-$ijBaseArchName")
 val ijVersionAdditional = project.property("idea.version.additional") as String
+val ijFileNameBase = "idea$ijProductCode-$version-${ijBaseArch.normalize()}"
 
 var downloadIJ = tasks.create<Download>("downloadIJ") {
-    src("https://download.jetbrains.com/idea/idea$ijProductCode-$version-$ijBaseArchName.tar.gz")
+    src("https://download.jetbrains.com/idea/$ijFileNameBase.tar.gz")
     dest(downloadDir)
     overwrite(false)
 }
@@ -31,7 +30,7 @@ tasks.create<ExtractIntelliJ>("extractIntelliJ") {
     dependsOn(downloadIJ)
 
     sourceFile.set(ijTar)
-    targetDir.set(ijDir.asFile)
+    targetDir.set(downloadDir.dir(ijFileNameBase).asFile)
 }
 
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
