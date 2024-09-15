@@ -1,8 +1,10 @@
-package org.glavo.build;
+package org.glavo.build.internal;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.glavo.build.Arch;
+import org.glavo.build.tasks.TransformIntelliJ;
 import org.gradle.api.GradleException;
 import org.gradle.api.Task;
 import org.gradle.api.logging.Logger;
@@ -38,22 +40,18 @@ public final class IJProcessor implements AutoCloseable {
 
     private final OpenHelper helper = new OpenHelper();
 
-    public IJProcessor(Task task,
-                       Arch baseArch, String productCode, Path baseTar,
-                       Arch arch, Path nativesZipFile,
-                       @Nullable Path jreFile,
-                       Path outTar) throws Throwable {
+    public IJProcessor(TransformIntelliJ task) throws Throwable {
         this.task = task;
-        this.baseArch = baseArch;
-        this.productCode = productCode;
-        this.baseTar = baseTar;
-        this.arch = arch;
-        this.jreFile = jreFile;
-        this.outTar = outTar;
-        this.nativesZipName = nativesZipFile.getFileName().toString();
+        this.baseArch = task.getBaseArch().get();
+        this.productCode = task.getProductCode().get();
+        this.baseTar = task.getBaseTar().get().toPath();
+        this.arch = task.getArch().get();
+        this.jreFile = task.getJreFile().get().toPath();
+        this.outTar = task.getOutTar().get().toPath();
+        this.nativesZipName = task.getNativesZipFile().get().getName();
 
         try {
-            this.nativesZip = helper.register(new ZipFile(nativesZipFile.toFile()));
+            this.nativesZip = helper.register(new ZipFile(task.getNativesZipFile().get()));
             this.tarInput = helper.register(new TarArchiveInputStream(
                     helper.register(new GZIPInputStream(
                             helper.register(Files.newInputStream(baseTar))))));

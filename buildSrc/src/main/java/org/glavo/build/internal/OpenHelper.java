@@ -1,4 +1,4 @@
-package org.glavo.build;
+package org.glavo.build.internal;
 
 import java.util.ArrayList;
 import java.util.List;

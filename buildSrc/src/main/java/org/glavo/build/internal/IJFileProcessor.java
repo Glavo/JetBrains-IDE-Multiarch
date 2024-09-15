@@ -1,9 +1,10 @@
-package org.glavo.build;
+package org.glavo.build.internal;
 
 import com.google.gson.*;
 import com.sun.jna.Native;
 import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.glavo.build.Arch;
 import org.gradle.api.GradleException;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +16,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import static org.glavo.build.IJProcessor.LOGGER;
+import static org.glavo.build.internal.IJProcessor.LOGGER;
 
 enum IJFileProcessor {
     PRODUCT_INFO("product-info.json") {

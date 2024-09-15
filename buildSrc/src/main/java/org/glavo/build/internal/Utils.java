@@ -1,4 +1,4 @@
-package org.glavo.build;
+package org.glavo.build.internal;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 
