@@ -1,9 +1,9 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.glavo.build.Arch
 import org.glavo.build.Product
-import org.glavo.build.tasks.ExtractIntelliJ
+import org.glavo.build.tasks.ExtractIDE
 import org.glavo.build.tasks.GenerateReadMe
-import org.glavo.build.tasks.TransformIntelliJ
+import org.glavo.build.tasks.TransformIDE
 import java.util.*
 
 plugins {
@@ -15,7 +15,7 @@ version = "0.1.0"
 
 val downloadDir = layout.buildDirectory.dir("download").get()
 val configDir = layout.projectDirectory.dir("config")
-val jbBaseArch = Arch.AARCH64
+val baseArch = Arch.AARCH64
 
 val Download.outputFile: File
     get() = outputFiles.first()
@@ -60,42 +60,42 @@ for (product in products) {
     val downloadProductTask = tasks.create<Download>("download${product.productCode}") {
         inputs.properties(productProperties)
 
-        src(product.getDownloadLink(productVersion, jbBaseArch))
+        src(product.getDownloadLink(productVersion, baseArch))
         dest(downloadDir.dir("ide"))
         overwrite(false)
     }
 
-    tasks.create<ExtractIntelliJ>("extract${product.productCode}") {
+    tasks.create<ExtractIDE>("extract${product.productCode}") {
         dependsOn(downloadProductTask)
 
         sourceFile.set(downloadProductTask.outputFile)
         targetDir.set(
             downloadProductTask.outputFile.parentFile.resolve(
-                product.getFileNameBase(productVersion, jbBaseArch)
+                product.getFileNameBase(productVersion, baseArch)
             )
         )
     }
 
     for (targetArch in arches) {
-        tasks.create<TransformIntelliJ>("create${product.productCode}-${targetArch.normalize()}") {
+        tasks.create<TransformIDE>("transform${product.productCode}-${targetArch.normalize()}") {
             dependsOn(downloadProductTask)
 
             inputs.properties(productProperties)
 
             downloadJDKTasks[targetArch]?.let {
                 dependsOn(it)
-                jreFile.set(it.outputFile)
+                jdkArchive.set(it.outputFile)
             }
 
-            baseArch.set(jbBaseArch)
-            productCode.set(product.productCode)
-            baseTar.set(downloadProductTask.outputFile)
+            ideBaseArch.set(baseArch)
+            ideProduct.set(product)
+            ideBaseTar.set(downloadProductTask.outputFile)
 
-            arch.set(targetArch)
-            nativesZipFile.set(
+            ideArch.set(targetArch)
+            ideNativesZipFile.set(
                 layout.projectDirectory.dir("resources").file("natives-linux-${targetArch.normalize()}.zip").asFile
             )
-            outTar.set(
+            targetFile.set(
                 layout.buildDirectory.dir("target").get()
                     .file(product.getFileNameBase("$productVersion+$productVersionAdditional", targetArch) + ".tar.gz").asFile
             )

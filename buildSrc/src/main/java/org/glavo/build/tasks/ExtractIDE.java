@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
-public abstract class ExtractIntelliJ extends DefaultTask {
+public abstract class ExtractIDE extends DefaultTask {
 
     @InputFile
     public abstract Property<File> getSourceFile();

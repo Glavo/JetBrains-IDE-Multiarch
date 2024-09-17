@@ -5,6 +5,7 @@ import com.sun.jna.Native;
 import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.glavo.build.Arch;
+import org.glavo.build.Product;
 import org.gradle.api.GradleException;
 
 import java.io.ByteArrayInputStream;
@@ -175,7 +176,7 @@ enum IJFileProcessor {
     REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher") {
         @Override
         boolean isSupported(IJProcessor processor) {
-            return processor.productCode.equals("IU");
+            return processor.product == Product.IDEA_IU;
         }
     },
     FSNOTIFIER("bin/fsnotifier", "fsnotifier"),

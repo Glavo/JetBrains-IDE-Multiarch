@@ -4,7 +4,8 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.glavo.build.Arch;
-import org.glavo.build.tasks.TransformIntelliJ;
+import org.glavo.build.Product;
+import org.glavo.build.tasks.TransformIDE;
 import org.gradle.api.GradleException;
 import org.gradle.api.Task;
 import org.gradle.api.logging.Logger;
@@ -30,7 +31,7 @@ public final class IJProcessor implements AutoCloseable {
     final Task task;
     final Arch baseArch;
     final Path baseTar;
-    final String productCode;
+    final Product product;
     final Arch arch;
     final @Nullable Path jreFile;
     final Path outTar;
@@ -45,18 +46,18 @@ public final class IJProcessor implements AutoCloseable {
 
     private final OpenHelper helper = new OpenHelper();
 
-    public IJProcessor(TransformIntelliJ task) throws Throwable {
+    public IJProcessor(TransformIDE task) throws Throwable {
         this.task = task;
-        this.baseArch = task.getBaseArch().get();
-        this.productCode = task.getProductCode().get();
-        this.baseTar = task.getBaseTar().get().toPath();
-        this.arch = task.getArch().get();
-        this.jreFile = task.getJreFile().get().toPath();
-        this.outTar = task.getOutTar().get().toPath();
-        this.nativesZipName = task.getNativesZipFile().get().getName();
+        this.baseArch = task.getIDEBaseArch().get();
+        this.product = task.getIDEProduct().get();
+        this.baseTar = task.getIDEBaseTar().get().toPath();
+        this.arch = task.getIDEArch().get();
+        this.jreFile = task.getJDKArchive().get().toPath();
+        this.outTar = task.getTargetFile().get().toPath();
+        this.nativesZipName = task.getIDENativesZipFile().get().getName();
 
         try {
-            this.nativesZip = helper.register(new ZipFile(task.getNativesZipFile().get()));
+            this.nativesZip = helper.register(new ZipFile(task.getIDENativesZipFile().get()));
             this.tarInput = helper.register(new TarArchiveInputStream(
                     helper.register(new GZIPInputStream(
                             helper.register(Files.newInputStream(baseTar))))));
