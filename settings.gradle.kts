@@ -1,1 +1,1 @@
-rootProject.name = "IntelliJ-IDEA-Multiarch"
+rootProject.name = "JetBrains-IDE-Multiarch"
