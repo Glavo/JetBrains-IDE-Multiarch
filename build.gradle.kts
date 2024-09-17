@@ -49,12 +49,10 @@ fun loadProperties(propertiesFile: File): Map<String, String> {
     }
 }
 
-val defaultProductPropertiesFile = configDir.dir("product").file("default.properties").asFile!!
-val defaultProductProperties = loadProperties(defaultProductPropertiesFile)
+val defaultProductProperties = loadProperties(configDir.dir("product").file("default.properties").asFile)
 
 for (product in products) {
-    val productPropertiesFile = configDir.dir("product").file("$product.properties").asFile
-    val productProperties = defaultProductProperties + loadProperties(productPropertiesFile)
+    val productProperties = defaultProductProperties + loadProperties(configDir.dir("product").file("$product.properties").asFile)
 
     val productVersion = productProperties["product.version"]!!
     val productVersionAdditional = productProperties["product.version.additional"]!!
