@@ -34,15 +34,18 @@ val downloadJDKTasks = arches.associateWith { arch ->
 }
 
 fun loadProperties(propertiesFile: File): Map<String, String> {
-    val properties = Properties()
     if (propertiesFile.exists()) {
-        propertiesFile.reader().use { reader ->
-            properties.load(reader)
+        val properties = Properties()
+        if (propertiesFile.exists()) {
+            propertiesFile.reader().use { reader ->
+                properties.load(reader)
+            }
         }
-    }
-
-    return mutableMapOf<String, String>().also { res ->
-        properties.forEach { (key, value) -> res[key.toString()] = value.toString() }
+        return mutableMapOf<String, String>().also { res ->
+            properties.forEach { (key, value) -> res[key.toString()] = value.toString() }
+        }
+    } else {
+        return mapOf()
     }
 }
 
@@ -51,13 +54,13 @@ val defaultProductProperties = loadProperties(defaultProductPropertiesFile)
 
 for (product in products) {
     val productPropertiesFile = configDir.dir("product").file("$product.properties").asFile
-    val productProperties = loadProperties(productPropertiesFile).withDefault { defaultProductProperties[it] }
+    val productProperties = defaultProductProperties + loadProperties(productPropertiesFile)
 
-    val productVersion = productProperties["version"]!!
-    val productVersionAdditional = productProperties["version.additional"]!!
+    val productVersion = productProperties["product.version"]!!
+    val productVersionAdditional = productProperties["product.version.additional"]!!
 
     val downloadProductTask = tasks.create<Download>("download${product.productCode}") {
-        inputs.files(defaultProductPropertiesFile, productPropertiesFile)
+        inputs.properties.putAll(productProperties)
 
         src(product.getDownloadLink(productVersion, jbBaseArch))
         dest(downloadDir.dir("ide"))
@@ -79,7 +82,7 @@ for (product in products) {
         tasks.create<TransformIntelliJ>("create-${targetArch.normalize()}") {
             dependsOn(downloadProductTask)
 
-            inputs.files(defaultProductPropertiesFile, productPropertiesFile)
+            inputs.properties.putAll(productProperties)
 
             downloadJDKTasks[targetArch]?.let {
                 dependsOn(it)
