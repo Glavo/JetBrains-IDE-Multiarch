@@ -11,10 +11,10 @@ plugins {
 }
 
 group = "org.glavo"
-version = property("idea.version") as String
+version = "0.1.0"
 
-val downloadDir = layout.buildDirectory.dir("download").get()!!
-val configDir = layout.projectDirectory.dir("config")!!
+val downloadDir = layout.buildDirectory.dir("download").get()
+val configDir = layout.projectDirectory.dir("config")
 val jbBaseArch = Arch.AARCH64
 
 val Download.outputFile: File
@@ -60,7 +60,7 @@ for (product in products) {
     val productVersionAdditional = productProperties["product.version.additional"]!!
 
     val downloadProductTask = tasks.create<Download>("download${product.productCode}") {
-        inputs.properties.putAll(productProperties)
+        inputs.properties(productProperties)
 
         src(product.getDownloadLink(productVersion, jbBaseArch))
         dest(downloadDir.dir("ide"))
@@ -79,10 +79,10 @@ for (product in products) {
     }
 
     for (targetArch in arches) {
-        tasks.create<TransformIntelliJ>("create-${targetArch.normalize()}") {
+        tasks.create<TransformIntelliJ>("create${product.productCode}-${targetArch.normalize()}") {
             dependsOn(downloadProductTask)
 
-            inputs.properties.putAll(productProperties)
+            inputs.properties(productProperties)
 
             downloadJDKTasks[targetArch]?.let {
                 dependsOn(it)
