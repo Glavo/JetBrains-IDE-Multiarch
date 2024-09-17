@@ -1,25 +1,31 @@
 package org.glavo.build;
 
 public enum Product {
-    INTELLIJ_COMMUNITY_EDITION("IC", "idea", "ideaIC"),
-    INTELLIJ_ULTIMATE("IU", "idea", "ideaIU"),
+    IDEA_IC("IC", "idea", "ideaIC"),
+    IDEA_IU("IU", "idea", "ideaIU"),
+    PYCHARM_COMMUNITY("PC", "python", "pycharm-community"),
+    PYCHARM_PROFESSIONAL("PY", "python", "pycharm-professional"),
     GOLAND("GO", "go", "goland");
 
-    private final String code;
+    private final String productCode;
     private final String downloadLinkPrefix;
-    private final String fileNameBase;
+    private final String fileNamePrefix;
 
-    Product(String code, String downloadLinkPrefix, String fileNameBase) {
-        this.code = code;
+    Product(String productCode, String downloadLinkPrefix, String fileNamePrefix) {
+        this.productCode = productCode;
         this.downloadLinkPrefix = downloadLinkPrefix;
-        this.fileNameBase = fileNameBase;
+        this.fileNamePrefix = fileNamePrefix;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public String getFileNameBase(String version, Arch arch) {
+        return "%s-%s-%s".formatted(fileNamePrefix, version, arch.normalize());
     }
 
     public String getDownloadLink(String version, Arch arch) {
-        return "https://download.jetbrains.com/%s/%s-%s-%s.tar.gz".formatted(downloadLinkPrefix, fileNameBase, version, arch.normalize());
-    }
-
-    public String getCode() {
-        return code;
+        return "https://download.jetbrains.com/%s/%s.tar.gz".formatted(downloadLinkPrefix, getFileNameBase(version, arch));
     }
 }
