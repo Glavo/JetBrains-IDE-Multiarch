@@ -1,9 +1,8 @@
-package org.glavo.build;
+package org.glavo.build.util;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.gradle.api.file.RegularFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;

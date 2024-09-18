@@ -1,7 +1,7 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.glavo.build.Arch
 import org.glavo.build.Product
-import org.glavo.build.Utils
+import org.glavo.build.util.Utils
 import org.glavo.build.tasks.ExtractIDE
 import org.glavo.build.tasks.GenerateReadMe
 import org.glavo.build.tasks.TransformIDE
