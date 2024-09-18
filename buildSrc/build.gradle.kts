@@ -4,6 +4,7 @@ repositories {
 
 tasks.compileJava {
     options.release.set(21)
+
 }
 
 dependencies {

@@ -5,7 +5,6 @@ import org.glavo.build.Utils
 import org.glavo.build.tasks.ExtractIDE
 import org.glavo.build.tasks.GenerateReadMe
 import org.glavo.build.tasks.TransformIDE
-import java.util.*
 
 plugins {
     id("de.undercouch.download") version "5.6.0"
@@ -16,6 +15,7 @@ version = "0.1.0"
 
 val downloadDir = layout.buildDirectory.dir("download").get()
 val configDir = layout.projectDirectory.dir("config")
+val templateDir = layout.projectDirectory.dir("template")
 val baseArch = Arch.AARCH64
 
 val Download.outputFile: File
@@ -90,8 +90,8 @@ for (product in products) {
 }
 
 tasks.create<GenerateReadMe>("generateReadMe") {
-    templateFile.set(project.file("template/README.md.template"))
-    propertiesFile.set(project.file("template/README.properties"))
+    templateFile.set(templateDir.file("README.md.template"))
+    propertiesFile.set(configDir.file("README.properties"))
     outputFile.set(project.file("README.md"))
 }
 

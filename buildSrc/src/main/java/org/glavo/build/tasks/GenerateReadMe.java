@@ -3,6 +3,7 @@ package org.glavo.build.tasks;
 import kala.template.TemplateEngine;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
+import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
@@ -18,22 +19,22 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public abstract class GenerateReadMe extends DefaultTask {
 
     @OutputFile
-    public abstract Property<File> getOutputFile();
+    public abstract RegularFileProperty getOutputFile();
 
     @InputFile
-    public abstract Property<File> getTemplateFile();
+    public abstract RegularFileProperty getTemplateFile();
 
     @InputFile
-    public abstract Property<File> getPropertiesFile();
+    public abstract RegularFileProperty getPropertiesFile();
 
     @TaskAction
     public void run() throws IOException {
         var properties = new Properties();
-        try (var reader = new FileReader(getPropertiesFile().get(), UTF_8)) {
+        try (var reader = new FileReader(getPropertiesFile().getAsFile().get(), UTF_8)) {
             properties.load(reader);
         }
 
-        TemplateEngine.getDefault().process(getTemplateFile().get().toPath(), getOutputFile().get().toPath(), list -> {
+        TemplateEngine.getDefault().process(getTemplateFile().getAsFile().get().toPath(), getOutputFile().getAsFile().get().toPath(), list -> {
             for (String key : list.split(":")) {
                 String value = properties.getProperty(key);
                 if (value != null) {
