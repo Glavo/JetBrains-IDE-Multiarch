@@ -1,6 +1,7 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.glavo.build.Arch
 import org.glavo.build.Product
+import org.glavo.build.Utils
 import org.glavo.build.tasks.ExtractIDE
 import org.glavo.build.tasks.GenerateReadMe
 import org.glavo.build.tasks.TransformIDE
@@ -23,23 +24,7 @@ val Download.outputFile: File
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 
-fun loadProperties(propertiesFile: File): Map<String, String> {
-    if (propertiesFile.exists()) {
-        val properties = Properties()
-        if (propertiesFile.exists()) {
-            propertiesFile.reader().use { reader ->
-                properties.load(reader)
-            }
-        }
-        return mutableMapOf<String, String>().also { res ->
-            properties.forEach { (key, value) -> res[key.toString()] = value.toString() }
-        }
-    } else {
-        return mapOf()
-    }
-}
-
-val jdkProperties = loadProperties(configDir.file("jdk.properties").asFile)
+val jdkProperties = Utils.loadProperties(configDir.file("jdk.properties"))
 val downloadJDKTasks = arches.associateWith { arch ->
     jdkProperties["idea.jdk.linux.${arch.normalize()}.url"]?.let { url ->
         tasks.create<Download>("downloadJDK-${arch.normalize()}") {
@@ -50,10 +35,10 @@ val downloadJDKTasks = arches.associateWith { arch ->
     }
 }
 
-val defaultProductProperties = loadProperties(configDir.dir("product").file("default.properties").asFile)
+val defaultProductProperties = Utils.loadProperties(configDir.dir("product").file("default.properties"))
 
 for (product in products) {
-    val productProperties = defaultProductProperties + loadProperties(configDir.dir("product").file("$product.properties").asFile)
+    val productProperties = defaultProductProperties + Utils.loadProperties(configDir.dir("product").file("$product.properties"))
 
     val productVersion = productProperties["product.version"]!!
     val productVersionAdditional = productProperties["product.version.additional"]!!

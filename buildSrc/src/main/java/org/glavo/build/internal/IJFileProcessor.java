@@ -6,6 +6,7 @@ import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.glavo.build.Arch;
 import org.glavo.build.Product;
+import org.glavo.build.Utils;
 import org.gradle.api.GradleException;
 
 import java.io.ByteArrayInputStream;
