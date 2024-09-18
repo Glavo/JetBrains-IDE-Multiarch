@@ -23,16 +23,6 @@ val Download.outputFile: File
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 
-val downloadJDKTasks = arches.associateWith { arch ->
-    findProperty("idea.jdk.linux.${arch.normalize()}.url")?.let { url ->
-        tasks.create<Download>("downloadJDK-${arch.normalize()}") {
-            src(url)
-            dest(downloadDir.dir("jdk"))
-            overwrite(false)
-        }
-    }
-}
-
 fun loadProperties(propertiesFile: File): Map<String, String> {
     if (propertiesFile.exists()) {
         val properties = Properties()
@@ -46,6 +36,17 @@ fun loadProperties(propertiesFile: File): Map<String, String> {
         }
     } else {
         return mapOf()
+    }
+}
+
+val jdkProperties = loadProperties(configDir.file("jdk.properties").asFile)
+val downloadJDKTasks = arches.associateWith { arch ->
+    jdkProperties["idea.jdk.linux.${arch.normalize()}.url"]?.let { url ->
+        tasks.create<Download>("downloadJDK-${arch.normalize()}") {
+            src(url)
+            dest(downloadDir.dir("jdk"))
+            overwrite(false)
+        }
     }
 }
 
