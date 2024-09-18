@@ -2,7 +2,7 @@ package org.glavo.build.tasks;
 
 import org.glavo.build.Arch;
 import org.glavo.build.Product;
-import org.glavo.build.internal.IJProcessor;
+import org.glavo.build.processor.IJProcessor;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;

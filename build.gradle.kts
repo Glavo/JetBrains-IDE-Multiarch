@@ -24,7 +24,7 @@ val Download.outputFile: File
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 
-val jdkProperties = Utils.loadProperties(configDir.file("jdk.properties"))
+val jdkProperties: Map<String, String> = Utils.loadProperties(configDir.file("jdk.properties"))
 val downloadJDKTasks = arches.associateWith { arch ->
     jdkProperties["idea.jdk.linux.${arch.normalize()}.url"]?.let { url ->
         tasks.create<Download>("downloadJDK-${arch.normalize()}") {
@@ -35,7 +35,7 @@ val downloadJDKTasks = arches.associateWith { arch ->
     }
 }
 
-val defaultProductProperties = Utils.loadProperties(configDir.dir("product").file("default.properties"))
+val defaultProductProperties: Map<String, String> = Utils.loadProperties(configDir.dir("product").file("default.properties"))
 
 for (product in products) {
     val productProperties = defaultProductProperties + Utils.loadProperties(configDir.dir("product").file("$product.properties"))

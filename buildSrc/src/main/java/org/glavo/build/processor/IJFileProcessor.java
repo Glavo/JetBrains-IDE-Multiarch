@@ -1,4 +1,4 @@
-package org.glavo.build.internal;
+package org.glavo.build.processor;
 
 import com.google.gson.*;
 import com.sun.jna.Native;
@@ -18,7 +18,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import static org.glavo.build.internal.IJProcessor.LOGGER;
+import static org.glavo.build.processor.IJProcessor.LOGGER;
 
 enum IJFileProcessor {
     PRODUCT_INFO("product-info.json") {
