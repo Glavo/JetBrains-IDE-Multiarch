@@ -79,11 +79,11 @@ for (product in products) {
 
             ideArch.set(targetArch)
             ideNativesZipFile.set(
-                layout.projectDirectory.dir("resources").file("natives-linux-${targetArch.normalize()}.zip").asFile
+                layout.projectDirectory.dir("resources").file("natives-linux-${targetArch.normalize()}.zip")
             )
             targetFile.set(
                 layout.buildDirectory.dir("target").get()
-                    .file(product.getFileNameBase("$productVersion+$productVersionAdditional", targetArch) + ".tar.gz").asFile
+                    .file(product.getFileNameBase("$productVersion+$productVersionAdditional", targetArch) + ".tar.gz")
             )
         }
     }

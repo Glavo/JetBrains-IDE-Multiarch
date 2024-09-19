@@ -50,14 +50,14 @@ public final class IJProcessor implements AutoCloseable {
         this.task = task;
         this.baseArch = task.getIDEBaseArch().get();
         this.product = task.getIDEProduct().get();
-        this.baseTar = task.getIDEBaseTar().get().toPath();
+        this.baseTar = task.getIDEBaseTar().get().getAsFile().toPath();
         this.arch = task.getIDEArch().get();
-        this.jreFile = task.getJDKArchive().get().toPath();
-        this.outTar = task.getTargetFile().get().toPath();
-        this.nativesZipName = task.getIDENativesZipFile().get().getName();
+        this.jreFile = task.getJDKArchive().get().getAsFile().toPath();
+        this.outTar = task.getTargetFile().get().getAsFile().toPath();
+        this.nativesZipName = task.getIDENativesZipFile().get().getAsFile().getName();
 
         try {
-            this.nativesZip = helper.register(new ZipFile(task.getIDENativesZipFile().get()));
+            this.nativesZip = helper.register(new ZipFile(task.getIDENativesZipFile().get().getAsFile()));
             this.tarInput = helper.register(new TarArchiveInputStream(
                     helper.register(new GZIPInputStream(
                             helper.register(Files.newInputStream(baseTar))))));

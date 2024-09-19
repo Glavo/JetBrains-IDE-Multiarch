@@ -4,6 +4,7 @@ import org.glavo.build.Arch;
 import org.glavo.build.Product;
 import org.glavo.build.processor.IJProcessor;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 
@@ -18,20 +19,20 @@ public abstract class TransformIDE extends DefaultTask {
     public abstract Property<Product> getIDEProduct();
 
     @InputFile
-    public abstract Property<File> getIDEBaseTar();
+    public abstract RegularFileProperty getIDEBaseTar();
 
     @Input
     public abstract Property<Arch> getIDEArch();
 
     @InputFile
-    public abstract Property<File> getIDENativesZipFile();
+    public abstract RegularFileProperty getIDENativesZipFile();
 
     @Optional
     @InputFile
-    public abstract Property<File> getJDKArchive();
+    public abstract RegularFileProperty getJDKArchive();
 
     @OutputFile
-    public abstract Property<File> getTargetFile();
+    public abstract RegularFileProperty getTargetFile();
 
     @TaskAction
     public void run() throws Throwable {
