@@ -1,17 +1,17 @@
-package org.glavo.build.processor;
+package org.glavo.build.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-final class OpenHelper {
+public final class OpenHelper {
     private final List<AutoCloseable> allCloseable = new ArrayList<>();
 
-    <T extends AutoCloseable> T register(T closeable) {
+    public <T extends AutoCloseable> T register(T closeable) {
         allCloseable.add(closeable);
         return closeable;
     }
 
-    void onException(Throwable exception) {
+    public void onException(Throwable exception) {
         for (int i = allCloseable.size() - 1; i >= 0; i--) {
             try {
                 allCloseable.get(i).close();
@@ -21,7 +21,7 @@ final class OpenHelper {
         }
     }
 
-    void close() throws Exception {
+    public void close() throws Exception {
         List<Throwable> exceptions = null;
         for (int i = allCloseable.size() - 1; i >= 0; i--) {
             try {
