@@ -2,13 +2,14 @@ package org.glavo.build.tasks;
 
 import org.glavo.build.Arch;
 import org.glavo.build.Product;
-import org.glavo.build.processor.IJProcessor;
+import org.glavo.build.processor.IDEProcessor;
+import org.glavo.build.processor.IJFileProcessor;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 
-import java.io.File;
+import java.util.Set;
 
 public abstract class TransformIDE extends DefaultTask {
 
@@ -31,12 +32,15 @@ public abstract class TransformIDE extends DefaultTask {
     @InputFile
     public abstract RegularFileProperty getJDKArchive();
 
+    @Input
+    public abstract Property<Set<IJFileProcessor>> getFileProcessors();
+
     @OutputFile
     public abstract RegularFileProperty getTargetFile();
 
     @TaskAction
     public void run() throws Throwable {
-        try (var processor = new IJProcessor(this)) {
+        try (var processor = new IDEProcessor(this)) {
             processor.process();
         }
     }

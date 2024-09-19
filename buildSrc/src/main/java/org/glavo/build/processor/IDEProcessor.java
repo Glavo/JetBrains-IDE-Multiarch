@@ -24,11 +24,11 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipFile;
 
-public final class IJProcessor implements AutoCloseable {
+public final class IDEProcessor implements AutoCloseable {
 
-    static final Logger LOGGER = Logging.getLogger(IJProcessor.class);
+    static final Logger LOGGER = Logging.getLogger(IDEProcessor.class);
 
-    final Task task;
+    final TransformIDE task;
     final Arch baseArch;
     final Path baseTar;
     final Product product;
@@ -46,7 +46,7 @@ public final class IJProcessor implements AutoCloseable {
 
     private final OpenHelper helper = new OpenHelper();
 
-    public IJProcessor(TransformIDE task) throws Throwable {
+    public IDEProcessor(TransformIDE task) throws Throwable {
         this.task = task;
         this.baseArch = task.getIDEBaseArch().get();
         this.product = task.getIDEProduct().get();
@@ -125,7 +125,7 @@ public final class IJProcessor implements AutoCloseable {
         var set = EnumSet.noneOf(IJFileProcessor.class);
         var processors = new HashMap<String, IJFileProcessor>();
 
-        for (IJFileProcessor processor : IJFileProcessor.values()) {
+        for (IJFileProcessor processor : task.getFileProcessors().get()) {
             if (processor.isSupported(this)) {
                 set.add(processor);
                 processors.put(processor.getPath(this, prefix), processor);

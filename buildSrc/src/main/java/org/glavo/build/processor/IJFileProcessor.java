@@ -18,11 +18,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import static org.glavo.build.processor.IJProcessor.LOGGER;
+import static org.glavo.build.processor.IDEProcessor.LOGGER;
 
-enum IJFileProcessor {
+public enum IJFileProcessor {
     PRODUCT_INFO("product-info.json") {
-        private static void processAdditionalJvmArguments(IJProcessor processor, JsonObject obj) {
+        private static void processAdditionalJvmArguments(IDEProcessor processor, JsonObject obj) {
             JsonElement additionalJvmArgumentsElement = obj.get("additionalJvmArguments");
             if (additionalJvmArgumentsElement == null) {
                 return;
@@ -42,7 +42,7 @@ enum IJFileProcessor {
         }
 
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws IOException {
+        void process(IDEProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws IOException {
             var gson = new GsonBuilder()
                     .setPrettyPrinting()
                     .disableHtmlEscaping()
@@ -84,7 +84,7 @@ enum IJFileProcessor {
     },
     IDEA_SH("bin/idea.sh") {
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws IOException {
+        void process(IDEProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws IOException {
             var result = new StringBuilder();
 
             boolean foundVMOptions = false;
@@ -123,7 +123,7 @@ enum IJFileProcessor {
     },
     UTIL_JAR("lib/util.jar") {
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
+        void process(IDEProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
             if (processor.arch == Arch.LOONGARCH64) {
                 var buffer = new ByteArrayOutputStream();
                 try (var input = new ZipInputStream(new ByteArrayInputStream(processor.tarInput.readAllBytes()));
@@ -176,7 +176,7 @@ enum IJFileProcessor {
     LOCAL_LAUNCHER("bin/idea", "xplat-launcher"),
     REMOTE_LAUNCHER("bin/remote-dev-server", "xplat-launcher") {
         @Override
-        boolean isSupported(IJProcessor processor) {
+        boolean isSupported(IDEProcessor processor) {
             return processor.product == Product.IDEA_IU;
         }
     },
@@ -189,12 +189,12 @@ enum IJFileProcessor {
         }
 
         @Override
-        String getPath(IJProcessor processor, String ijDirPrefix) {
+        String getPath(IDEProcessor processor, String ijDirPrefix) {
             return getPath(processor.baseArch, ijDirPrefix);
         }
 
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
+        void process(IDEProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
             LOGGER.lifecycle("Replace libjnidispatch.so ({} -> {})", getPath(processor.baseArch, ijDirPrefix), getPath(processor.arch, ijDirPrefix));
 
             String jniDispatchPath = "linux-%s/libjnidispatch.so".formatted(processor.arch.normalize());
@@ -219,12 +219,12 @@ enum IJFileProcessor {
         }
 
         @Override
-        String getPath(IJProcessor processor, String ijDirPrefix) {
+        String getPath(IDEProcessor processor, String ijDirPrefix) {
             return getPath(processor.baseArch, ijDirPrefix);
         }
 
         @Override
-        void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
+        void process(IDEProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
             LOGGER.lifecycle("Replace libpty.so ({} -> {})", getPath(processor.baseArch, ijDirPrefix), getPath(processor.arch, ijDirPrefix));
 
             //noinspection DataFlowIssue
@@ -255,15 +255,15 @@ enum IJFileProcessor {
         this.replacement = replacement;
     }
 
-    String getPath(IJProcessor processor, String ijDirPrefix) {
+    String getPath(IDEProcessor processor, String ijDirPrefix) {
         return ijDirPrefix + path;
     }
 
-    boolean isSupported(IJProcessor processor) {
+    boolean isSupported(IDEProcessor processor) {
         return true;
     }
 
-    void process(IJProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
+    void process(IDEProcessor processor, TarArchiveEntry entry, String ijDirPrefix) throws Throwable {
         if (replacement == null) {
             throw new AssertionError("replacement is null");
         }
