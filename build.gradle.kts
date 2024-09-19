@@ -16,7 +16,6 @@ version = "0.1.0"
 val downloadDir = layout.buildDirectory.dir("download").get()
 val configDir = layout.projectDirectory.dir("config")
 val templateDir = layout.projectDirectory.dir("template")
-val baseArch = Arch.AARCH64
 
 val Download.outputFile: File
     get() = outputFiles.first()
@@ -42,11 +41,12 @@ for (product in products) {
 
     val productVersion = productProperties["product.version"]!!
     val productVersionAdditional = productProperties["product.version.additional"]!!
+    val productBaseArch = Arch.of(productProperties["product.baseArch"])
 
     val downloadProductTask = tasks.create<Download>("download${product.productCode}") {
         inputs.properties(productProperties)
 
-        src(product.getDownloadLink(productVersion, baseArch))
+        src(product.getDownloadLink(productVersion, productBaseArch))
         dest(downloadDir.dir("ide"))
         overwrite(false)
     }
@@ -57,7 +57,7 @@ for (product in products) {
         sourceFile.set(downloadProductTask.outputFile)
         targetDir.set(
             downloadProductTask.outputFile.parentFile.resolve(
-                product.getFileNameBase(productVersion, baseArch)
+                product.getFileNameBase(productVersion, productBaseArch)
             )
         )
     }
@@ -73,7 +73,7 @@ for (product in products) {
                 jdkArchive.set(it.outputFile)
             }
 
-            ideBaseArch.set(baseArch)
+            ideBaseArch.set(productBaseArch)
             ideProduct.set(product)
             ideBaseTar.set(downloadProductTask.outputFile)
 
