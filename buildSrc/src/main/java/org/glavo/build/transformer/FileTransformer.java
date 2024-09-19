@@ -1,21 +1,21 @@
 package org.glavo.build.transformer;
 
-import kala.function.CheckedBiConsumer;
 import kala.function.CheckedFunction;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 public sealed interface FileTransformer {
 
-    public record Replace(String replacement) implements FileTransformer {
+    record Replace(byte[] replacement, @Nullable String targetPath) implements FileTransformer {
+        public Replace(byte[] replacement) {
+            this(replacement, null);
+        }
     }
 
-    public record FilterOut() implements FileTransformer {
+    record FilterOut() implements FileTransformer {
     }
 
-    public record Transform(
-            CheckedFunction<TarArchiveEntry, byte[], IOException> action) implements FileTransformer {
+    record Transform(CheckedFunction<byte[], byte[], IOException> action) implements FileTransformer {
     }
 }

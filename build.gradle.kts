@@ -1,8 +1,6 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.glavo.build.Arch
 import org.glavo.build.Product
-import org.glavo.build.processor.IJFileProcessor
-import org.glavo.build.processor.IJProcessor
 import org.glavo.build.util.Utils
 import org.glavo.build.tasks.ExtractIDE
 import org.glavo.build.tasks.GenerateReadMe
@@ -79,11 +77,10 @@ for (product in products) {
             ideProduct.set(product)
             ideBaseTar.set(downloadProductTask.outputFile)
 
-            ideArch.set(targetArch)
+            ideTargetArch.set(targetArch)
             ideNativesZipFile.set(
                 layout.projectDirectory.dir("resources").file("natives-linux-${targetArch.normalize()}.zip")
             )
-            fileProcessors.set(IJFileProcessor.values().toHashSet())
             targetFile.set(
                 layout.buildDirectory.dir("target").get()
                     .file(product.getFileNameBase("$productVersion+$productVersionAdditional", targetArch) + ".tar.gz")

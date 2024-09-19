@@ -1,24 +1,26 @@
 package org.glavo.build;
 
-import java.util.EnumSet;
-
 public enum Product {
-    IDEA_IC("IC", "idea", "ideaIC"),
-    IDEA_IU("IU", "idea", "ideaIU"),
-    PYCHARM_COMMUNITY("PC", "python", "pycharm-community"),
-    PYCHARM_PROFESSIONAL("PY", "python", "pycharm-professional"),
-    GOLAND("GO", "go", "goland");
-
-    public static final EnumSet ALL_OPEN_SOURCE = EnumSet.of(IDEA_IC, PYCHARM_COMMUNITY);
+    IDEA_IC("IC", "idea", "ideaIC", "idea"),
+    IDEA_IU("IU", "idea", "ideaIU", "idea"),
+    PYCHARM_COMMUNITY("PC", "python", "pycharm-community", "pycharm"),
+    PYCHARM_PROFESSIONAL("PY", "python", "pycharm-professional", "pycharm"),
+    GOLAND("GO", "go", "goland", "goland");
 
     private final String productCode;
     private final String downloadLinkPrefix;
     private final String fileNamePrefix;
+    private final String launcherName;
 
-    Product(String productCode, String downloadLinkPrefix, String fileNamePrefix) {
+    Product(String productCode, String downloadLinkPrefix, String fileNamePrefix, String launcherName) {
         this.productCode = productCode;
         this.downloadLinkPrefix = downloadLinkPrefix;
         this.fileNamePrefix = fileNamePrefix;
+        this.launcherName = launcherName;
+    }
+
+    public boolean isOpenSource() {
+        return this == IDEA_IC || this == PYCHARM_COMMUNITY;
     }
 
     public String getProductCode() {
@@ -31,5 +33,9 @@ public enum Product {
 
     public String getDownloadLink(String version, Arch arch) {
         return "https://download.jetbrains.com/%s/%s.tar.gz".formatted(downloadLinkPrefix, getFileNameBase(version, arch));
+    }
+
+    public String getLauncherName() {
+        return launcherName;
     }
 }

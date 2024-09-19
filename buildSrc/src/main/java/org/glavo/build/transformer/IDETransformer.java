@@ -1,11 +1,13 @@
 package org.glavo.build.transformer;
 
 import com.google.gson.*;
-import kala.function.CheckedFunction;
+import com.sun.jna.Native;
+import kala.collection.mutable.MutableList;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.glavo.build.processor.IDEProcessor;
+import org.glavo.build.Arch;
+import org.glavo.build.Product;
 import org.glavo.build.util.OpenHelper;
 import org.glavo.build.tasks.TransformIDE;
 import org.glavo.build.util.Utils;
@@ -15,23 +17,31 @@ import org.gradle.api.logging.Logging;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.*;
 
-public abstract class IDETransformer {
-    public static final Logger LOGGER = Logging.getLogger(IDEProcessor.class);
+import static java.util.Objects.requireNonNullElse;
+
+public abstract class IDETransformer implements AutoCloseable {
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .disableHtmlEscaping()
+            .create();
+
+    public static final Logger LOGGER = Logging.getLogger(IDETransformer.class);
 
     protected final TransformIDE task;
+    protected final Product product;
+    protected final Arch baseArch;
+    protected final Arch targetArch;
+
     protected final ZipFile nativesZip;
     protected final TarArchiveInputStream tarInput;
     protected final TarArchiveOutputStream tarOutput;
@@ -43,6 +53,10 @@ public abstract class IDETransformer {
 
     public IDETransformer(TransformIDE task) throws Throwable {
         this.task = task;
+
+        this.product = task.getIDEProduct().get();
+        this.baseArch = task.getIDEBaseArch().get();
+        this.targetArch = task.getIDETargetArch().get();
 
         try {
             this.nativesZip = helper.register(new ZipFile(task.getIDENativesZipFile().get().getAsFile()));
@@ -67,67 +81,164 @@ public abstract class IDETransformer {
         }
     }
 
+    protected final FileTransformer.Replace getNativeReplacement(String path) throws IOException {
+        return getNativeReplacement(path, null);
+    }
+
+    protected final FileTransformer.Replace getNativeReplacement(String path, @Nullable String targetPath) throws IOException {
+        ZipEntry entry = nativesZip.getEntry(path);
+        if (entry == null) {
+            throw new GradleException("Missing " + path);
+        }
+
+        return new FileTransformer.Replace(nativesZip.getInputStream(entry).readAllBytes(), targetPath);
+    }
+
+    private void processAdditionalJvmArguments(JsonObject obj) {
+        JsonElement additionalJvmArgumentsElement = obj.get("additionalJvmArguments");
+        if (additionalJvmArgumentsElement == null) {
+            return;
+        }
+
+        var arg = "-Djna.boot.library.path=$IDE_HOME/lib/jna/" + task.getIDEBaseArch().get().normalize();
+
+        JsonArray additionalJvmArguments = additionalJvmArgumentsElement.getAsJsonArray();
+        for (int i = 0; i < additionalJvmArguments.size(); i++) {
+            JsonElement element = additionalJvmArguments.get(i);
+            if (element.getAsString().equals(arg)) {
+                additionalJvmArguments.set(i, new JsonPrimitive("-Djna.boot.library.path=$IDE_HOME/lib/jna/" + targetArch.normalize()));
+                additionalJvmArguments.asList().add(i + 1, new JsonPrimitive("-Didea.filewatcher.executable.path=$IDE_HOME/bin/fsnotifier"));
+                return;
+            }
+        }
+    }
+
     @MustBeInvokedByOverriders
-    protected Map<String, FileTransformer> getTransformers() {
+    protected Map<String, FileTransformer> getTransformers() throws IOException {
         Map<String, FileTransformer> transformer = new HashMap<>();
-        transformer.put("product-info.json", new FileTransformer.Transform(new CheckedFunction<TarArchiveEntry, byte[], IOException>() {
-            private void processAdditionalJvmArguments(JsonObject obj) {
-                JsonElement additionalJvmArgumentsElement = obj.get("additionalJvmArguments");
-                if (additionalJvmArgumentsElement == null) {
-                    return;
-                }
+        transformer.put("bin/" + product.getLauncherName(), getNativeReplacement("xplat-launcher"));
+        if (!product.isOpenSource()) {
+            transformer.put("bin/remote-dev-server", getNativeReplacement("xplat-launcher"));
+        }
+        transformer.put("bin/fsnotifier", getNativeReplacement("fsnotifier"));
+        transformer.put("bin/restarter", getNativeReplacement("restarter"));
+        transformer.put("bin/libdbm.so", getNativeReplacement("libdbm.so"));
+        transformer.put("lib/pty4j/linux/%s/libpty.so".formatted(baseArch.normalize()),
+                getNativeReplacement("libpty.so", "lib/pty4j/linux/%s/libpty.so".formatted(targetArch.normalize())));
 
-                var arg = "-Djna.boot.library.path=$IDE_HOME/lib/jna/" + task.getIDEBaseArch().get().normalize();
-
-                JsonArray additionalJvmArguments = additionalJvmArgumentsElement.getAsJsonArray();
-                for (int i = 0; i < additionalJvmArguments.size(); i++) {
-                    JsonElement element = additionalJvmArguments.get(i);
-                    if (element.getAsString().equals(arg)) {
-                        additionalJvmArguments.set(i, new JsonPrimitive("-Djna.boot.library.path=$IDE_HOME/lib/jna/" + task.getIDEArch().get().normalize()));
-                        additionalJvmArguments.asList().add(i + 1, new JsonPrimitive("-Didea.filewatcher.executable.path=$IDE_HOME/bin/fsnotifier"));
-                        return;
-                    }
-                }
+        String jniDispatchPath = "linux-%s/libjnidispatch.so".formatted(targetArch.normalize());
+        try (var stream = Native.class.getResourceAsStream(jniDispatchPath)) {
+            if (stream == null) {
+                throw new GradleException(jniDispatchPath + " not found");
             }
+            transformer.put("lib/jna/%s/libjnidispatch.so".formatted(baseArch.normalize()),
+                    new FileTransformer.Replace(stream.readAllBytes(), "lib/jna/%s/libjnidispatch.so".formatted(targetArch.normalize())));
+        }
 
-            @Override
-            public byte[] applyChecked(TarArchiveEntry entry) throws IOException {
-                var gson = new GsonBuilder()
-                        .setPrettyPrinting()
-                        .disableHtmlEscaping()
-                        .create();
+        transformer.put("product-info.json", new FileTransformer.Transform(raw -> {
+            JsonObject productInfo = GSON.fromJson(new String(raw), JsonObject.class);
+            JsonObject result = new JsonObject();
 
-                JsonObject productInfo = gson.fromJson(new String(tarInput.readAllBytes()), JsonObject.class);
-                JsonObject result = new JsonObject();
-
-                productInfo.asMap().forEach((key, value) -> {
-                    if (key.equals("productCode")) {
-                        result.add(key, value);
-                        result.addProperty("envVarBaseName", "IDEA");
-                    } else if (key.equals("launch")) {
-                        var launchArray = (JsonArray) value;
-                        if (launchArray.size() != 1) {
-                            throw new GradleException("Expected exactly one launch");
-                        }
-
-                        var launch = launchArray.get(0).getAsJsonObject();
-                        launch.addProperty("arch", task.getIDEArch().get().normalize());
-                        processAdditionalJvmArguments(launch);
-
-                        for (JsonElement element : launch.getAsJsonArray("customCommands")) {
-                            processAdditionalJvmArguments(element.getAsJsonObject());
-                        }
-
-                        result.add(key, value);
-                    } else {
-                        result.add(key, value);
+            productInfo.asMap().forEach((key, value) -> {
+                if (key.equals("launch")) {
+                    var launchArray = (JsonArray) value;
+                    if (launchArray.size() != 1) {
+                        throw new GradleException("Expected exactly one launch");
                     }
-                });
 
-                return gson.toJson(result).getBytes(StandardCharsets.UTF_8);
-            }
+                    var launch = launchArray.get(0).getAsJsonObject();
+                    launch.addProperty("arch", task.getIDETargetArch().get().normalize());
+                    processAdditionalJvmArguments(launch);
 
+                    for (JsonElement element : launch.getAsJsonArray("customCommands")) {
+                        processAdditionalJvmArguments(element.getAsJsonObject());
+                    }
+
+                }
+                result.add(key, value);
+                if (key.equals("productCode") && productInfo.get("envVarBaseName") == null) {
+                    result.addProperty("envVarBaseName", product.getLauncherName().toUpperCase(Locale.ROOT).replace('-', '_'));
+                }
+            });
+
+            return GSON.toJson(result).getBytes(StandardCharsets.UTF_8);
         }));
+
+        transformer.put("bin/%s.sh".formatted(product.getLauncherName()), new FileTransformer.Transform(raw -> {
+            var result = new StringBuilder();
+
+            boolean foundVMOptions = false;
+            for (String line : new String(raw).lines().toList()) {
+                if (line.contains("-Didea.vendor.name=JetBrains") && line.endsWith("\\")) {
+                    if (foundVMOptions) {
+                        throw new GradleException("Duplicate JVM options");
+                    }
+                    foundVMOptions = true;
+
+                    var args = MutableList.from(List.of(line.substring(0, line.length() - 1).trim().split(" ")));
+                    args.insert(1, "\"-Didea.filewatcher.executable.path=$IDE_HOME/bin/fsnotifier\"");
+
+                    int idx = args.indexOf("\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + baseArch.normalize() + "\"");
+                    if (idx < 0) {
+                        throw new GradleException("Missing jna option");
+                    }
+                    args.set(idx, "\"-Djna.boot.library.path=$IDE_HOME/lib/jna/" + targetArch.normalize() + "\"");
+                    args.joinTo(result, " ", "  ", " \\\n");
+                } else {
+                    result.append(line);
+                    result.append('\n');
+                }
+            }
+
+            if (!foundVMOptions) {
+                throw new GradleException("No VM options found");
+            }
+
+            return result.toString().getBytes(StandardCharsets.UTF_8);
+        }));
+
+        if (targetArch == Arch.LOONGARCH64) {
+            transformer.put("lib/util.jar", new FileTransformer.Transform(raw -> {
+                var buffer = new ByteArrayOutputStream();
+                try (var input = new ZipInputStream(new ByteArrayInputStream(raw));
+                     var output = new ZipOutputStream(buffer)) {
+
+                    boolean foundOSFacadeImpl = false;
+                    ZipEntry zipEntry;
+                    while ((zipEntry = input.getNextEntry()) != null) {
+                        if (zipEntry.getName().equals("com/pty4j/unix/linux/OSFacadeImpl.class")) {
+                            if (foundOSFacadeImpl) {
+                                throw new GradleException("Duplicate OSFacadeImpl");
+                            }
+                            foundOSFacadeImpl = true;
+
+                            byte[] bytes;
+                            try (var stream = IDETransformer.class.getResourceAsStream("OSFacadeImpl.class.bin")) {
+                                //noinspection DataFlowIssue
+                                bytes = stream.readAllBytes();
+                            }
+
+                            ZipEntry newEntry = new ZipEntry(zipEntry.getName());
+                            newEntry.setSize(bytes.length);
+
+                            output.putNextEntry(newEntry);
+                            output.write(bytes);
+                            output.closeEntry();
+                        } else {
+                            output.putNextEntry(zipEntry);
+                            copy(input, output);
+                            output.closeEntry();
+                        }
+                    }
+
+                    if (!foundOSFacadeImpl) {
+                        throw new GradleException("OSFacadeImpl not found");
+                    }
+                }
+
+                return buffer.toByteArray();
+            }));
+        }
 
         return transformer;
     }
@@ -159,7 +270,7 @@ public abstract class IDETransformer {
         } while ((entry = jreTar.getNextEntry()) != null);
     }
 
-    public void transform() throws Throwable {
+    public void doTransform() throws Throwable {
         String prefix;
         {
             TarArchiveEntry it = tarInput.getNextEntry();
@@ -203,24 +314,17 @@ public abstract class IDETransformer {
                     case FileTransformer.Replace replace -> {
                         LOGGER.lifecycle("TRANSFORM: Replace {} with {}/{}", entry.getName(), task.getIDENativesZipFile().get().getAsFile().getName(), replace.replacement());
 
-                        ZipEntry replacementEntry = nativesZip.getEntry(replace.replacement());
-                        if (replacementEntry == null) {
-                            throw new GradleException("Missing " + replace.replacement());
-                        }
-
-                        var newEntry = Utils.copyTarEntry(entry, replacementEntry.getSize());
+                        var newEntry = Utils.copyTarEntry(entry, requireNonNullElse(replace.targetPath(), entry.getName()), replace.replacement().length);
                         tarOutput.putArchiveEntry(newEntry);
-                        try (var input = nativesZip.getInputStream(replacementEntry)) {
-                            copy(input, tarOutput);
-                        }
+                        tarOutput.write(replace.replacement());
                         tarOutput.closeArchiveEntry();
                     }
-                    case FileTransformer.FilterOut __ -> {
+                    case FileTransformer.FilterOut ignored -> {
                         LOGGER.lifecycle("TRANSFORM: Filter out {}", entry.getName());
                     }
                     case FileTransformer.Transform transform -> {
                         LOGGER.lifecycle("TRANSFORM: Transform {}", path);
-                        byte[] result = transform.action().apply(entry);
+                        byte[] result = transform.action().apply(tarInput.readAllBytes());
                         tarOutput.putArchiveEntry(Utils.copyTarEntry(entry, result.length));
                         tarOutput.write(result);
                         tarOutput.closeArchiveEntry();
@@ -245,5 +349,10 @@ public abstract class IDETransformer {
         if (!processedJbr) {
             throw new GradleException("No JBR found");
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        helper.close();
     }
 }
