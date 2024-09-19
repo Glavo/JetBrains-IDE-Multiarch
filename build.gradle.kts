@@ -26,7 +26,7 @@ val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 
 val jdkProperties: Map<String, String> = Utils.loadProperties(configDir.file("jdk.properties"))
 val downloadJDKTasks = arches.associateWith { arch ->
-    jdkProperties["idea.jdk.linux.${arch.normalize()}.url"]?.let { url ->
+    jdkProperties["jdk.linux.${arch.normalize()}.url"]?.let { url ->
         tasks.create<Download>("downloadJDK-${arch.normalize()}") {
             src(url)
             dest(downloadDir.dir("jdk"))
@@ -94,4 +94,3 @@ tasks.create<GenerateReadMe>("generateReadMe") {
     propertiesFile.set(configDir.file("README.properties"))
     outputFile.set(project.file("README.md"))
 }
-
