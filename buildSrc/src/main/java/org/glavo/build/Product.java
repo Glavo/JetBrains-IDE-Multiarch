@@ -1,5 +1,9 @@
 package org.glavo.build;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 public enum Product {
     IDEA_IC("IC", "idea", "ideaIC", "idea"),
     IDEA_IU("IU", "idea", "ideaIU", "idea"),
@@ -37,5 +41,22 @@ public enum Product {
 
     public String getLauncherName() {
         return launcherName;
+    }
+
+    public Map<String, String> resolveProperties(Map<String, String> properties) {
+        var result = new HashMap<String, String>();
+        properties.forEach((key, value) -> {
+            if (key.startsWith("default.")) {
+                result.put(key.substring("default.".length()), value);
+            }
+        });
+
+        var prefix = productCode.toLowerCase(Locale.ROOT) + ".";
+        properties.forEach((key, value) -> {
+            if (key.startsWith(prefix)) {
+                result.put(key.substring(prefix.length()), value);
+            }
+        });
+        return result;
     }
 }

@@ -34,14 +34,14 @@ val downloadJDKTasks = arches.associateWith { arch ->
     }
 }
 
-val defaultProductProperties: Map<String, String> = Utils.loadProperties(configDir.dir("product").file("default.properties"))
+val allProductProperties = Utils.loadProperties(configDir.file("product.properties"))
 
 for (product in products) {
-    val productProperties = defaultProductProperties + Utils.loadProperties(configDir.dir("product").file("$product.properties"))
+    val productProperties = product.resolveProperties(allProductProperties)
 
-    val productVersion = productProperties["product.version"]!!
-    val productVersionAdditional = productProperties["product.version.additional"]!!
-    val productBaseArch = Arch.of(productProperties["product.baseArch"])
+    val productVersion = productProperties["version"]
+    val productVersionAdditional = productProperties["version.additional"]
+    val productBaseArch = Arch.of(productProperties["baseArch"])
 
     val downloadProductTask = tasks.create<Download>("download${product.productCode}") {
         inputs.properties(productProperties)
