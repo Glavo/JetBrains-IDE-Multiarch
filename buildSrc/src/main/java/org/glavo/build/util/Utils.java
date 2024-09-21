@@ -1,6 +1,8 @@
 package org.glavo.build.util;
 
+import com.sun.jna.Platform;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.gradle.api.GradleException;
 import org.gradle.api.file.RegularFile;
 
 import java.io.IOException;
@@ -8,6 +10,12 @@ import java.nio.file.Files;
 import java.util.*;
 
 public final class Utils {
+    public static void ensureLinux() {
+        if (!Platform.isLinux()) {
+            throw new GradleException("This task should only be run on Linux");
+        }
+    }
+
     public static Map<String, String> loadProperties(RegularFile file) throws IOException {
         var path = file.getAsFile().toPath();
         if (Files.exists(path)) {

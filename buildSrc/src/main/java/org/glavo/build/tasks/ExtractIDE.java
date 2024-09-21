@@ -3,6 +3,7 @@ package org.glavo.build.tasks;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.FileUtils;
+import org.glavo.build.util.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.provider.Property;
@@ -14,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
 public abstract class ExtractIDE extends DefaultTask {
@@ -27,9 +27,7 @@ public abstract class ExtractIDE extends DefaultTask {
 
     @TaskAction
     public void run() throws IOException {
-        if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
-            throw new GradleException("This task should not run on Windows");
-        }
+        Utils.ensureLinux();
 
         var targetDir = getTargetDir().get().toPath();
         FileUtils.deleteDirectory(targetDir.toFile());
