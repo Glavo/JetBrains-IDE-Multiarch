@@ -18,6 +18,14 @@ libdbusmenu-glib/Makefile
 libdbusmenu-glib/dbusmenu-glib-0.4.pc
 libdbusmenu-glib/libdbusmenu-glib.la
 libdbusmenu-glib/stamp-enum-types
+libdbusmenu-glib/enum-types.c
+libdbusmenu-glib/enum-types.h
+libdbusmenu-glib/client-marshal.c
+libdbusmenu-glib/client-marshal.h
+libdbusmenu-glib/menuitem-marshal.c
+libdbusmenu-glib/menuitem-marshal.h
+libdbusmenu-glib/server-marshal.c
+libdbusmenu-glib/server-marshal.h
 libdbusmenu-gtk/.deps/
 libdbusmenu-gtk/.libs/
 libdbusmenu-gtk/Makefile
