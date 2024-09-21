@@ -10,3 +10,7 @@
 ## [pty4j](https://github.com/JetBrains/pty4j/tree/master/native)
 
 * [pty4j](./pty4j): `9721ee89eb77f4ade32397439b70e99c5bd789e3`
+
+## [libdbusmenu](https://github.com/JetBrains/libdbusmenu)
+
+* [libdbumsmenu](./libdbusmenu): `38d7a2ada4b2a08c535491d43a39825868f2b065`

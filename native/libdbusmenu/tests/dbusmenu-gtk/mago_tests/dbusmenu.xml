@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<suite name="dbusmenu gtk test suite">
+  <class>dbusmenu.DbusMenuGtkTest</class>
+  <description>
+    Test libdbusmenu-gtk.
+  </description>
+   <case name="Static Test">
+    <method>testStaticMenu</method>
+    <description>Simple check for a menu </description>
+    <args>
+        <menu_schema>data/static.json</menu_schema>
+      <menu_item>value39</menu_item>
+    </args>
+  </case>
+ <case name="Blank label">
+    <method>testStaticMenu</method>
+    <description>Blank Label</description>
+    <args>
+        <menu_schema>data/blank_label.json</menu_schema>
+      <menu_item></menu_item>
+    </args>
+  </case>
+ <case name="Blank Submenus">
+    <method>testSubmenus</method>
+    <description>Blank Submenus</description>
+    <args>
+        <menu_schema>data/blank_submenus.json</menu_schema>
+      <menu_item>value6</menu_item>
+      <submenus></submenus>
+    </args>
+ </case>
+ <case name="Long Label">
+    <method>testStaticMenu</method>
+    <description>Really Long Label (1000 chars)</description>
+    <args>
+        <menu_schema>data/long_label.json</menu_schema>
+      <menu_item>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</menu_item>
+    </args>
+   </case>
+  <case name="No Id">
+    <method>testStaticMenu</method>
+    <description>Search for a submenu that comes from a menu without ID</description>
+    <args>
+        <menu_schema>data/no_id.json</menu_schema>
+      <menu_item>submenu_from_no_id</menu_item>
+    </args>
+   </case>
+ <case name="Blank Label 2 levels">
+    <method>testStaticMenu</method>
+    <description>Search for a submenu that comes from a menu with a blank label</description>
+    <args>
+        <menu_schema>data/blank_label_2levels.json</menu_schema>
+      <menu_item>value10</menu_item>
+    </args>
+   </case>
+ <case name="No Label">
+    <method>testStaticMenu</method>
+    <description>Be sure that a submenu from a menu without label does not exist</description>
+    <args>
+        <menu_schema>data/no_label.json</menu_schema>
+      <menu_item>submenu_from_no_label</menu_item>
+      <notexists>True</notexists>
+    </args>
+   </case>
+  <case name="Several Submenus">
+    <method>testStaticMenu</method>
+    <description>Check that a submenu is shown</description>
+    <args>
+        <menu_schema>data/several_submenus.json</menu_schema>
+      <menu_item>value10</menu_item>
+    </args>
+   </case>
+ <case name="Several Submenus Recursive">
+    <method>testStaticMenu</method>
+    <description>Be sure that a submenu from a 4th level depth, is shown</description>
+    <args>
+        <menu_schema>data/several_submenus_recursive.json</menu_schema>
+      <menu_item>value7001</menu_item>
+    </args>
+   </case>
+ <case name="Several Submenus UTF8">
+    <method>testStaticMenu</method>
+    <description>Be sure that a submenu, with a UTF-8 label, is shown</description>
+    <args>
+      <menu_schema>data/several_submenus_utf8.json</menu_schema>
+      <menu_item>value5ス</menu_item>
+    </args>
+ </case>
+</suite>

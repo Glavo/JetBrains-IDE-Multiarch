@@ -1,0 +1,51 @@
+[
+	{"id": 4,
+	 "label": "value2ñ",
+	 "submenu": [
+	 	{"id": 5,
+		 "label": "value5ス",
+		 "submenu": [
+			{"id": 10,
+			 "label": "value10"},
+			{"id": 11,
+			 "label": "value11"},
+			{"id": 12,
+			 "label": "value12"}
+	 ]
+		},
+	 	{"id": 6,
+		 "label": "value6ñ",
+		 "submenu": [ 
+		 ]
+		},
+	 	{"id": 7,
+		 "label": "value7",
+		 "submenu": [
+			{"id": 30,
+			 "label": "value30",
+             "submenu": [
+             {"id": 50, "label": "value9", "nonsenses": "useless"}
+            ]},
+			{"id": 31,
+			 "label": "alue31"},
+			{"id": 32,
+			 "label": "value32"},
+			{"id": 33,
+			 "label": "value33"},
+			{"id": 34,
+			 "label": "value34"},
+			{"id": 35,
+			 "label": "value35"},
+			{"id": 36,
+			 "label": "value36"},
+			{"id": 37,
+			 "label": "value37"},
+			{"id": 38,
+			 "label": "value38"},
+			{"id": 39,
+			 "label": "value39"}
+		 ]
+		},
+	 ]
+	}
+]

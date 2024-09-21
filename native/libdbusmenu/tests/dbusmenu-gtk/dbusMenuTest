@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export NO_GAIL=0
+export NO_AT_BRIDGE=0
+
+dbus-test-runner --dbus-config /usr/share/dbus-test-runner/session.conf --task $INDICATOR_BUILD_DIR/test-gtk-label-client --task-name Client --task $INDICATOR_BUILD_DIR/test-gtk-label-server --parameter ./mago_tests/$1 --task-name Server --ignore-return
+
+

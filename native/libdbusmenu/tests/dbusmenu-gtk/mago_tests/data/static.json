@@ -1,0 +1,26 @@
+[
+	{"id": 1,
+	 "label": "value1",
+	 "submenu": [
+	 	{"id": 30,
+		 "label": "value30"},
+	 	{"id": 31,
+		 "label": "value31"},
+	 	{"id": 32,
+		 "label": "value32"},
+	 	{"id": 33,
+		 "label": "value33"},
+	 	{"id": 34,
+		 "label": "value34"},
+	 	{"id": 35,
+		 "label": "value35"},
+	 	{"id": 36,
+		 "label": "value36"},
+	 	{"id": 37,
+		 "label": "value37"},
+	 	{"id": 38,
+		 "label": "value38"},
+	 	{"id": 39,
+		 "label": "value39"}
+	 ]
+	}]

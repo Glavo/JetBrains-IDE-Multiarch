@@ -1,0 +1,17 @@
+16.04.0
+ - Lots of fixes...
+
+12.10.2
+ - Fix crashed introduced in 12.10.0's gtk-menu-images code (LP: #1053670)
+
+12.10.1
+ - Revert the vala bindings' naming for the 12.10 cycle; revisit for 13.04
+
+12.10.0
+ - Honor changes to GtkSettings' gtk-menu-images value (LP: #927236)
+ - don't display an underscore on menuitimes containing a '&' (LP: #994564)
+ - set the widget for the accelerator even if there isn't a mnemonic (LP: #982656)
+ - make the vala bindings use pkg-config names, rather than gir ones
+ - Some platforms don't have valgrind, so treat those unit tests separately
+ - make headers match independent of the build directory
+ - constify some public API calls

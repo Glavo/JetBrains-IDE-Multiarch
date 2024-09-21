@@ -1,0 +1,2928 @@
+{
+  "id": 0,
+  "children-display": 'submenu',
+  "submenu": [
+      {
+        "id": 5,
+        "children-display": 'submenu',
+        "label": 'File',
+        "submenu": [
+            {
+              "id": 6,
+              "label": 'Quit',
+              "shortcut": [['Control', 'q']]
+            },
+            {
+              "id": 7,
+              "label": 'Close all',
+              "shortcut": [['Control', 'Shift', 'w']]
+            },
+            {
+              "id": 8,
+              "label": 'Close',
+              "shortcut": [['Control', 'w']]
+            },
+            {
+              "id": 9,
+              "type": 'separator'
+            },
+            {
+              "id": 10,
+              "label": 'Send by Email...'
+            },
+            {
+              "id": 11,
+              "label": 'Print...',
+              "shortcut": [['Control', 'p']]
+            },
+            {
+              "id": 12,
+              "label": 'Page Setup'
+            },
+            {
+              "id": 13,
+              "type": 'separator'
+            },
+            {
+              "id": 14,
+              "label": 'Revert'
+            },
+            {
+              "id": 15,
+              "label": 'Save as Template...'
+            },
+            {
+              "id": 16,
+              "label": 'Save a Copy...'
+            },
+            {
+              "id": 17,
+              "label": 'Save As...',
+              "shortcut": [['Control', 'Shift', 's']]
+            },
+            {
+              "id": 18,
+              "label": 'Save',
+              "shortcut": [['Control', 's']]
+            },
+            {
+              "id": 19,
+              "type": 'separator'
+            },
+            {
+              "id": 20,
+              "children-display": 'submenu',
+              "label": 'Open Recent',
+              "submenu": [
+                  {
+                    "id": 21,
+                    "label": 'Document History'
+                  },
+                  {
+                    "id": 22,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 23,
+                    "label": 'giggity.jpg',
+                    "shortcut": [['Control', '2']]
+                  },
+                  {
+                    "id": 24,
+                    "label": 'Icon Height.svg',
+                    "shortcut": [['Control', '1']]
+                  }
+              ]
+            },
+            {
+              "id": 25,
+              "label": 'Open Location...'
+            },
+            {
+              "id": 26,
+              "label": 'Open as Layers...',
+              "shortcut": [['Control', 'Alt', 'o']]
+            },
+            {
+              "id": 27,
+              "label": 'Open...',
+              "shortcut": [['Control', 'o']]
+            },
+            {
+              "id": 28,
+              "children-display": 'submenu',
+              "label": 'Create',
+              "submenu": [
+                  {
+                    "id": 29,
+                    "children-display": 'submenu',
+                    "label": 'Web Page Themes',
+                    "submenu": [
+                        {
+                          "id": 30,
+                          "children-display": 'submenu',
+                          "label": 'Classic.Gimp.Org',
+                          "submenu": [
+                              {
+                                "id": 31,
+                                "label": 'Tube Sub-Sub-Button Label...'
+                              },
+                              {
+                                "id": 32,
+                                "label": 'Tube Sub-Button Label...'
+                              },
+                              {
+                                "id": 33,
+                                "label": 'Tube Button Label...'
+                              },
+                              {
+                                "id": 34,
+                                "label": 'Small Header...'
+                              },
+                              {
+                                "id": 35,
+                                "label": 'General Tube Labels...'
+                              },
+                              {
+                                "id": 36,
+                                "label": 'Big Header...'
+                              }
+                          ]
+                        },
+                        {
+                          "id": 37,
+                          "children-display": 'submenu',
+                          "label": 'Beveled Pattern',
+                          "submenu": [
+                              {
+                                "id": 38,
+                                "label": 'Hrule...'
+                              },
+                              {
+                                "id": 39,
+                                "label": 'Heading...'
+                              },
+                              {
+                                "id": 40,
+                                "label": 'Button...'
+                              },
+                              {
+                                "id": 41,
+                                "label": 'Bullet...'
+                              },
+                              {
+                                "id": 42,
+                                "label": 'Arrow...'
+                              }
+                          ]
+                        },
+                        {
+                          "id": 43,
+                          "children-display": 'submenu',
+                          "label": 'Alien Glow',
+                          "submenu": [
+                              {
+                                "id": 44,
+                                "label": 'Hrule...'
+                              },
+                              {
+                                "id": 45,
+                                "label": 'Button...'
+                              },
+                              {
+                                "id": 46,
+                                "label": 'Bullet...'
+                              },
+                              {
+                                "id": 47,
+                                "label": 'Arrow...'
+                              }
+                          ]
+                        }
+                    ]
+                  },
+                  {
+                    "id": 48,
+                    "children-display": 'submenu',
+                    "label": 'Patterns',
+                    "submenu": [
+                        {
+                          "id": 49,
+                          "label": 'Truchet...'
+                        },
+                        {
+                          "id": 50,
+                          "label": 'Swirly...'
+                        },
+                        {
+                          "id": 51,
+                          "label": 'Swirl-Tile...'
+                        },
+                        {
+                          "id": 52,
+                          "label": 'Render Map...'
+                        },
+                        {
+                          "id": 53,
+                          "label": 'Land...'
+                        },
+                        {
+                          "id": 54,
+                          "label": 'Flatland...'
+                        },
+                        {
+                          "id": 55,
+                          "label": 'Camouflage...'
+                        },
+                        {
+                          "id": 56,
+                          "label": '3D Truchet...'
+                        }
+                    ]
+                  },
+                  {
+                    "id": 57,
+                    "children-display": 'submenu',
+                    "label": 'Logos',
+                    "submenu": [
+                        {
+                          "id": 58,
+                          "label": 'Web Title Header...'
+                        },
+                        {
+                          "id": 59,
+                          "label": 'Textured...'
+                        },
+                        {
+                          "id": 60,
+                          "label": 'Text Circle...'
+                        },
+                        {
+                          "id": 61,
+                          "label": 'Starscape...'
+                        },
+                        {
+                          "id": 62,
+                          "label": 'Speed Text...'
+                        },
+                        {
+                          "id": 63,
+                          "label": 'SOTA Chrome...'
+                        },
+                        {
+                          "id": 64,
+                          "label": 'Particle Trace...'
+                        },
+                        {
+                          "id": 65,
+                          "label": 'Newsprint Text...'
+                        },
+                        {
+                          "id": 66,
+                          "label": 'Neon...'
+                        },
+                        {
+                          "id": 67,
+                          "label": 'Imigre-26...'
+                        },
+                        {
+                          "id": 68,
+                          "label": 'Gradient Bevel...'
+                        },
+                        {
+                          "id": 69,
+                          "label": 'Glowing Hot...'
+                        },
+                        {
+                          "id": 70,
+                          "label": 'Glossy...'
+                        },
+                        {
+                          "id": 71,
+                          "label": 'Frosty...'
+                        },
+                        {
+                          "id": 72,
+                          "label": 'Crystal...'
+                        },
+                        {
+                          "id": 73,
+                          "label": 'Cool Metal...'
+                        },
+                        {
+                          "id": 74,
+                          "label": 'Comic Book...'
+                        },
+                        {
+                          "id": 75,
+                          "label": 'Chrome...'
+                        },
+                        {
+                          "id": 76,
+                          "label": 'Chip Away...'
+                        },
+                        {
+                          "id": 77,
+                          "label": 'Chalk...'
+                        },
+                        {
+                          "id": 78,
+                          "label": 'Carved...'
+                        },
+                        {
+                          "id": 79,
+                          "label": 'Bovination...'
+                        },
+                        {
+                          "id": 80,
+                          "label": 'Blended...'
+                        },
+                        {
+                          "id": 81,
+                          "label": 'Basic I...'
+                        },
+                        {
+                          "id": 82,
+                          "label": 'Basic II...'
+                        },
+                        {
+                          "id": 83,
+                          "label": 'Alien Neon...'
+                        },
+                        {
+                          "id": 84,
+                          "label": 'Alien Glow...'
+                        },
+                        {
+                          "id": 85,
+                          "label": '3D Outline...'
+                        }
+                    ]
+                  },
+                  {
+                    "id": 86,
+                    "children-display": 'submenu',
+                    "label": 'Buttons',
+                    "submenu": [
+                        {
+                          "id": 87,
+                          "label": 'Simple Beveled Button...'
+                        },
+                        {
+                          "id": 88,
+                          "label": 'Round Button...'
+                        }
+                    ]
+                  },
+                  {
+                    "id": 89,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 90,
+                    "children-display": 'submenu',
+                    "label": 'xscanimage',
+                    "submenu": [
+                        {
+                          "id": 91,
+                          "enabled": false,
+                          "label": 'Device dialog...'
+                        }
+                    ]
+                  },
+                  {
+                    "id": 92,
+                    "label": 'Screenshot...'
+                  },
+                  {
+                    "id": 93,
+                    "label": 'From Clipboard',
+                    "shortcut": [['Control', 'Shift', 'v']]
+                  }
+              ]
+            },
+            {
+              "id": 94,
+              "label": 'New...',
+              "shortcut": [['Control', 'n']]
+            }
+        ]
+      },
+      {
+        "id": 95,
+        "children-display": 'submenu',
+        "label": 'Edit',
+        "submenu": [
+            {
+              "id": 96,
+              "label": 'Units'
+            },
+            {
+              "id": 97,
+              "label": 'Modules'
+            },
+            {
+              "id": 98,
+              "label": 'Keyboard Shortcuts'
+            },
+            {
+              "id": 99,
+              "label": 'Preferences'
+            },
+            {
+              "id": 100,
+              "type": 'separator'
+            },
+            {
+              "id": 101,
+              "enabled": false,
+              "label": 'Stroke Path...'
+            },
+            {
+              "id": 102,
+              "enabled": false,
+              "label": 'Stroke Selection...'
+            },
+            {
+              "id": 103,
+              "label": 'Fill with Pattern',
+              "shortcut": [['Control', 'semicolon']]
+            },
+            {
+              "id": 104,
+              "label": 'Fill with BG Color',
+              "shortcut": [['Control', 'period']]
+            },
+            {
+              "id": 105,
+              "label": 'Fill with FG Color',
+              "shortcut": [['Control', 'comma']]
+            },
+            {
+              "id": 106,
+              "label": 'Clear',
+              "shortcut": [['Delete']]
+            },
+            {
+              "id": 107,
+              "type": 'separator'
+            },
+            {
+              "id": 108,
+              "children-display": 'submenu',
+              "label": 'Buffer',
+              "submenu": [
+                  {
+                    "id": 109,
+                    "label": 'Paste Named...'
+                  },
+                  {
+                    "id": 110,
+                    "label": 'Copy Visible Named...'
+                  },
+                  {
+                    "id": 111,
+                    "label": 'Copy Named...'
+                  },
+                  {
+                    "id": 112,
+                    "label": 'Cut Named...'
+                  }
+              ]
+            },
+            {
+              "id": 113,
+              "children-display": 'submenu',
+              "label": 'Paste as',
+              "submenu": [
+                  {
+                    "id": 114,
+                    "label": 'New Pattern...'
+                  },
+                  {
+                    "id": 115,
+                    "label": 'New Brush...'
+                  },
+                  {
+                    "id": 116,
+                    "label": 'New Layer'
+                  },
+                  {
+                    "id": 117,
+                    "label": 'New Image',
+                    "shortcut": [['Control', 'Shift', 'v']]
+                  }
+              ]
+            },
+            {
+              "id": 118,
+              "label": 'Paste Into'
+            },
+            {
+              "id": 119,
+              "label": 'Paste',
+              "shortcut": [['Control', 'v']]
+            },
+            {
+              "id": 120,
+              "label": 'Copy Visible',
+              "shortcut": [['Control', 'Shift', 'c']]
+            },
+            {
+              "id": 121,
+              "label": 'Copy',
+              "shortcut": [['Control', 'c']]
+            },
+            {
+              "id": 122,
+              "label": 'Cut',
+              "shortcut": [['Control', 'x']]
+            },
+            {
+              "id": 123,
+              "type": 'separator'
+            },
+            {
+              "id": 124,
+              "label": 'Undo History'
+            },
+            {
+              "id": 3,
+              "enabled": false,
+              "label": '_Fade...'
+            },
+            {
+              "id": 2,
+              "enabled": false,
+              "label": '_Redo',
+              "shortcut": [['Control', 'y']]
+            },
+            {
+              "id": 1,
+              "enabled": false,
+              "label": '_Undo',
+              "shortcut": [['Control', 'z']]
+            }
+        ]
+      },
+      {
+        "id": 125,
+        "children-display": 'submenu',
+        "label": 'Select',
+        "submenu": [
+            {
+              "id": 126,
+              "enabled": false,
+              "label": 'To Path'
+            },
+            {
+              "id": 127,
+              "label": 'Save to Channel'
+            },
+            {
+              "id": 128,
+              "label": 'Toggle Quick Mask',
+              "shortcut": [['Shift', 'q']],
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 129,
+              "type": 'separator'
+            },
+            {
+              "id": 130,
+              "label": 'Distort...'
+            },
+            {
+              "id": 131,
+              "enabled": false,
+              "label": 'Border...'
+            },
+            {
+              "id": 132,
+              "enabled": false,
+              "label": 'Grow...'
+            },
+            {
+              "id": 133,
+              "enabled": false,
+              "label": 'Shrink...'
+            },
+            {
+              "id": 134,
+              "enabled": false,
+              "label": 'Sharpen'
+            },
+            {
+              "id": 135,
+              "enabled": false,
+              "label": 'Feather...'
+            },
+            {
+              "id": 136,
+              "type": 'separator'
+            },
+            {
+              "id": 137,
+              "label": 'Selection Editor'
+            },
+            {
+              "id": 138,
+              "enabled": false,
+              "label": 'From Path',
+              "shortcut": [['Shift', 'v']]
+            },
+            {
+              "id": 139,
+              "label": 'By Color',
+              "shortcut": [['Shift', 'o']]
+            },
+            {
+              "id": 140,
+              "enabled": false,
+              "label": 'Float',
+              "shortcut": [['Control', 'Shift', 'l']]
+            },
+            {
+              "id": 141,
+              "label": 'Invert',
+              "shortcut": [['Control', 'i']]
+            },
+            {
+              "id": 142,
+              "enabled": false,
+              "label": 'None',
+              "shortcut": [['Control', 'Shift', 'a']]
+            },
+            {
+              "id": 143,
+              "label": 'All',
+              "shortcut": [['Control', 'a']]
+            }
+        ]
+      },
+      {
+        "id": 144,
+        "children-display": 'submenu',
+        "label": 'View',
+        "submenu": [
+            {
+              "id": 145,
+              "label": 'Show Statusbar',
+              "toggle-state": 1,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 146,
+              "label": 'Show Scrollbars',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 147,
+              "label": 'Show Rulers',
+              "shortcut": [['Control', 'Shift', 'r']],
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 148,
+              "label": 'Show Menubar',
+              "toggle-state": 1,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 149,
+              "children-display": 'submenu',
+              "label": 'Padding Color',
+              "submenu": [
+                  {
+                    "id": 150,
+                    "label": 'As in Preferences'
+                  },
+                  {
+                    "id": 151,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 152,
+                    "label": 'Select Custom Color...'
+                  },
+                  {
+                    "id": 153,
+                    "label": 'Dark Check Color'
+                  },
+                  {
+                    "id": 154,
+                    "label": 'Light Check Color'
+                  },
+                  {
+                    "id": 155,
+                    "label": 'From Theme'
+                  }
+              ]
+            },
+            {
+              "id": 156,
+              "type": 'separator'
+            },
+            {
+              "id": 157,
+              "label": 'Snap to Active Path',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 158,
+              "label": 'Snap to Canvas Edges',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 159,
+              "label": 'Snap to Grid',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 160,
+              "label": 'Snap to Guides',
+              "toggle-state": 1,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 161,
+              "type": 'separator'
+            },
+            {
+              "id": 162,
+              "label": 'Show Sample Points',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 163,
+              "label": 'Show Grid',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 164,
+              "label": 'Show Guides',
+              "shortcut": [['Control', 'Shift', 't']],
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 165,
+              "label": 'Show Layer Boundary',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 166,
+              "label": 'Show Selection',
+              "shortcut": [['Control', 't']],
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 167,
+              "type": 'separator'
+            },
+            {
+              "id": 168,
+              "label": 'Display Filters...'
+            },
+            {
+              "id": 169,
+              "label": 'Navigation Window'
+            },
+            {
+              "id": 170,
+              "type": 'separator'
+            },
+            {
+              "id": 171,
+              "children-display": 'submenu',
+              "label": 'Fullscreen',
+              "shortcut": [['F11']],
+              "toggle-state": 0,
+              "toggle-type": 'checkmark',
+              "submenu": [
+                  {
+                    "id": 172,
+                    "label": 'Open Display...'
+                  }
+              ]
+            },
+            {
+              "id": 173,
+              "label": 'Shrink Wrap',
+              "shortcut": [['Control', 'e']]
+            },
+            {
+              "id": 174,
+              "type": 'separator'
+            },
+            {
+              "id": 175,
+              "children-display": 'submenu',
+              "label": '_Zoom (67%)',
+              "submenu": [
+                  {
+                    "id": 176,
+                    "label": 'Othe_r (67%)...',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 177,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 178,
+                    "label": '1:16  (6.25%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 179,
+                    "label": '1:8  (12.5%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 180,
+                    "label": '1:4  (25%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 181,
+                    "label": '1:2  (50%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 182,
+                    "label": '1:1  (100%)',
+                    "shortcut": [['1']],
+                    "toggle-state": 1,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 183,
+                    "label": '2:1  (200%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 184,
+                    "label": '4:1  (400%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 185,
+                    "label": '8:1  (800%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 186,
+                    "label": '16:1  (1600%)',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 187,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 188,
+                    "label": 'Fill Window'
+                  },
+                  {
+                    "id": 189,
+                    "label": 'Fit Image in Window',
+                    "shortcut": [['Control', 'Shift', 'e']]
+                  },
+                  {
+                    "id": 190,
+                    "label": 'Zoom In',
+                    "shortcut": [['plus']]
+                  },
+                  {
+                    "id": 191,
+                    "label": 'Zoom Out',
+                    "shortcut": [['minus']]
+                  },
+                  {
+                    "id": 4,
+                    "label": 'Re_vert Zoom (67%)',
+                    "shortcut": [['grave']]
+                  }
+              ]
+            },
+            {
+              "id": 192,
+              "label": 'Dot for Dot',
+              "toggle-state": 1,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 193,
+              "label": 'New View'
+            }
+        ]
+      },
+      {
+        "id": 194,
+        "children-display": 'submenu',
+        "label": 'Image',
+        "submenu": [
+            {
+              "id": 195,
+              "label": 'Image Properties',
+              "shortcut": [['Alt', 'Return']]
+            },
+            {
+              "id": 196,
+              "label": 'Configure Grid...'
+            },
+            {
+              "id": 197,
+              "children-display": 'submenu',
+              "label": 'Guides',
+              "submenu": [
+                  {
+                    "id": 198,
+                    "label": 'Remove all Guides'
+                  },
+                  {
+                    "id": 199,
+                    "label": 'New Guides from Selection'
+                  },
+                  {
+                    "id": 200,
+                    "label": 'New Guide...'
+                  },
+                  {
+                    "id": 201,
+                    "label": 'New Guide (by Percent)...'
+                  }
+              ]
+            },
+            {
+              "id": 202,
+              "type": 'separator'
+            },
+            {
+              "id": 203,
+              "label": 'Align Visible Layers...'
+            },
+            {
+              "id": 204,
+              "label": 'Flatten Image'
+            },
+            {
+              "id": 205,
+              "label": 'Merge Visible Layers...',
+              "shortcut": [['Control', 'm']]
+            },
+            {
+              "id": 206,
+              "type": 'separator'
+            },
+            {
+              "id": 207,
+              "label": 'Zealous Crop'
+            },
+            {
+              "id": 208,
+              "label": 'Autocrop Image'
+            },
+            {
+              "id": 209,
+              "enabled": false,
+              "label": 'Crop to Selection'
+            },
+            {
+              "id": 210,
+              "type": 'separator'
+            },
+            {
+              "id": 211,
+              "label": 'Scale Image...'
+            },
+            {
+              "id": 212,
+              "label": 'Print Size...'
+            },
+            {
+              "id": 213,
+              "enabled": false,
+              "label": 'Fit Canvas to Selection'
+            },
+            {
+              "id": 214,
+              "label": 'Fit Canvas to Layers'
+            },
+            {
+              "id": 215,
+              "label": 'Canvas Size...'
+            },
+            {
+              "id": 216,
+              "type": 'separator'
+            },
+            {
+              "id": 217,
+              "children-display": 'submenu',
+              "label": 'Transform',
+              "submenu": [
+                  {
+                    "id": 218,
+                    "label": 'Guillotine'
+                  },
+                  {
+                    "id": 219,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 220,
+                    "label": 'Rotate 180?'
+                  },
+                  {
+                    "id": 221,
+                    "label": 'Rotate 90? counter-clockwise'
+                  },
+                  {
+                    "id": 222,
+                    "label": 'Rotate 90? clockwise'
+                  },
+                  {
+                    "id": 223,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 224,
+                    "label": 'Flip Vertically'
+                  },
+                  {
+                    "id": 225,
+                    "label": 'Flip Horizontally'
+                  }
+              ]
+            },
+            {
+              "id": 226,
+              "children-display": 'submenu',
+              "label": 'Mode',
+              "submenu": [
+                  {
+                    "id": 227,
+                    "label": 'Convert to Color Profile...'
+                  },
+                  {
+                    "id": 228,
+                    "label": 'Assign Color Profile...'
+                  },
+                  {
+                    "id": 229,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 230,
+                    "label": 'Indexed...',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 231,
+                    "label": 'Grayscale',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 232,
+                    "label": 'RGB',
+                    "toggle-state": 1,
+                    "toggle-type": 'checkmark'
+                  }
+              ]
+            },
+            {
+              "id": 233,
+              "label": 'Duplicate',
+              "shortcut": [['Control', 'd']]
+            }
+        ]
+      },
+      {
+        "id": 234,
+        "children-display": 'submenu',
+        "label": 'Layer',
+        "submenu": [
+            {
+              "id": 235,
+              "label": 'Autocrop Layer'
+            },
+            {
+              "id": 236,
+              "enabled": false,
+              "label": 'Crop to Selection'
+            },
+            {
+              "id": 237,
+              "label": 'Scale Layer...'
+            },
+            {
+              "id": 238,
+              "label": 'Layer to Image Size'
+            },
+            {
+              "id": 239,
+              "label": 'Layer Boundary Size...'
+            },
+            {
+              "id": 240,
+              "type": 'separator'
+            },
+            {
+              "id": 241,
+              "children-display": 'submenu',
+              "label": 'Transform',
+              "submenu": [
+                  {
+                    "id": 242,
+                    "label": 'Offset...',
+                    "shortcut": [['Control', 'Shift', 'o']]
+                  },
+                  {
+                    "id": 243,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 244,
+                    "label": 'Arbitrary Rotation...'
+                  },
+                  {
+                    "id": 245,
+                    "label": 'Rotate 180?'
+                  },
+                  {
+                    "id": 246,
+                    "label": 'Rotate 90? counter-clockwise'
+                  },
+                  {
+                    "id": 247,
+                    "label": 'Rotate 90? clockwise'
+                  },
+                  {
+                    "id": 248,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 249,
+                    "label": 'Flip Vertically'
+                  },
+                  {
+                    "id": 250,
+                    "label": 'Flip Horizontally'
+                  }
+              ]
+            },
+            {
+              "id": 251,
+              "children-display": 'submenu',
+              "label": 'Transparency',
+              "submenu": [
+                  {
+                    "id": 252,
+                    "label": 'Intersect with Selection'
+                  },
+                  {
+                    "id": 253,
+                    "label": 'Subtract from Selection'
+                  },
+                  {
+                    "id": 254,
+                    "label": 'Add to Selection'
+                  },
+                  {
+                    "id": 255,
+                    "label": 'Alpha to Selection'
+                  },
+                  {
+                    "id": 256,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 257,
+                    "label": 'Threshold Alpha...'
+                  },
+                  {
+                    "id": 258,
+                    "label": 'Semi-Flatten'
+                  },
+                  {
+                    "id": 259,
+                    "label": 'Color to Alpha...'
+                  },
+                  {
+                    "id": 260,
+                    "label": 'Remove Alpha Channel'
+                  },
+                  {
+                    "id": 261,
+                    "enabled": false,
+                    "label": 'Add Alpha Channel'
+                  }
+              ]
+            },
+            {
+              "id": 262,
+              "children-display": 'submenu',
+              "label": 'Mask',
+              "submenu": [
+                  {
+                    "id": 263,
+                    "enabled": false,
+                    "label": 'Intersect with Selection'
+                  },
+                  {
+                    "id": 264,
+                    "enabled": false,
+                    "label": 'Subtract from Selection'
+                  },
+                  {
+                    "id": 265,
+                    "enabled": false,
+                    "label": 'Add to Selection'
+                  },
+                  {
+                    "id": 266,
+                    "enabled": false,
+                    "label": 'Mask to Selection'
+                  },
+                  {
+                    "id": 267,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 268,
+                    "enabled": false,
+                    "label": 'Disable Layer Mask',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 269,
+                    "enabled": false,
+                    "label": 'Edit Layer Mask',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 270,
+                    "enabled": false,
+                    "label": 'Show Layer Mask',
+                    "toggle-state": 0,
+                    "toggle-type": 'checkmark'
+                  },
+                  {
+                    "id": 271,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 272,
+                    "enabled": false,
+                    "label": 'Delete Layer Mask'
+                  },
+                  {
+                    "id": 273,
+                    "enabled": false,
+                    "label": 'Apply Layer Mask'
+                  },
+                  {
+                    "id": 274,
+                    "label": 'Add Layer Mask...'
+                  }
+              ]
+            },
+            {
+              "id": 275,
+              "children-display": 'submenu',
+              "label": 'Stack',
+              "submenu": [
+                  {
+                    "id": 276,
+                    "label": 'Reverse Layer Order'
+                  },
+                  {
+                    "id": 277,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 278,
+                    "enabled": false,
+                    "label": 'Layer to Bottom'
+                  },
+                  {
+                    "id": 279,
+                    "enabled": false,
+                    "label": 'Layer to Top'
+                  },
+                  {
+                    "id": 280,
+                    "enabled": false,
+                    "label": 'Lower Layer'
+                  },
+                  {
+                    "id": 281,
+                    "enabled": false,
+                    "label": 'Raise Layer'
+                  },
+                  {
+                    "id": 282,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 283,
+                    "enabled": false,
+                    "label": 'Select Bottom Layer',
+                    "shortcut": [['End']]
+                  },
+                  {
+                    "id": 284,
+                    "enabled": false,
+                    "label": 'Select Top Layer',
+                    "shortcut": [['Home']]
+                  },
+                  {
+                    "id": 285,
+                    "enabled": false,
+                    "label": 'Select Next Layer',
+                    "shortcut": [['Page_Down']]
+                  },
+                  {
+                    "id": 286,
+                    "enabled": false,
+                    "label": 'Select Previous Layer',
+                    "shortcut": [['Page_Up']]
+                  }
+              ]
+            },
+            {
+              "id": 287,
+              "children-display": 'submenu',
+              "type": 'separator',
+              "submenu": [
+                  {
+                    "id": 288,
+                    "enabled": false,
+                    "label": 'Empty'
+                  }
+              ]
+            },
+            {
+              "id": 289,
+              "label": 'Delete Layer'
+            },
+            {
+              "id": 290,
+              "enabled": false,
+              "label": 'Merge Down'
+            },
+            {
+              "id": 291,
+              "enabled": false,
+              "label": 'Anchor Layer',
+              "shortcut": [['Control', 'h']]
+            },
+            {
+              "id": 292,
+              "label": 'Duplicate Layer',
+              "shortcut": [['Control', 'Shift', 'd']]
+            },
+            {
+              "id": 293,
+              "label": 'New from Visible'
+            },
+            {
+              "id": 294,
+              "label": 'New Layer...',
+              "shortcut": [['Control', 'Shift', 'n']]
+            }
+        ]
+      },
+      {
+        "id": 295,
+        "children-display": 'submenu',
+        "label": 'Colors',
+        "submenu": [
+            {
+              "id": 296,
+              "label": 'Retinex...'
+            },
+            {
+              "id": 297,
+              "label": 'Maximum RGB...'
+            },
+            {
+              "id": 298,
+              "enabled": false,
+              "label": 'Hot...'
+            },
+            {
+              "id": 299,
+              "label": 'Filter Pack...'
+            },
+            {
+              "id": 300,
+              "label": 'Color to Alpha...'
+            },
+            {
+              "id": 301,
+              "label": 'Colorify...'
+            },
+            {
+              "id": 302,
+              "type": 'separator'
+            },
+            {
+              "id": 303,
+              "children-display": 'submenu',
+              "label": 'Info',
+              "submenu": [
+                  {
+                    "id": 304,
+                    "label": 'Smooth Palette...'
+                  },
+                  {
+                    "id": 305,
+                    "label": 'Colorcube Analysis...'
+                  },
+                  {
+                    "id": 306,
+                    "label": 'Border Average...'
+                  },
+                  {
+                    "id": 307,
+                    "label": 'Histogram'
+                  }
+              ]
+            },
+            {
+              "id": 308,
+              "children-display": 'submenu',
+              "label": 'Map',
+              "submenu": [
+                  {
+                    "id": 309,
+                    "label": 'Sample Colorize...'
+                  },
+                  {
+                    "id": 310,
+                    "label": 'Rotate Colors...'
+                  },
+                  {
+                    "id": 311,
+                    "label": 'Palette Map'
+                  },
+                  {
+                    "id": 312,
+                    "label": 'Gradient Map'
+                  },
+                  {
+                    "id": 313,
+                    "label": 'Color Exchange...'
+                  },
+                  {
+                    "id": 314,
+                    "label": 'Alien Map...'
+                  },
+                  {
+                    "id": 315,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 316,
+                    "enabled": false,
+                    "label": 'Set Colormap...'
+                  },
+                  {
+                    "id": 317,
+                    "enabled": false,
+                    "label": 'Rearrange Colormap...'
+                  }
+              ]
+            },
+            {
+              "id": 318,
+              "children-display": 'submenu',
+              "label": 'Components',
+              "submenu": [
+                  {
+                    "id": 319,
+                    "enabled": false,
+                    "label": 'Recompose'
+                  },
+                  {
+                    "id": 320,
+                    "label": 'Decompose...'
+                  },
+                  {
+                    "id": 321,
+                    "enabled": false,
+                    "label": 'Compose...'
+                  },
+                  {
+                    "id": 322,
+                    "label": 'Channel Mixer...'
+                  }
+              ]
+            },
+            {
+              "id": 323,
+              "children-display": 'submenu',
+              "label": 'Auto',
+              "submenu": [
+                  {
+                    "id": 324,
+                    "label": 'Stretch HSV'
+                  },
+                  {
+                    "id": 325,
+                    "label": 'Stretch Contrast'
+                  },
+                  {
+                    "id": 326,
+                    "label": 'Normalize'
+                  },
+                  {
+                    "id": 327,
+                    "label": 'Color Enhance'
+                  },
+                  {
+                    "id": 328,
+                    "label": 'White Balance'
+                  },
+                  {
+                    "id": 329,
+                    "label": 'Equalize'
+                  }
+              ]
+            },
+            {
+              "id": 330,
+              "type": 'separator'
+            },
+            {
+              "id": 331,
+              "label": 'Use GEGL',
+              "toggle-state": 0,
+              "toggle-type": 'checkmark'
+            },
+            {
+              "id": 332,
+              "type": 'separator'
+            },
+            {
+              "id": 333,
+              "label": 'Value Invert'
+            },
+            {
+              "id": 334,
+              "label": 'Invert'
+            },
+            {
+              "id": 335,
+              "type": 'separator'
+            },
+            {
+              "id": 336,
+              "label": 'Desaturate...'
+            },
+            {
+              "id": 337,
+              "label": 'Posterize...'
+            },
+            {
+              "id": 338,
+              "label": 'Curves...'
+            },
+            {
+              "id": 339,
+              "label": 'Levels...'
+            },
+            {
+              "id": 340,
+              "label": 'Threshold...'
+            },
+            {
+              "id": 341,
+              "label": 'Brightness-Contrast...'
+            },
+            {
+              "id": 342,
+              "label": 'Colorize...'
+            },
+            {
+              "id": 343,
+              "label": 'Hue-Saturation...'
+            },
+            {
+              "id": 344,
+              "label": 'Color Balance...'
+            }
+        ]
+      },
+      {
+        "id": 345,
+        "children-display": 'submenu',
+        "label": 'Tools',
+        "submenu": [
+            {
+              "id": 346,
+              "label": 'Swap Colors',
+              "shortcut": [['x']]
+            },
+            {
+              "id": 347,
+              "label": 'Default Colors',
+              "shortcut": [['d']]
+            },
+            {
+              "id": 348,
+              "label": 'Toolbox',
+              "shortcut": [['Control', 'b']]
+            },
+            {
+              "id": 349,
+              "type": 'separator'
+            },
+            {
+              "id": 350,
+              "label": 'GEGL Operation...'
+            },
+            {
+              "id": 351,
+              "label": 'Text',
+              "shortcut": [['t']]
+            },
+            {
+              "id": 352,
+              "label": 'Measure',
+              "shortcut": [['Shift', 'm']]
+            },
+            {
+              "id": 353,
+              "label": 'Zoom',
+              "shortcut": [['z']]
+            },
+            {
+              "id": 354,
+              "label": 'Color Picker',
+              "shortcut": [['o']]
+            },
+            {
+              "id": 355,
+              "label": 'Paths',
+              "shortcut": [['b']]
+            },
+            {
+              "id": 356,
+              "children-display": 'submenu',
+              "label": 'Color Tools',
+              "submenu": [
+                  {
+                    "id": 357,
+                    "label": 'Desaturate...'
+                  },
+                  {
+                    "id": 358,
+                    "label": 'Posterize...'
+                  },
+                  {
+                    "id": 359,
+                    "label": 'Curves...'
+                  },
+                  {
+                    "id": 360,
+                    "label": 'Levels...'
+                  },
+                  {
+                    "id": 361,
+                    "label": 'Threshold...'
+                  },
+                  {
+                    "id": 362,
+                    "label": 'Brightness-Contrast...'
+                  },
+                  {
+                    "id": 363,
+                    "label": 'Colorize...'
+                  },
+                  {
+                    "id": 364,
+                    "label": 'Hue-Saturation...'
+                  },
+                  {
+                    "id": 365,
+                    "label": 'Color Balance...'
+                  }
+              ]
+            },
+            {
+              "id": 366,
+              "children-display": 'submenu',
+              "label": 'Transform Tools',
+              "submenu": [
+                  {
+                    "id": 367,
+                    "label": 'Flip',
+                    "shortcut": [['Shift', 'f']]
+                  },
+                  {
+                    "id": 368,
+                    "label": 'Perspective',
+                    "shortcut": [['Shift', 'p']]
+                  },
+                  {
+                    "id": 369,
+                    "label": 'Shear',
+                    "shortcut": [['Shift', 's']]
+                  },
+                  {
+                    "id": 370,
+                    "label": 'Scale',
+                    "shortcut": [['Shift', 't']]
+                  },
+                  {
+                    "id": 371,
+                    "label": 'Rotate',
+                    "shortcut": [['Shift', 'r']]
+                  },
+                  {
+                    "id": 372,
+                    "label": 'Crop',
+                    "shortcut": [['Shift', 'c']]
+                  },
+                  {
+                    "id": 373,
+                    "label": 'Move',
+                    "shortcut": [['m']]
+                  },
+                  {
+                    "id": 374,
+                    "label": 'Align',
+                    "shortcut": [['q']]
+                  }
+              ]
+            },
+            {
+              "id": 375,
+              "children-display": 'submenu',
+              "label": 'Paint Tools',
+              "submenu": [
+                  {
+                    "id": 376,
+                    "label": 'Dodge / Burn',
+                    "shortcut": [['Shift', 'd']]
+                  },
+                  {
+                    "id": 377,
+                    "label": 'Smudge',
+                    "shortcut": [['s']]
+                  },
+                  {
+                    "id": 378,
+                    "label": 'Blur / Sharpen',
+                    "shortcut": [['Shift', 'u']]
+                  },
+                  {
+                    "id": 379,
+                    "label": 'Perspective Clone'
+                  },
+                  {
+                    "id": 380,
+                    "label": 'Heal',
+                    "shortcut": [['h']]
+                  },
+                  {
+                    "id": 381,
+                    "label": 'Clone',
+                    "shortcut": [['c']]
+                  },
+                  {
+                    "id": 382,
+                    "label": 'Ink',
+                    "shortcut": [['k']]
+                  },
+                  {
+                    "id": 383,
+                    "label": 'Airbrush',
+                    "shortcut": [['a']]
+                  },
+                  {
+                    "id": 384,
+                    "label": 'Eraser',
+                    "shortcut": [['Shift', 'e']]
+                  },
+                  {
+                    "id": 385,
+                    "label": 'Paintbrush',
+                    "shortcut": [['p']]
+                  },
+                  {
+                    "id": 386,
+                    "label": 'Pencil',
+                    "shortcut": [['n']]
+                  },
+                  {
+                    "id": 387,
+                    "label": 'Blend',
+                    "shortcut": [['l']]
+                  },
+                  {
+                    "id": 388,
+                    "label": 'Bucket Fill',
+                    "shortcut": [['Shift', 'b']]
+                  }
+              ]
+            },
+            {
+              "id": 389,
+              "children-display": 'submenu',
+              "label": 'Selection Tools',
+              "submenu": [
+                  {
+                    "id": 390,
+                    "label": 'Intelligent Scissors',
+                    "shortcut": [['i']]
+                  },
+                  {
+                    "id": 391,
+                    "label": 'By Color Select',
+                    "shortcut": [['Shift', 'o']]
+                  },
+                  {
+                    "id": 392,
+                    "label": 'Fuzzy Select',
+                    "shortcut": [['u']]
+                  },
+                  {
+                    "id": 393,
+                    "label": 'Foreground Select'
+                  },
+                  {
+                    "id": 394,
+                    "label": 'Free Select',
+                    "shortcut": [['f']]
+                  },
+                  {
+                    "id": 395,
+                    "label": 'Ellipse Select',
+                    "shortcut": [['e']]
+                  },
+                  {
+                    "id": 396,
+                    "label": 'Rectangle Select',
+                    "shortcut": [['r']]
+                  }
+              ]
+            }
+        ]
+      },
+      {
+        "id": 397,
+        "children-display": 'submenu',
+        "label": 'Filters',
+        "submenu": [
+            {
+              "id": 398,
+              "children-display": 'submenu',
+              "label": 'Script-Fu',
+              "submenu": [
+                  {
+                    "id": 399,
+                    "label": 'Start Server...'
+                  },
+                  {
+                    "id": 400,
+                    "label": 'Refresh Scripts'
+                  },
+                  {
+                    "id": 401,
+                    "label": 'Console'
+                  }
+              ]
+            },
+            {
+              "id": 402,
+              "children-display": 'submenu',
+              "label": 'Python-Fu',
+              "submenu": [
+                  {
+                    "id": 403,
+                    "label": 'Console'
+                  }
+              ]
+            },
+            {
+              "id": 404,
+              "type": 'separator'
+            },
+            {
+              "id": 405,
+              "children-display": 'submenu',
+              "label": 'Alpha to Logo',
+              "submenu": [
+                  {
+                    "id": 406,
+                    "label": 'Textured...'
+                  },
+                  {
+                    "id": 407,
+                    "label": 'Particle Trace...'
+                  },
+                  {
+                    "id": 408,
+                    "label": 'Neon...'
+                  },
+                  {
+                    "id": 409,
+                    "label": 'Gradient Bevel...'
+                  },
+                  {
+                    "id": 410,
+                    "label": 'Glowing Hot...'
+                  },
+                  {
+                    "id": 411,
+                    "label": 'Glossy...'
+                  },
+                  {
+                    "id": 412,
+                    "label": 'Frosty...'
+                  },
+                  {
+                    "id": 413,
+                    "label": 'Cool Metal...'
+                  },
+                  {
+                    "id": 414,
+                    "label": 'Comic Book...'
+                  },
+                  {
+                    "id": 415,
+                    "label": 'Chrome...'
+                  },
+                  {
+                    "id": 416,
+                    "label": 'Chip Away...'
+                  },
+                  {
+                    "id": 417,
+                    "label": 'Chalk...'
+                  },
+                  {
+                    "id": 418,
+                    "label": 'Bovination...'
+                  },
+                  {
+                    "id": 419,
+                    "label": 'Blended...'
+                  },
+                  {
+                    "id": 420,
+                    "label": 'Basic I...'
+                  },
+                  {
+                    "id": 421,
+                    "label": 'Basic II...'
+                  },
+                  {
+                    "id": 422,
+                    "label": 'Alien Neon...'
+                  },
+                  {
+                    "id": 423,
+                    "label": 'Alien Glow...'
+                  },
+                  {
+                    "id": 424,
+                    "label": '3D Outline...'
+                  }
+              ]
+            },
+            {
+              "id": 425,
+              "type": 'separator'
+            },
+            {
+              "id": 426,
+              "children-display": 'submenu',
+              "label": 'Animation',
+              "submenu": [
+                  {
+                    "id": 427,
+                    "label": 'Unoptimize'
+                  },
+                  {
+                    "id": 428,
+                    "label": 'Playback...'
+                  },
+                  {
+                    "id": 429,
+                    "label": 'Optimize (for GIF)'
+                  },
+                  {
+                    "id": 430,
+                    "label": 'Optimize (Difference)'
+                  },
+                  {
+                    "id": 431,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 432,
+                    "label": 'Waves...'
+                  },
+                  {
+                    "id": 433,
+                    "label": 'Spinning Globe...'
+                  },
+                  {
+                    "id": 434,
+                    "label": 'Rippling...'
+                  },
+                  {
+                    "id": 435,
+                    "label": 'Burn-In...'
+                  },
+                  {
+                    "id": 436,
+                    "label": 'Blend...'
+                  }
+              ]
+            },
+            {
+              "id": 437,
+              "children-display": 'submenu',
+              "label": 'Web',
+              "submenu": [
+                  {
+                    "id": 438,
+                    "label": 'Slice...'
+                  },
+                  {
+                    "id": 439,
+                    "label": 'Semi-Flatten'
+                  },
+                  {
+                    "id": 440,
+                    "label": 'Image Map...'
+                  }
+              ]
+            },
+            {
+              "id": 441,
+              "children-display": 'submenu',
+              "label": 'Render',
+              "submenu": [
+                  {
+                    "id": 442,
+                    "label": 'Spyrogimp...'
+                  },
+                  {
+                    "id": 443,
+                    "label": 'Sphere Designer...'
+                  },
+                  {
+                    "id": 444,
+                    "label": 'Line Nova...'
+                  },
+                  {
+                    "id": 445,
+                    "label": 'Lava...'
+                  },
+                  {
+                    "id": 446,
+                    "label": 'Gfig...'
+                  },
+                  {
+                    "id": 447,
+                    "label": 'Fractal Explorer...'
+                  },
+                  {
+                    "id": 448,
+                    "label": 'Circuit...'
+                  },
+                  {
+                    "id": 449,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 450,
+                    "children-display": 'submenu',
+                    "label": 'Pattern',
+                    "submenu": [
+                        {
+                          "id": 451,
+                          "label": 'Sinus...'
+                        },
+                        {
+                          "id": 452,
+                          "label": 'Qbist...'
+                        },
+                        {
+                          "id": 453,
+                          "label": 'Maze...'
+                        },
+                        {
+                          "id": 454,
+                          "label": 'Jigsaw...'
+                        },
+                        {
+                          "id": 455,
+                          "label": 'Grid...'
+                        },
+                        {
+                          "id": 456,
+                          "label": 'Diffraction Patterns...'
+                        },
+                        {
+                          "id": 457,
+                          "label": 'CML Explorer...'
+                        },
+                        {
+                          "id": 458,
+                          "label": 'Checkerboard...'
+                        }
+                    ]
+                  },
+                  {
+                    "id": 459,
+                    "children-display": 'submenu',
+                    "label": 'Nature',
+                    "submenu": [
+                        {
+                          "id": 460,
+                          "label": 'IFS Fractal...'
+                        },
+                        {
+                          "id": 461,
+                          "label": 'Flame...'
+                        }
+                    ]
+                  },
+                  {
+                    "id": 462,
+                    "children-display": 'submenu',
+                    "label": 'Clouds',
+                    "submenu": [
+                        {
+                          "id": 463,
+                          "label": 'Solid Noise...'
+                        },
+                        {
+                          "id": 464,
+                          "label": 'Plasma...'
+                        },
+                        {
+                          "id": 465,
+                          "label": 'Fog...'
+                        },
+                        {
+                          "id": 466,
+                          "label": 'Difference Clouds...'
+                        }
+                    ]
+                  }
+              ]
+            },
+            {
+              "id": 467,
+              "children-display": 'submenu',
+              "label": 'Map',
+              "submenu": [
+                  {
+                    "id": 468,
+                    "label": 'Warp...'
+                  },
+                  {
+                    "id": 469,
+                    "label": 'Tile...'
+                  },
+                  {
+                    "id": 470,
+                    "label": 'Small Tiles...'
+                  },
+                  {
+                    "id": 471,
+                    "label": 'Paper Tile...'
+                  },
+                  {
+                    "id": 472,
+                    "label": 'Map Object...'
+                  },
+                  {
+                    "id": 473,
+                    "label": 'Make Seamless'
+                  },
+                  {
+                    "id": 474,
+                    "label": 'Illusion...'
+                  },
+                  {
+                    "id": 475,
+                    "label": 'Fractal Trace...'
+                  },
+                  {
+                    "id": 476,
+                    "label": 'Displace...'
+                  },
+                  {
+                    "id": 477,
+                    "label": 'Bump Map...'
+                  }
+              ]
+            },
+            {
+              "id": 478,
+              "children-display": 'submenu',
+              "label": 'Decor',
+              "submenu": [
+                  {
+                    "id": 479,
+                    "enabled": false,
+                    "label": 'Stencil Chrome...'
+                  },
+                  {
+                    "id": 480,
+                    "enabled": false,
+                    "label": 'Stencil Carve...'
+                  },
+                  {
+                    "id": 481,
+                    "enabled": false,
+                    "label": 'Slide...'
+                  },
+                  {
+                    "id": 482,
+                    "enabled": false,
+                    "label": 'Round Corners...'
+                  },
+                  {
+                    "id": 483,
+                    "label": 'Old Photo...'
+                  },
+                  {
+                    "id": 484,
+                    "label": 'Fuzzy Border...'
+                  },
+                  {
+                    "id": 485,
+                    "label": 'Coffee Stain...'
+                  },
+                  {
+                    "id": 486,
+                    "label": 'Add Border...'
+                  },
+                  {
+                    "id": 487,
+                    "label": 'Add Bevel...'
+                  }
+              ]
+            },
+            {
+              "id": 488,
+              "children-display": 'submenu',
+              "label": 'Artistic',
+              "submenu": [
+                  {
+                    "id": 489,
+                    "label": 'Weave...'
+                  },
+                  {
+                    "id": 490,
+                    "label": 'Van Gogh (LIC)...'
+                  },
+                  {
+                    "id": 491,
+                    "label": 'Softglow...'
+                  },
+                  {
+                    "id": 492,
+                    "label": 'Predator...'
+                  },
+                  {
+                    "id": 493,
+                    "label": 'Photocopy...'
+                  },
+                  {
+                    "id": 494,
+                    "label": 'Oilify...'
+                  },
+                  {
+                    "id": 495,
+                    "label": 'GIMPressionist...'
+                  },
+                  {
+                    "id": 496,
+                    "label": 'Cubism...'
+                  },
+                  {
+                    "id": 497,
+                    "label": 'Clothify...'
+                  },
+                  {
+                    "id": 498,
+                    "label": 'Cartoon...'
+                  },
+                  {
+                    "id": 499,
+                    "label": 'Apply Canvas...'
+                  }
+              ]
+            },
+            {
+              "id": 500,
+              "children-display": 'submenu',
+              "label": 'Combine',
+              "submenu": [
+                  {
+                    "id": 501,
+                    "label": 'Filmstrip...'
+                  },
+                  {
+                    "id": 502,
+                    "label": 'Depth Merge...'
+                  }
+              ]
+            },
+            {
+              "id": 503,
+              "children-display": 'submenu',
+              "label": 'Generic',
+              "submenu": [
+                  {
+                    "id": 504,
+                    "label": 'Erode'
+                  },
+                  {
+                    "id": 505,
+                    "label": 'Dilate'
+                  },
+                  {
+                    "id": 506,
+                    "label": 'Convolution Matrix...'
+                  }
+              ]
+            },
+            {
+              "id": 507,
+              "children-display": 'submenu',
+              "label": 'Edge-Detect',
+              "submenu": [
+                  {
+                    "id": 508,
+                    "label": 'Sobel...'
+                  },
+                  {
+                    "id": 509,
+                    "label": 'Neon...'
+                  },
+                  {
+                    "id": 510,
+                    "label": 'Laplace'
+                  },
+                  {
+                    "id": 511,
+                    "label": 'Edge...'
+                  },
+                  {
+                    "id": 512,
+                    "label": 'Difference of Gaussians...'
+                  }
+              ]
+            },
+            {
+              "id": 513,
+              "children-display": 'submenu',
+              "label": 'Noise',
+              "submenu": [
+                  {
+                    "id": 514,
+                    "label": 'Spread...'
+                  },
+                  {
+                    "id": 515,
+                    "label": 'Slur...'
+                  },
+                  {
+                    "id": 516,
+                    "label": 'RGB Noise...'
+                  },
+                  {
+                    "id": 517,
+                    "label": 'Pick...'
+                  },
+                  {
+                    "id": 518,
+                    "label": 'Hurl...'
+                  },
+                  {
+                    "id": 519,
+                    "label": 'HSV Noise...'
+                  }
+              ]
+            },
+            {
+              "id": 520,
+              "children-display": 'submenu',
+              "label": 'Light and Shadow',
+              "submenu": [
+                  {
+                    "id": 521,
+                    "label": 'Glass Tile...'
+                  },
+                  {
+                    "id": 522,
+                    "label": 'Apply Lens...'
+                  },
+                  {
+                    "id": 523,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 524,
+                    "label": 'Xach-Effect...'
+                  },
+                  {
+                    "id": 525,
+                    "label": 'Perspective...'
+                  },
+                  {
+                    "id": 526,
+                    "label": 'Drop Shadow...'
+                  },
+                  {
+                    "id": 527,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 528,
+                    "label": 'Supernova...'
+                  },
+                  {
+                    "id": 529,
+                    "label": 'Sparkle...'
+                  },
+                  {
+                    "id": 530,
+                    "label": 'Lighting Effects...'
+                  },
+                  {
+                    "id": 531,
+                    "label": 'Lens Flare...'
+                  },
+                  {
+                    "id": 532,
+                    "label": 'Gradient Flare...'
+                  }
+              ]
+            },
+            {
+              "id": 533,
+              "children-display": 'submenu',
+              "label": 'Distorts',
+              "submenu": [
+                  {
+                    "id": 534,
+                    "label": 'Wind...'
+                  },
+                  {
+                    "id": 535,
+                    "label": 'Whirl and Pinch...'
+                  },
+                  {
+                    "id": 536,
+                    "label": 'Waves...'
+                  },
+                  {
+                    "id": 537,
+                    "label": 'Video...'
+                  },
+                  {
+                    "id": 538,
+                    "label": 'Value Propagate...'
+                  },
+                  {
+                    "id": 539,
+                    "label": 'Shift...'
+                  },
+                  {
+                    "id": 540,
+                    "label": 'Ripple...'
+                  },
+                  {
+                    "id": 541,
+                    "label": 'Polar Coordinates...'
+                  },
+                  {
+                    "id": 542,
+                    "label": 'Pagecurl...'
+                  },
+                  {
+                    "id": 543,
+                    "label": 'Newsprint...'
+                  },
+                  {
+                    "id": 544,
+                    "label": 'Mosaic...'
+                  },
+                  {
+                    "id": 545,
+                    "label": 'Lens Distortion...'
+                  },
+                  {
+                    "id": 546,
+                    "label": 'IWarp...'
+                  },
+                  {
+                    "id": 547,
+                    "label": 'Erase Every Other Row...'
+                  },
+                  {
+                    "id": 548,
+                    "label": 'Engrave...'
+                  },
+                  {
+                    "id": 549,
+                    "label": 'Emboss...'
+                  },
+                  {
+                    "id": 550,
+                    "label": 'Curve Bend...'
+                  },
+                  {
+                    "id": 551,
+                    "label": 'Blinds...'
+                  }
+              ]
+            },
+            {
+              "id": 552,
+              "children-display": 'submenu',
+              "label": 'Enhance',
+              "submenu": [
+                  {
+                    "id": 553,
+                    "label": 'Unsharp Mask...'
+                  },
+                  {
+                    "id": 554,
+                    "label": 'Sharpen...'
+                  },
+                  {
+                    "id": 555,
+                    "label": 'Red Eye Removal...'
+                  },
+                  {
+                    "id": 556,
+                    "enabled": false,
+                    "label": 'NL Filter...'
+                  },
+                  {
+                    "id": 557,
+                    "label": 'Destripe...'
+                  },
+                  {
+                    "id": 558,
+                    "label": 'Despeckle...'
+                  },
+                  {
+                    "id": 559,
+                    "label": 'Deinterlace...'
+                  },
+                  {
+                    "id": 560,
+                    "label": 'Antialias'
+                  }
+              ]
+            },
+            {
+              "id": 561,
+              "children-display": 'submenu',
+              "label": 'Blur',
+              "submenu": [
+                  {
+                    "id": 562,
+                    "label": 'Tileable Blur...'
+                  },
+                  {
+                    "id": 563,
+                    "label": 'Selective Gaussian Blur...'
+                  },
+                  {
+                    "id": 564,
+                    "label": 'Pixelize...'
+                  },
+                  {
+                    "id": 565,
+                    "label": 'Motion Blur...'
+                  },
+                  {
+                    "id": 566,
+                    "label": 'Gaussian Blur...'
+                  },
+                  {
+                    "id": 567,
+                    "label": 'Blur'
+                  }
+              ]
+            },
+            {
+              "id": 568,
+              "type": 'separator'
+            },
+            {
+              "id": 569,
+              "label": 'Reset all Filters'
+            },
+            {
+              "id": 570,
+              "children-display": 'submenu',
+              "enabled": false,
+              "label": 'Re-Show Last',
+              "shortcut": [['Control', 'Shift', 'f']],
+              "submenu": [
+                  {
+                    "id": 571,
+                    "enabled": false,
+                    "label": 'Empty'
+                  }
+              ]
+            },
+            {
+              "id": 572,
+              "enabled": false,
+              "label": 'Repeat Last',
+              "shortcut": [['Control', 'f']]
+            }
+        ]
+      },
+      {
+        "id": 573,
+        "children-display": 'submenu',
+        "label": 'Windows',
+        "submenu": [
+            {
+              "id": 574,
+              "label": 'Toolbox',
+              "shortcut": [['Control', 'b']]
+            },
+            {
+              "id": 575,
+              "type": 'separator'
+            },
+            {
+              "id": 576,
+              "children-display": 'submenu',
+              "label": 'Dockable Dialogs',
+              "submenu": [
+                  {
+                    "id": 577,
+                    "label": 'Error Console'
+                  },
+                  {
+                    "id": 578,
+                    "label": 'Tools'
+                  },
+                  {
+                    "id": 579,
+                    "label": 'Templates'
+                  },
+                  {
+                    "id": 580,
+                    "label": 'Document History'
+                  },
+                  {
+                    "id": 581,
+                    "label": 'Images'
+                  },
+                  {
+                    "id": 582,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 583,
+                    "label": 'Buffers'
+                  },
+                  {
+                    "id": 584,
+                    "label": 'Fonts'
+                  },
+                  {
+                    "id": 585,
+                    "label": 'Palettes'
+                  },
+                  {
+                    "id": 586,
+                    "label": 'Gradients',
+                    "shortcut": [['Control', 'g']]
+                  },
+                  {
+                    "id": 587,
+                    "label": 'Patterns',
+                    "shortcut": [['Control', 'Shift', 'p']]
+                  },
+                  {
+                    "id": 588,
+                    "label": 'Brushes',
+                    "shortcut": [['Control', 'Shift', 'b']]
+                  },
+                  {
+                    "id": 589,
+                    "label": 'Colors'
+                  },
+                  {
+                    "id": 590,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 591,
+                    "label": 'Sample Points'
+                  },
+                  {
+                    "id": 592,
+                    "label": 'Pointer'
+                  },
+                  {
+                    "id": 593,
+                    "label": 'Undo History'
+                  },
+                  {
+                    "id": 594,
+                    "label": 'Navigation'
+                  },
+                  {
+                    "id": 595,
+                    "label": 'Selection Editor'
+                  },
+                  {
+                    "id": 596,
+                    "label": 'Histogram'
+                  },
+                  {
+                    "id": 597,
+                    "label": 'Colormap'
+                  },
+                  {
+                    "id": 598,
+                    "label": 'Paths'
+                  },
+                  {
+                    "id": 599,
+                    "label": 'Channels'
+                  },
+                  {
+                    "id": 600,
+                    "label": 'Layers',
+                    "shortcut": [['Control', 'l']]
+                  },
+                  {
+                    "id": 601,
+                    "type": 'separator'
+                  },
+                  {
+                    "id": 602,
+                    "label": 'Device Status'
+                  },
+                  {
+                    "id": 603,
+                    "label": 'Tool Options'
+                  }
+              ]
+            },
+            {
+              "id": 604,
+              "children-display": 'submenu',
+              "label": 'Recently Closed Docks',
+              "submenu": [
+                  {
+                    "id": 605,
+                    "enabled": false,
+                    "label": 'Empty'
+                  }
+              ]
+            }
+        ]
+      },
+      {
+        "id": 606,
+        "children-display": 'submenu',
+        "label": 'Help',
+        "submenu": [
+            {
+              "id": 607,
+              "children-display": 'submenu',
+              "label": 'User Manual',
+              "submenu": [
+                  {
+                    "id": 608,
+                    "label": 'Working with Digital Camera Photos'
+                  },
+                  {
+                    "id": 609,
+                    "label": 'Using Paths'
+                  },
+                  {
+                    "id": 610,
+                    "label": 'Preparing your Images for the Web'
+                  },
+                  {
+                    "id": 611,
+                    "label": 'How to Use Dialogs'
+                  },
+                  {
+                    "id": 612,
+                    "label": 'Drawing Simple Objects'
+                  },
+                  {
+                    "id": 613,
+                    "label": 'Create, Open and Save Files'
+                  },
+                  {
+                    "id": 614,
+                    "label": 'Basic Concepts'
+                  }
+              ]
+            },
+            {
+              "id": 615,
+              "children-display": 'submenu',
+              "label": 'GIMP Online',
+              "submenu": [
+                  {
+                    "id": 616,
+                    "label": 'User Manual Web Site'
+                  },
+                  {
+                    "id": 617,
+                    "label": 'Plug-in Registry'
+                  },
+                  {
+                    "id": 618,
+                    "label": 'Main Web Site'
+                  },
+                  {
+                    "id": 619,
+                    "label": 'Developer Web Site'
+                  }
+              ]
+            },
+            {
+              "id": 620,
+              "type": 'separator'
+            },
+            {
+              "id": 621,
+              "label": 'Procedure Browser'
+            },
+            {
+              "id": 622,
+              "label": 'Plug-In Browser'
+            },
+            {
+              "id": 623,
+              "type": 'separator'
+            },
+            {
+              "id": 624,
+              "label": 'About'
+            },
+            {
+              "id": 625,
+              "label": 'Tip of the Day'
+            },
+            {
+              "id": 626,
+              "label": 'Context Help',
+              "shortcut": [['Shift', 'F1']]
+            },
+            {
+              "id": 627,
+              "label": 'Help',
+              "shortcut": [['F1']]
+            }
+        ]
+      }
+  ]
+}

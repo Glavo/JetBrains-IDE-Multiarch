@@ -1,0 +1,7 @@
+if WANT_LIBDBUSMENUGTK
+LIBDBUSMENUGTK_SUBDIR = libdbusmenu-gtk
+endif
+
+SUBDIRS = \
+	libdbusmenu-glib \
+	$(LIBDBUSMENUGTK_SUBDIR)

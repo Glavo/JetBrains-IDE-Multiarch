@@ -7,7 +7,7 @@ NATIVE_BUILD_DIR="$NATIVE_DIR/build"
 OUTPUT_DIR="$NATIVE_DIR/out"
 
 OS_ARCH=$(uname -m)
-
+TARGET_ARCH=${TARGET_ARCH:-$OS_ARCH}
 CC=${CC:-gcc}
 
 rm -rf "$NATIVE_BUILD_DIR"
@@ -16,11 +16,9 @@ mkdir -p "$NATIVE_BUILD_DIR"
 mkdir -p "$OUTPUT_DIR"
 
 ## libdbusmenu
-LIBDBUSMENU_DIR="$NATIVE_BUILD_DIR/libdbusmenu"
-git clone https://github.com/JetBrains/libdbusmenu.git "$LIBDBUSMENU_DIR"
+LIBDBUSMENU_DIR="$NATIVE_DIR/libdbusmenu"
 cd "$LIBDBUSMENU_DIR"
-git checkout 38d7a2ada4b2a08c535491d43a39825868f2b065
-./configure --build "$OS_ARCH-unknown-linux-gnu" --target "$OS_ARCH-unknown-linux-gnu"
+./configure --build "$TARGET_ARCH-unknown-linux-gnu" --target "$TARGET_ARCH-unknown-linux-gnu"
 cd "$LIBDBUSMENU_DIR/libdbusmenu-glib"
 make
 cp "$LIBDBUSMENU_DIR/libdbusmenu-glib/.libs/libdbusmenu-glib.a" "$NATIVE_DIR/LinuxGlobalMenu/"
@@ -56,7 +54,7 @@ $CC -shared -o "$OUTPUT_DIR/libpty.so" -fPIC -D_REENTRANT -D_GNU_SOURCE -I "$PTY
   "$PTY4J_DIR/pfind.c"
 
 ## package
-NATIVES_ZIP="natives-linux-$OS_ARCH.zip"
+NATIVES_ZIP="natives-linux-$TARGET_ARCH.zip"
 rm -f "$NATIVES_ZIP"
 zip -j "$NATIVES_ZIP" "$OUTPUT_DIR"/*
 echo "All files are packaged into $(realpath "$NATIVES_ZIP")."

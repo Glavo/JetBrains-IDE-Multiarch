@@ -1,0 +1,24 @@
+[
+	{"id": 1, "label": "hey",
+	 "submenu": [
+	 	{"id": 30, "submenu": [{"id":500, "label": "submenu_from_no_label"}]},
+	 	{"id": 31,
+		 "label": "value31"},
+	 	{"id": 32,
+		 "label": "value32"},
+	 	{"id": 33,
+		 "label": "value33"},
+	 	{"id": 34,
+		 "label": "value34"},
+	 	{"id": 35,
+		 "label": "value35"},
+	 	{"id": 36,
+		 "label": "value36"},
+	 	{"id": 37,
+		 "label": "value37"},
+	 	{"id": 38,
+		 "label": "value38"},
+	 	{"id": 39,
+		 "label": "value39"}
+	 ]
+	}]

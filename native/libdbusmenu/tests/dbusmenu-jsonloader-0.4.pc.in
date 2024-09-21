@@ -1,0 +1,14 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+bindir=@bindir@
+includedir=@includedir@
+
+Cflags: -I${includedir}/libdbusmenu-glib-0.4
+Requires: dbusmenu-glib-0.4 json-glib-1.0
+Libs: -L${libdir} -ldbusmenu-jsonloader
+
+Name: libdbusmenu-jsonloader
+Description: A small library to load JSON descriptions of menus.  Mostly for testing.
+Version: @VERSION@
+

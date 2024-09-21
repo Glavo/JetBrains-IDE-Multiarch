@@ -1,0 +1,6 @@
+#!/bin/sh
+
+COMMAND=$@
+INSTRUCTIONS=`valgrind --tool=callgrind --callgrind-out-file=/dev/null --instr-atstart=no --collect-atstart=no --combine-dumps=yes $COMMAND 2>&1 > /dev/null | grep refs | grep I | tail --lines=1 | cut -d ":" -f 2 | sed -e 's/^[ \t]*//'`
+
+echo "Instructions needed to execute '$COMMAND': $INSTRUCTIONS"
