@@ -5,7 +5,6 @@ import org.glavo.build.util.IOBuffer;
 import org.glavo.build.util.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
-import org.gradle.api.file.RegularFile;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -21,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -82,6 +80,7 @@ public abstract class BuildNative extends DefaultTask {
                 .env("CXX", cxx);
 
         // LinuxGlobalMenu
+        LOGGER.lifecycle("Building LinuxGlobalMenu");
         Path linuxGlobalMenuDir = nativeRoot.resolve("LinuxGlobalMenu");
         Path linuxGlobalMenuBuildDir = buildDir.resolve("LinuxGlobalMenu");
 
@@ -106,6 +105,7 @@ public abstract class BuildNative extends DefaultTask {
         builder.addResult(linuxGlobalMenuBuildDir.resolve("libdbm.so"));
 
         // fsNotifier
+        LOGGER.lifecycle("Building fsNotifier");
         Path fsNotifierDir = nativeRoot.resolve("fsNotifier");
         Path fsNotifierTargetFile = buildDir.resolve("fsnotifier");
         builder.exec(cc, "-O2", "-Wall", "-Wextra", "-Wpedantic",
@@ -117,12 +117,14 @@ public abstract class BuildNative extends DefaultTask {
         builder.addResult(fsNotifierTargetFile);
 
         // restarter
+        LOGGER.lifecycle("Building restarter");
         Path restarterDir = nativeRoot.resolve("restarter");
         builder.exec("cargo", "build", "--target=" + triple(targetArch), "--release",
                 "--manifest-path=" + restarterDir.resolve("Cargo.toml"));
         builder.addResult(restarterDir.resolve("target/release/restarter"));
 
         // repair-utility
+        LOGGER.lifecycle("Building repair-utility");
         Path repairUtilityDir = nativeRoot.resolve("repair-utility");
         Path repairUtilityFile = buildDir.resolve("repair");
         builder.exec(go, "build", "-C", repairUtilityDir, "-o", repairUtilityFile)
@@ -131,12 +133,14 @@ public abstract class BuildNative extends DefaultTask {
         builder.addResult(repairUtilityFile);
 
         // XPlatLauncher
+        LOGGER.lifecycle("Building XPlatLauncher");
         Path xplatLauncherDir = nativeRoot.resolve("XPlatLauncher");
         builder.exec(cargo, "build", "--release", "--target=" + triple(targetArch), "--release",
                 "--manifest-path=" + xplatLauncherDir.resolve("Cargo.toml"));
         builder.addResult(xplatLauncherDir.resolve("target/release/xplat-launcher"));
 
         // pty4j
+        LOGGER.lifecycle("Building pty4j");
         Path pty4jDir = nativeRoot.resolve("pty4j");
         Path pty4jFile = buildDir.resolve("libpty.so");
         builder.exec(cc, "-shared", "-o", pty4jFile, "-fPIC", "-D_REENTRANT", "-D_GNU_SOURCE",
@@ -147,9 +151,46 @@ public abstract class BuildNative extends DefaultTask {
         );
 
         // ---
+        Path nativesZipFile = Utils.getAsPath(getOutputFile());
+        LOGGER.lifecycle("Package natives to {}", nativesZipFile);
+        Files.createDirectories(nativesZipFile.getParent());
+        var buffer = new IOBuffer();
 
-        try {
-            builder.run(getOutputFile().get());
+        try (var out = new ZipOutputStream(Files.newOutputStream(nativesZipFile, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE))) {
+            for (Action action : builder.actions) {
+                switch (action) {
+                    case Action.Exec exec -> {
+                        ProcessBuilder processBuilder = new ProcessBuilder(exec.commands);
+                        processBuilder.inheritIO();
+
+                        if (exec.workingDir != null) {
+                            processBuilder.directory(exec.workingDir.toFile());
+                        }
+
+                        processBuilder.environment().putAll(builder.env);
+                        if (exec.env != null) {
+                            processBuilder.environment().putAll(exec.env);
+                        }
+
+                        Process process = processBuilder.start();
+                        try {
+                            process.waitFor();
+                        } catch (InterruptedException e) {
+                            process.destroy();
+                            throw new GradleException("Unexpected interrupted exception", e);
+                        }
+                    }
+                    case Action.Copy copy -> {
+                        Files.copy(copy.source, copy.target);
+                    }
+                    case Action.AddResult addResult -> {
+                        out.putNextEntry(new ZipEntry(addResult.name));
+                        try (var input = Files.newInputStream(addResult.file)) {
+                            buffer.copy(input, out);
+                        }
+                    }
+                }
+            }
         } catch (Throwable e) {
             getOutputFile().get().getAsFile().delete();
             throw e;
@@ -162,13 +203,9 @@ public abstract class BuildNative extends DefaultTask {
 
     private sealed interface Action {
         final class Exec implements Action {
-            final List<String> commands;
-            Path workingDir;
+            final List<String> commands = new ArrayList<>();
             Map<String, String> env;
-
-            private Exec(List<String> commands) {
-                this.commands = commands;
-            }
+            Path workingDir;
 
             Exec working(Path workingDir) {
                 this.workingDir = workingDir;
@@ -203,7 +240,10 @@ public abstract class BuildNative extends DefaultTask {
         }
 
         Action.Exec exec(Object... commands) {
-            Action.Exec exec = new Action.Exec(Stream.of(commands).map(Object::toString).toList());
+            Action.Exec exec = new Action.Exec();
+            for (Object command : commands) {
+                exec.commands.add(command.toString());
+            }
             this.actions.add(exec);
             return exec;
         }
@@ -216,48 +256,6 @@ public abstract class BuildNative extends DefaultTask {
         void addResult(Path file) {
             var addResult = new Action.AddResult(file.getFileName().toString(), file);
             this.actions.add(addResult);
-        }
-
-        void run(RegularFile nativesZip) throws IOException {
-            Path nativesZipFile = nativesZip.getAsFile().toPath();
-            Files.createDirectories(nativesZipFile.getParent());
-            var buffer = new IOBuffer();
-            try (var out = new ZipOutputStream(Files.newOutputStream(nativesZipFile, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE))) {
-                for (Action action : actions) {
-                    switch (action) {
-                        case Action.Exec exec -> {
-                            ProcessBuilder processBuilder = new ProcessBuilder(exec.commands);
-                            processBuilder.inheritIO();
-
-                            if (exec.workingDir != null) {
-                                processBuilder.directory(exec.workingDir.toFile());
-                            }
-
-                            processBuilder.environment().putAll(this.env);
-                            if (exec.env != null) {
-                                processBuilder.environment().putAll(exec.env);
-                            }
-
-                            Process process = processBuilder.start();
-                            try {
-                                process.waitFor();
-                            } catch (InterruptedException e) {
-                                process.destroy();
-                                throw new GradleException("Unexpected interrupted exception", e);
-                            }
-                        }
-                        case Action.Copy copy -> {
-                            Files.copy(copy.source, copy.target);
-                        }
-                        case Action.AddResult addResult -> {
-                            out.putNextEntry(new ZipEntry(addResult.name));
-                            try (var input = Files.newInputStream(addResult.file)) {
-                                buffer.copy(input, out);
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }
