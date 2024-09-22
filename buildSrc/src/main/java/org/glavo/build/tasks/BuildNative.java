@@ -154,7 +154,7 @@ public abstract class BuildNative extends DefaultTask {
             for (Action action : builder.actions) {
                 switch (action) {
                     case Action.Exec exec -> {
-                        LOGGER.lifecycle("Exec: " + exec.commands);
+                        LOGGER.lifecycle("Exec " + exec.commands);
 
                         ProcessBuilder processBuilder = new ProcessBuilder(exec.commands);
                         processBuilder.inheritIO();
@@ -168,12 +168,20 @@ public abstract class BuildNative extends DefaultTask {
                             processBuilder.environment().putAll(exec.env);
                         }
 
+                        getStandardOutputCapture().start();
                         Process process = processBuilder.start();
+                        int result;
                         try {
-                            process.waitFor();
+                            result = process.waitFor();
                         } catch (InterruptedException e) {
                             process.destroy();
                             throw new GradleException("Unexpected interrupted exception", e);
+                        } finally {
+                            getStandardOutputCapture().stop();
+                        }
+
+                        if (result != 0) {
+                            throw new GradleException("Process exited with an error: " + result);
                         }
                     }
                     case Action.Copy copy -> {
