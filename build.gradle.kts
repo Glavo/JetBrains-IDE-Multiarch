@@ -1,6 +1,7 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.glavo.build.Arch
 import org.glavo.build.Product
+import org.glavo.build.tasks.BuildNative
 import org.glavo.build.util.Utils
 import org.glavo.build.tasks.ExtractIDE
 import org.glavo.build.tasks.GenerateReadMe
@@ -94,4 +95,9 @@ tasks.create<GenerateReadMe>("generateReadMe") {
     templateFile.set(templateDir.file("README.md.template"))
     propertiesFile.set(configDir.file("README.properties"))
     outputFile.set(project.file("README.md"))
+}
+
+tasks.create<BuildNative>("buildNative") {
+    nativeProjectsRoot.set(project.file("native"))
+    outputFile.set(project.file("natives-linux-${Arch.current().normalize()}"))
 }

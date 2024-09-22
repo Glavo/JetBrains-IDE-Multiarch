@@ -61,7 +61,7 @@ public abstract class BuildNative extends DefaultTask {
     public void run() throws IOException {
         Utils.ensureLinux();
 
-        Arch targetArch = getArch().get();
+        Arch targetArch = getArch().getOrElse(Arch.current());
         Arch osArch = Arch.current();
 
         String cc = getCC().getOrElse("gcc");
@@ -74,13 +74,13 @@ public abstract class BuildNative extends DefaultTask {
         Path buildDir = nativeRoot.resolve("build");
 
         Utils.deleteDirectory(buildDir);
+        Files.createDirectories(buildDir);
 
         var builder = new ActionsBuilder()
                 .env("CC", cc)
                 .env("CXX", cxx);
 
         // LinuxGlobalMenu
-        LOGGER.lifecycle("Building LinuxGlobalMenu");
         Path linuxGlobalMenuDir = nativeRoot.resolve("LinuxGlobalMenu");
         Path linuxGlobalMenuBuildDir = buildDir.resolve("LinuxGlobalMenu");
 
@@ -105,7 +105,6 @@ public abstract class BuildNative extends DefaultTask {
         builder.addResult(linuxGlobalMenuBuildDir.resolve("libdbm.so"));
 
         // fsNotifier
-        LOGGER.lifecycle("Building fsNotifier");
         Path fsNotifierDir = nativeRoot.resolve("fsNotifier");
         Path fsNotifierTargetFile = buildDir.resolve("fsnotifier");
         builder.exec(cc, "-O2", "-Wall", "-Wextra", "-Wpedantic",
@@ -117,14 +116,12 @@ public abstract class BuildNative extends DefaultTask {
         builder.addResult(fsNotifierTargetFile);
 
         // restarter
-        LOGGER.lifecycle("Building restarter");
         Path restarterDir = nativeRoot.resolve("restarter");
         builder.exec("cargo", "build", "--target=" + triple(targetArch), "--release",
                 "--manifest-path=" + restarterDir.resolve("Cargo.toml"));
         builder.addResult(restarterDir.resolve("target/release/restarter"));
 
         // repair-utility
-        LOGGER.lifecycle("Building repair-utility");
         Path repairUtilityDir = nativeRoot.resolve("repair-utility");
         Path repairUtilityFile = buildDir.resolve("repair");
         builder.exec(go, "build", "-C", repairUtilityDir, "-o", repairUtilityFile)
@@ -133,14 +130,12 @@ public abstract class BuildNative extends DefaultTask {
         builder.addResult(repairUtilityFile);
 
         // XPlatLauncher
-        LOGGER.lifecycle("Building XPlatLauncher");
         Path xplatLauncherDir = nativeRoot.resolve("XPlatLauncher");
         builder.exec(cargo, "build", "--release", "--target=" + triple(targetArch), "--release",
                 "--manifest-path=" + xplatLauncherDir.resolve("Cargo.toml"));
         builder.addResult(xplatLauncherDir.resolve("target/release/xplat-launcher"));
 
         // pty4j
-        LOGGER.lifecycle("Building pty4j");
         Path pty4jDir = nativeRoot.resolve("pty4j");
         Path pty4jFile = buildDir.resolve("libpty.so");
         builder.exec(cc, "-shared", "-o", pty4jFile, "-fPIC", "-D_REENTRANT", "-D_GNU_SOURCE",
@@ -152,7 +147,6 @@ public abstract class BuildNative extends DefaultTask {
 
         // ---
         Path nativesZipFile = Utils.getAsPath(getOutputFile());
-        LOGGER.lifecycle("Package natives to {}", nativesZipFile);
         Files.createDirectories(nativesZipFile.getParent());
         var buffer = new IOBuffer();
 
@@ -160,6 +154,8 @@ public abstract class BuildNative extends DefaultTask {
             for (Action action : builder.actions) {
                 switch (action) {
                     case Action.Exec exec -> {
+                        LOGGER.lifecycle("Exec: " + exec.commands);
+
                         ProcessBuilder processBuilder = new ProcessBuilder(exec.commands);
                         processBuilder.inheritIO();
 
@@ -181,9 +177,11 @@ public abstract class BuildNative extends DefaultTask {
                         }
                     }
                     case Action.Copy copy -> {
+                        LOGGER.lifecycle("Copy {} to {}", copy.source, copy.target);
                         Files.copy(copy.source, copy.target);
                     }
                     case Action.AddResult addResult -> {
+                        LOGGER.lifecycle("Add {} to result", addResult.file);
                         out.putNextEntry(new ZipEntry(addResult.name));
                         try (var input = Files.newInputStream(addResult.file)) {
                             buffer.copy(input, out);
