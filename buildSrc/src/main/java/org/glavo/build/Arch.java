@@ -1,6 +1,7 @@
 package org.glavo.build;
 
 import com.sun.jna.Platform;
+import kala.value.LazyValue;
 
 import java.util.Locale;
 
@@ -9,6 +10,11 @@ public enum Arch {
     AARCH64,
     RISCV64,
     LOONGARCH64;
+
+    private final LazyValue<String> normalizedName = LazyValue.of(() -> switch (this) {
+        case X86_64 -> "x86-64";
+        default -> this.name().toLowerCase(Locale.ROOT);
+    });
 
     public static Arch current() {
         return switch (Platform.ARCH) {
@@ -31,7 +37,7 @@ public enum Arch {
     }
 
     public String normalize() {
-        return this.name().toLowerCase(Locale.ROOT);
+        return normalizedName.get();
     }
 
     public String getGoArch() {
