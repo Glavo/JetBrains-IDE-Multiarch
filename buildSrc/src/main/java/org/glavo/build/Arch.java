@@ -37,6 +37,7 @@ public enum Arch {
     public String getGoArch() {
         return switch (this) {
             case X86_64 -> "amd64";
+            case AARCH64 -> "arm64";
             case LOONGARCH64 -> "loong64";
             default -> normalize();
         };
