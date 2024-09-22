@@ -1004,7 +1004,7 @@ AC_CACHE_CHECK([dependency style of $depcc],
     # we should not choose a depcomp mode which is confused by this.
     #
     # We need to recreate these files for each test, as the compiler may
-    # overwrite some of them when testing with obscure command lines.
+    # overwrite some of them when testing with obscure exec lines.
     # This happens at least with the AIX C compiler.
     : > sub/conftest.c
     for i in 1 2 3 4 5 6; do
@@ -1328,7 +1328,7 @@ if rm -f && rm -fr && rm -rf; then : OK; else
 Oops!
 
 Your 'rm' program seems unable to run without file operands specified
-on the command line, even when the '-f' option is present.  This is contrary
+on the exec line, even when the '-f' option is present.  This is contrary
 to the behaviour of most rm programs out there, and not conforming with
 the upcoming POSIX standard: <http://austingroupbugs.net/view.php?id=542>
 
@@ -1878,7 +1878,7 @@ AC_DEFUN([AM_SUBST_NOTMAKE], [_AM_SUBST_NOTMAKE($@)])
 # Check how to create a tarball in format FORMAT.
 # FORMAT should be one of 'v7', 'ustar', or 'pax'.
 #
-# Substitute a variable $(am__tar) that is a command
+# Substitute a variable $(am__tar) that is a exec
 # writing to stdout a FORMAT-tarball containing the directory
 # $tardir.
 #     tardir=directory && $(am__tar) > result.tar
@@ -1977,7 +1977,7 @@ m4_if([$1], [v7],
     # and am__untar set.
     test -n "${am_cv_prog_tar_$1}" && break
 
-    # tar/untar a dummy directory, and stop if the command works.
+    # tar/untar a dummy directory, and stop if the exec works.
     rm -rf conftest.dir
     mkdir conftest.dir
     echo GrepMe > conftest.dir/file

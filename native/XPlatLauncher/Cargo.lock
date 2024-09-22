@@ -965,7 +965,7 @@ checksum = "d78414d29fcc82329080166077e0f7689f4016551fdb334d787c3d040fe2634f"
 dependencies = [
  "gix-actor",
  "gix-attributes",
- "gix-command",
+ "gix-exec",
  "gix-commitgraph",
  "gix-config",
  "gix-credentials",
@@ -1062,7 +1062,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gix-command"
+name = "gix-exec"
 version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d76867867da891cbe32021ad454e8cae90242f6afb06762e4dd0d357afd1d7b"
@@ -1128,7 +1128,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "198588f532e4d1202e04e6c3f50e4d7c060dffc66801c6f53cc246f1d234739e"
 dependencies = [
  "bstr",
- "gix-command",
+ "gix-exec",
  "gix-config-value",
  "gix-path",
  "gix-prompt",
@@ -1207,7 +1207,7 @@ dependencies = [
  "bstr",
  "encoding_rs",
  "gix-attributes",
- "gix-command",
+ "gix-exec",
  "gix-hash",
  "gix-object",
  "gix-packetline-blocking",
@@ -1459,7 +1459,7 @@ version = "0.8.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7e0595d2be4b6d6a71a099e989bdd610882b882da35fb8503d91d6f81aa0936f"
 dependencies = [
- "gix-command",
+ "gix-exec",
  "gix-config-value",
  "parking_lot",
  "rustix",
@@ -1615,7 +1615,7 @@ checksum = "27c02b83763ffe95bcc27ce5821b2b7f843315a009c06f1cd59c9b66c508c058"
 dependencies = [
  "base64 0.22.1",
  "bstr",
- "gix-command",
+ "gix-exec",
  "gix-credentials",
  "gix-features",
  "gix-packetline",

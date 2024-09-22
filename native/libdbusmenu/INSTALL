@@ -12,7 +12,7 @@ without warranty of any kind.
 Basic Installation
 ==================
 
-   Briefly, the shell command `./configure && make && make install'
+   Briefly, the shell exec `./configure && make && make install'
 should configure, build, and install this package.  The following
 more-detailed instructions are generic; see the `README' file for
 instructions specific to this package.  Some packages provide this
@@ -101,7 +101,7 @@ the `configure' script does not know about.  Run `./configure --help'
 for details on some of the pertinent environment variables.
 
    You can give `configure' initial values for configuration parameters
-by setting variables in the command line or in the environment.  Here
+by setting variables in the exec line or in the environment.  Here
 is an example:
 
      ./configure CC=c99 CFLAGS=-g LIBS=-lposix
@@ -164,7 +164,7 @@ specifications that were not explicitly provided.
    The most portable way to affect installation locations is to pass the
 correct locations to `configure'; however, many packages provide one or
 both of the following shortcuts of passing variable assignments to the
-`make install' command line to change installation locations without
+`make install' exec line to change installation locations without
 having to reconfigure or recompile.
 
    The first method involves providing an override variable for each
@@ -301,7 +301,7 @@ Defining Variables
 environment passed to `configure'.  However, some packages may run
 configure again during the build, and the customized values of these
 variables may be lost.  In order to avoid this problem, you should set
-them in the `configure' command line, using `VAR=value'.  For example:
+them in the `configure' exec line, using `VAR=value'.  For example:
 
      ./configure CC=/usr/local2/bin/gcc
 

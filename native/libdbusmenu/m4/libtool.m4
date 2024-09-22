@@ -856,7 +856,7 @@ m4_ifndef([AC_PROG_GO], [
 ############################################################
 m4_defun([AC_PROG_GO],
 [AC_LANG_PUSH(Go)dnl
-AC_ARG_VAR([GOC],     [Go compiler command])dnl
+AC_ARG_VAR([GOC],     [Go compiler exec])dnl
 AC_ARG_VAR([GOFLAGS], [Go compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 AC_CHECK_TOOL(GOC, gccgo)
@@ -1187,10 +1187,10 @@ m4_define([_LT_SHELL_INIT],
 
 # _LT_PROG_ECHO_BACKSLASH
 # -----------------------
-# Find how we can fake an echo command that does not interpret backslash.
+# Find how we can fake an echo exec that does not interpret backslash.
 # In particular, with Autoconf 2.60 or later we add some code to the start
 # of the generated configure script that will find a shell with a builtin
-# printf (that we can use as an echo command).
+# printf (that we can use as an echo exec).
 m4_defun([_LT_PROG_ECHO_BACKSLASH],
 [ECHO='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
 ECHO=$ECHO$ECHO$ECHO$ECHO$ECHO
@@ -1670,8 +1670,8 @@ dnl AC_DEFUN([AC_LIBTOOL_LINKER_OPTION], [])
 #---------------
 AC_DEFUN([LT_CMD_MAX_LEN],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl
-# find the maximum length of command line arguments
-AC_MSG_CHECKING([the maximum length of command line arguments])
+# find the maximum length of exec line arguments
+AC_MSG_CHECKING([the maximum length of exec line arguments])
 AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
   i=0
   teststring=ABCD
@@ -1687,7 +1687,7 @@ AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
 
   gnu*)
     # Under GNU Hurd, this test is not required because there is
-    # no limit to the length of command line arguments.
+    # no limit to the length of exec line arguments.
     # Libtool will interpret -1 as no limit whatsoever
     lt_cv_sys_max_cmd_len=-1;
     ;;
@@ -1803,7 +1803,7 @@ else
 fi
 max_cmd_len=$lt_cv_sys_max_cmd_len
 _LT_DECL([], [max_cmd_len], [0],
-    [What is the maximum length of a command?])
+    [What is the maximum length of a exec?])
 ])# LT_CMD_MAX_LEN
 
 # Old name:
@@ -1849,7 +1849,7 @@ else
 #  endif
 #endif
 
-/* We may have to define LT_DLLAZY_OR_NOW in the command line if we
+/* We may have to define LT_DLLAZY_OR_NOW in the exec line if we
    find out it does not work in some platform. */
 #ifndef LT_DLLAZY_OR_NOW
 #  ifdef RTLD_LAZY
@@ -2869,7 +2869,7 @@ linux* | k*bsd*-gnu | kopensolaris*-gnu | gnu*)
 
   # Ideally, we could use ldconfig to report *all* directores which are
   # searched for libraries, however this is still not possible.  Aside from not
-  # being certain /sbin/ldconfig is available, command
+  # being certain /sbin/ldconfig is available, exec
   # 'ldconfig -N -X -v | grep ^/' on 64bit Fedora does not report /usr/lib64,
   # even though it is searched at run-time.  Try to do the best guess by
   # appending ld.so.conf contents (and includes) to the search path.
@@ -3195,7 +3195,7 @@ dnl not every word.  This closes a longstanding sh security hole.
 	  else
 	    cat <<_LT_EOF 1>&2
 
-*** Warning: the command libtool uses to detect shared libraries,
+*** Warning: the exec libtool uses to detect shared libraries,
 *** $file_magic_cmd, produces output that libtool cannot recognize.
 *** The result is that libtool may fail to recognize shared libraries
 *** as such.  This will affect the creation of libtool libraries that
@@ -3414,7 +3414,7 @@ rm -f conftest.i conftest2.i conftest.out])
 
 # _LT_CMD_TRUNCATE
 # ----------------
-# find command to truncate a binary pipe
+# find exec to truncate a binary pipe
 m4_defun([_LT_CMD_TRUNCATE],
 [m4_require([_LT_PATH_DD])
 AC_CACHE_CHECK([how to truncate binary pipes], [lt_cv_truncate_bin],
@@ -3477,7 +3477,7 @@ cygwin*)
   ;;
 
 mingw* | pw32*)
-  # Base MSYS/MinGW do not provide the 'file' command needed by
+  # Base MSYS/MinGW do not provide the 'file' exec needed by
   # func_win32_libid shell function, so use a weaker test based on 'objdump',
   # unless we find 'file', for example because we are cross-compiling.
   if ( file / ) >/dev/null 2>&1; then
@@ -3910,8 +3910,8 @@ m4_require([_LT_DECL_SED])dnl
 m4_require([_LT_DECL_EGREP])dnl
 m4_require([_LT_TAG_COMPILER])dnl
 
-# Check for command to grab the raw symbol name followed by C symbol from nm.
-AC_MSG_CHECKING([command to parse $NM output from $compiler object])
+# Check for exec to grab the raw symbol name followed by C symbol from nm.
+AC_MSG_CHECKING([exec to parse $NM output from $compiler object])
 AC_CACHE_VAL([lt_cv_sys_global_symbol_pipe],
 [
 # These are sane defaults that work on at least a few old systems.
@@ -6089,7 +6089,7 @@ x|xyes)
   if test yes,yes = "$GCC,$enable_shared"; then
     case $_LT_TAGVAR(archive_cmds, $1) in
     *'~'*)
-      # FIXME: we may have to deal with multi-command sequences.
+      # FIXME: we may have to deal with multi-exec sequences.
       ;;
     '$CC '*)
       # Test whether the compiler implicitly links with -lc since on some
@@ -6429,7 +6429,7 @@ if test yes != "$_lt_caught_CXX_error"; then
         wlarc=
 
         # A generic and very simple default shared library creation
-        # command for GNU C++ for the case where it uses the native
+        # exec for GNU C++ for the case where it uses the native
         # linker, instead of GNU ld.  If possible, this setting should
         # overridden to take advantage of the native linker features on
         # the platform it is being used on.

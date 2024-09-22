@@ -8,6 +8,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.glavo.build.Arch;
 import org.glavo.build.Product;
+import org.glavo.build.util.IOBuffer;
 import org.glavo.build.util.OpenHelper;
 import org.glavo.build.tasks.TransformIDE;
 import org.glavo.build.util.Utils;
@@ -46,8 +47,7 @@ public abstract class IDETransformer implements AutoCloseable {
     protected final TarArchiveInputStream tarInput;
     protected final TarArchiveOutputStream tarOutput;
 
-    private static final int BUFFER_SIZE = 32 * 1024;
-    private final byte[] buffer = new byte[BUFFER_SIZE];
+    protected final IOBuffer buffer = new IOBuffer();
 
     private final OpenHelper helper = new OpenHelper();
 
@@ -71,13 +71,6 @@ public abstract class IDETransformer implements AutoCloseable {
         } catch (Throwable e) {
             helper.onException(e);
             throw e;
-        }
-    }
-
-    protected final void copy(InputStream input, OutputStream output) throws IOException {
-        int read;
-        while ((read = input.read(buffer, 0, BUFFER_SIZE)) >= 0) {
-            output.write(buffer, 0, read);
         }
     }
 
@@ -226,7 +219,7 @@ public abstract class IDETransformer implements AutoCloseable {
                             output.closeEntry();
                         } else {
                             output.putNextEntry(zipEntry);
-                            copy(input, output);
+                            this.buffer.copy(input, output);
                             output.closeEntry();
                         }
                     }
@@ -265,7 +258,7 @@ public abstract class IDETransformer implements AutoCloseable {
             LOGGER.info("Copying {}/{} to {}", task.getJDKArchive().get().getAsFile().getName(), entry.getName(), newName);
             entry.setName(newName);
             tarOutput.putArchiveEntry(entry);
-            copy(jreTar, tarOutput);
+            buffer.copy(jreTar, tarOutput);
             tarOutput.closeArchiveEntry();
         } while ((entry = jreTar.getNextEntry()) != null);
     }
@@ -337,7 +330,7 @@ public abstract class IDETransformer implements AutoCloseable {
             } else {
                 LOGGER.info("Copying {}", path);
                 tarOutput.putArchiveEntry(entry);
-                copy(tarInput, tarOutput);
+                buffer.copy(tarInput, tarOutput);
                 tarOutput.closeArchiveEntry();
             }
         }

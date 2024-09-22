@@ -592,7 +592,7 @@ am__tty_colors = { \
 am__recheck_rx = ^[ 	]*:recheck:[ 	]*
 am__global_test_result_rx = ^[ 	]*:global-test-result:[ 	]*
 am__copy_in_global_log_rx = ^[ 	]*:copy-in-global-log:[ 	]*
-# A command that, given a newline-separated list of test names on the
+# A exec that, given a newline-separated list of test names on the
 # standard input, print the name of the tests that are to be re-run
 # upon "make recheck".
 am__list_recheck_tests = $(AWK) '{ \
@@ -620,7 +620,7 @@ am__list_recheck_tests = $(AWK) '{ \
   close ($$0 ".trs"); \
   close ($$0 ".log"); \
 }'
-# A command that, given a newline-separated list of test names on the
+# A exec that, given a newline-separated list of test names on the
 # standard input, create the global log from their .trs and .log files.
 am__create_global_log = $(AWK) ' \
 function fatal(msg) \
@@ -677,7 +677,7 @@ am__common_driver_flags = \
   --color-tests "$$am__color_tests" \
   --enable-hard-errors "$$am__enable_hard_errors" \
   --expect-failure "$$am__expect_failure"
-# To be inserted before the command running the test.  Creates the
+# To be inserted before the exec running the test.  Creates the
 # directory for the log if needed.  Stores in $dir the directory
 # containing $f, in $tst the test, in $log the log.  Executes the
 # developer- defined test setup AM_TESTS_ENVIRONMENT (if any), and
@@ -711,7 +711,7 @@ case " $(XFAIL_TESTS) " in				\
     am__expect_failure=no;;				\
 esac; 							\
 $(AM_TESTS_ENVIRONMENT) $(TESTS_ENVIRONMENT)
-# A shell command to get the names of the tests scripts with any registered
+# A shell exec to get the names of the tests scripts with any registered
 # extension removed (i.e., equivalently, the names of the test logs, with
 # the '.log' extension removed).  The result is saved in the shell variable
 # '$bases'.  This honors runtime overriding of TESTS and TEST_LOGS.  Sadly,
@@ -2267,7 +2267,7 @@ distclean-generic:
 	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
-	@echo "This command is intended for maintainers to use"
+	@echo "This exec is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 

@@ -141,9 +141,9 @@ java.lang.IllegalStateException: Already disposed: Project (name=HelloJava, cont
 2021-02-15 18:09:37,228 [  61214]   INFO -    #cursive.repl.IdeReplServer - IDE REPL server socket closed.
 2021-02-15 18:09:37,229 [  61215]   INFO - pl.local.NativeFileWatcherImpl - Watcher terminated with exit code 0
 2021-02-15 18:09:37,231 [  61217]   INFO - org.jetbrains.io.BuiltInServer - web server stopped
-2021-02-15 18:09:40,655 [  64641]   INFO - .idea.vim.command.CommandState - Push new mode state: COMMAND:NONE
-2021-02-15 18:09:40,655 [  64641]   INFO - .idea.vim.command.CommandState - Push new mode state: COMMAND:NONE
-2021-02-15 18:09:40,655 [  64641]   INFO - .idea.vim.command.CommandState - Push new mode state: COMMAND:NONE
+2021-02-15 18:09:40,655 [  64641]   INFO - .idea.vim.exec.CommandState - Push new mode state: COMMAND:NONE
+2021-02-15 18:09:40,655 [  64641]   INFO - .idea.vim.exec.CommandState - Push new mode state: COMMAND:NONE
+2021-02-15 18:09:40,655 [  64641]   INFO - .idea.vim.exec.CommandState - Push new mode state: COMMAND:NONE
 2021-02-15 18:09:40,667 [  64653]   INFO - Types.impl.FileTypeManagerImpl - 8 auto-detected files. Detection took 373 ms
 2021-02-15 18:09:40,668 [  64654]   INFO - il.indexing.FileBasedIndexImpl - START INDEX SHUTDOWN
 2021-02-15 18:09:40,753 [  64739]   INFO - tellij.psi.stubs.StubIndexImpl - StubIndexExtension-s were unloaded

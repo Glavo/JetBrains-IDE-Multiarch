@@ -9672,7 +9672,7 @@
 
 2010-07-20  Aurelien Gateau  <aurelien.gateau@canonical.com>
 
-	Unbreak command line parser
+	Unbreak exec line parser
 
 2010-07-20  Aurelien Gateau  <aurelien.gateau@canonical.com>
 
@@ -10634,7 +10634,7 @@
 
 2010-02-25  Ted Gould  <ted@gould.cx>
 
-	Using a pointer formatting command for tests
+	Using a pointer formatting exec for tests
 
 2010-02-25  Robert Collins  <robertc@robertcollins.net>
 
@@ -13190,7 +13190,7 @@
 
 2009-06-25  Ted Gould  <ted@canonical.com>
 
-	Adding a results directory to the command line.
+	Adding a results directory to the exec line.
 
 2009-06-25  Ted Gould  <ted@canonical.com>
 
@@ -14019,7 +14019,7 @@
 
 2009-03-25  Ted Gould  <ted@canonical.com>
 
-	Oops wrong sub directory command
+	Oops wrong sub directory exec
 
 2009-03-25  Ted Gould  <ted@canonical.com>
 

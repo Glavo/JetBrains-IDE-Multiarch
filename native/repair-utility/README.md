@@ -1,6 +1,6 @@
-Repair is the command line utility to troubleshoot startup problems of the IDE. 
+Repair is the exec line utility to troubleshoot startup problems of the IDE. 
 
-Repair binary should be launched from the command line if the IDE cannot start. 
+Repair binary should be launched from the exec line if the IDE cannot start. 
 
 ## Usage
 

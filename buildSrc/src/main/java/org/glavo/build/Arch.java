@@ -1,17 +1,18 @@
 package org.glavo.build;
 
-import com.sun.jna.Native;
 import com.sun.jna.Platform;
 
 import java.util.Locale;
 
 public enum Arch {
+    X86_64,
     AARCH64,
     RISCV64,
     LOONGARCH64;
 
     public static Arch current() {
         return switch (Platform.ARCH) {
+            case "x86-64" -> X86_64;
             case "aarch64" -> AARCH64;
             case "riscv64" -> RISCV64;
             case "loongarch64" -> LOONGARCH64;
@@ -31,5 +32,13 @@ public enum Arch {
 
     public String normalize() {
         return this.name().toLowerCase(Locale.ROOT);
+    }
+
+    public String getGoArch() {
+        if (this == LOONGARCH64) {
+            return "loong64";
+        } else {
+            return normalize();
+        }
     }
 }
