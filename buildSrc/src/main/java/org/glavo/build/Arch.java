@@ -35,10 +35,10 @@ public enum Arch {
     }
 
     public String getGoArch() {
-        if (this == LOONGARCH64) {
-            return "loong64";
-        } else {
-            return normalize();
-        }
+        return switch (this) {
+            case X86_64 -> "amd64";
+            case LOONGARCH64 -> "loong64";
+            default -> normalize();
+        };
     }
 }
