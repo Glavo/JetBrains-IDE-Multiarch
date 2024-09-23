@@ -20,6 +20,7 @@ import org.gradle.process.ExecResult;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -184,7 +185,7 @@ public abstract class BuildNative extends DefaultTask {
                     }
                     case Action.Copy copy -> {
                         LOGGER.lifecycle("Copy {} to {}", copy.source, copy.target);
-                        Files.copy(copy.source, copy.target);
+                        Files.copy(copy.source, copy.target, StandardCopyOption.REPLACE_EXISTING);
                     }
                     case Action.AddResult addResult -> {
                         LOGGER.lifecycle("Add {} to result", addResult.file);
