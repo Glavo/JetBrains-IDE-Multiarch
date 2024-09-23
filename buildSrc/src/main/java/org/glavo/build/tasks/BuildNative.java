@@ -6,6 +6,7 @@ import org.glavo.build.util.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.file.RegularFileProperty;
+import org.gradle.api.logging.LogLevel;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.provider.Property;
@@ -14,6 +15,7 @@ import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.process.ExecResult;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,6 +63,11 @@ public abstract class BuildNative extends DefaultTask {
     @OutputFile
     public abstract RegularFileProperty getOutputFile();
 
+    public BuildNative() {
+        getLogging().captureStandardError(LogLevel.LIFECYCLE);
+        getLogging().captureStandardError(LogLevel.ERROR);
+    }
+
     @TaskAction
     public void run() throws IOException {
         Utils.ensureLinux();
@@ -94,8 +101,8 @@ public abstract class BuildNative extends DefaultTask {
         builder.exec(make, "clean")
                 .working(libdbusmenuDir);
         builder.exec("bash", "./configure",
-                        "--build=" + triple(osArch),
-                        "--host=" + triple(targetArch))
+                        "--build=" + autoMakeTriple(osArch),
+                        "--host=" + autoMakeTriple(targetArch))
                 .working(libdbusmenuDir);
         builder.exec(make)
                 .working(libdbusmenuGlibDir);
@@ -163,33 +170,17 @@ public abstract class BuildNative extends DefaultTask {
                     case Action.Exec exec -> {
                         LOGGER.lifecycle("Exec " + exec.commands);
 
-                        ProcessBuilder processBuilder = new ProcessBuilder(exec.commands);
-                        processBuilder.inheritIO();
+                        this.getProject().exec(execSpec -> {
+                            execSpec.commandLine(exec.commands);
+                            if (exec.workingDir != null) {
+                                execSpec.setWorkingDir(exec.workingDir.toFile());
+                            }
+                            execSpec.environment(builder.env);
+                            if (exec.env != null) {
+                                execSpec.environment(exec.env);
+                            }
 
-                        if (exec.workingDir != null) {
-                            processBuilder.directory(exec.workingDir.toFile());
-                        }
-
-                        processBuilder.environment().putAll(builder.env);
-                        if (exec.env != null) {
-                            processBuilder.environment().putAll(exec.env);
-                        }
-
-                        getStandardOutputCapture().start();
-                        Process process = processBuilder.start();
-                        int result;
-                        try {
-                            result = process.waitFor();
-                        } catch (InterruptedException e) {
-                            process.destroy();
-                            throw new GradleException("Unexpected interrupted exception", e);
-                        } finally {
-                            getStandardOutputCapture().stop();
-                        }
-
-                        if (result != 0) {
-                            throw new GradleException("Process exited with an error: " + result);
-                        }
+                        }).assertNormalExitValue();
                     }
                     case Action.Copy copy -> {
                         LOGGER.lifecycle("Copy {} to {}", copy.source, copy.target);
@@ -208,6 +199,10 @@ public abstract class BuildNative extends DefaultTask {
             getOutputFile().get().getAsFile().delete();
             throw e;
         }
+    }
+
+    private static String autoMakeTriple(Arch arch) {
+        return arch.normalize() + "-linux-gnu";
     }
 
     private static String triple(Arch arch) {
