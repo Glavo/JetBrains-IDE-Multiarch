@@ -115,7 +115,8 @@ public abstract class IDETransformer implements AutoCloseable {
         }
         transformer.put("bin/fsnotifier", getNativeReplacement("fsnotifier"));
         transformer.put("bin/restarter", getNativeReplacement("restarter"));
-        transformer.put("bin/libdbm.so", getNativeReplacement("libdbm.so"));
+        // transformer.put("bin/libdbm.so", getNativeReplacement("libdbm.so"));
+        transformer.put("bin/libdbm.so", new FileTransformer.FilterOut());
         transformer.put("lib/pty4j/linux/%s/libpty.so".formatted(baseArch.normalize()),
                 getNativeReplacement("libpty.so", "lib/pty4j/linux/%s/libpty.so".formatted(targetArch.normalize())));
 
