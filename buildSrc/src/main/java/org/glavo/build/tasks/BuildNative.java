@@ -4,7 +4,6 @@ import org.glavo.build.Arch;
 import org.glavo.build.util.IOBuffer;
 import org.glavo.build.util.Utils;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.GradleException;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.LogLevel;
 import org.gradle.api.logging.Logger;
@@ -15,7 +14,6 @@ import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.process.ExecResult;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,7 +30,7 @@ public abstract class BuildNative extends DefaultTask {
 
     @Input
     @Optional
-    public abstract Property<Arch> getArch();
+    public abstract Property<Arch> getTargetArch();
 
     @Input
     @Optional
@@ -73,7 +71,7 @@ public abstract class BuildNative extends DefaultTask {
     public void run() throws IOException {
         Utils.ensureLinux();
 
-        Arch targetArch = getArch().getOrElse(Arch.current());
+        Arch targetArch = getTargetArch().getOrElse(Arch.current());
         Arch osArch = Arch.current();
         String rustTargetTriple = targetArch.getRustTriple();
 
@@ -143,7 +141,8 @@ public abstract class BuildNative extends DefaultTask {
         builder.exec(go, "build", "-o", repairUtilityFile)
                 .working(repairUtilityDir)
                 .env("GOOS", "linux")
-                .env("GOARCH", targetArch.getGoArch());
+                .env("GOARCH", targetArch.getGoArch())
+                .env("CGO_ENABLED", "0");
         builder.addResult(repairUtilityFile);
 
         // XPlatLauncher

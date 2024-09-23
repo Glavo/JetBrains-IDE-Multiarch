@@ -43,6 +43,10 @@ public enum Arch {
         };
     }
 
+    public String getTriple(String vendor) {
+        return "%s%s-linux-gnu".formatted(normalize(), vendor == null ? "" : "-" + vendor);
+    }
+
     public String getRustTriple() {
         return switch (this) {
             case RISCV64 -> "riscv64gc-unknown-linux-gnu";

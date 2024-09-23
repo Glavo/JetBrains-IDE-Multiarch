@@ -21,6 +21,8 @@ val templateDir = layout.projectDirectory.dir("template")
 val Download.outputFile: File
     get() = outputFiles.first()
 
+fun nativesFile(arch: Arch) = project.file("resources/natives-linux-${arch.normalize()}.zip")
+
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
 val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 
@@ -80,9 +82,7 @@ for (product in products) {
             ideBaseTar.set(downloadProductTask.outputFile)
 
             ideTargetArch.set(targetArch)
-            ideNativesZipFile.set(
-                layout.projectDirectory.dir("resources").file("natives-linux-${targetArch.normalize()}.zip")
-            )
+            ideNativesZipFile.set(nativesFile(targetArch))
             targetFile.set(
                 layout.buildDirectory.dir("target").get()
                     .file(product.getFileNameBase(targetVersion, targetArch) + ".tar.gz")
@@ -91,13 +91,27 @@ for (product in products) {
     }
 }
 
+for (arch in Arch.values()) {
+    val isCross = arch != Arch.current()
+    val archName = arch.normalize()
+    fun findArchProperty(name: String): String? = findProperty("$arch.$name")?.toString()
+
+    tasks.create<BuildNative>("buildNative-$archName") {
+        nativeProjectsRoot.set(project.file("native"))
+        outputFile.set(nativesFile(arch))
+
+        targetArch.set(arch)
+        cc.set(findArchProperty("cc") ?: (if (isCross) arch.getTriple(null) + "-gcc" else "gcc"))
+        cxx.set(findArchProperty("cxx") ?: (if (isCross) arch.getTriple(null) + "-g++" else "g++"))
+        make.set(findArchProperty("make"))
+        cMake.set(findArchProperty("cmake"))
+        go.set(findArchProperty("go"))
+        cargo.set(findArchProperty("cargo"))
+    }
+}
+
 tasks.create<GenerateReadMe>("generateReadMe") {
     templateFile.set(templateDir.file("README.md.template"))
     propertiesFile.set(configDir.file("README.properties"))
     outputFile.set(project.file("README.md"))
-}
-
-tasks.create<BuildNative>("buildNative") {
-    nativeProjectsRoot.set(project.file("native"))
-    outputFile.set(project.file("natives-linux-${Arch.current().normalize()}"))
 }
