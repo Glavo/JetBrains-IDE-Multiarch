@@ -75,6 +75,7 @@ public abstract class BuildNative extends DefaultTask {
 
         Arch targetArch = getArch().getOrElse(Arch.current());
         Arch osArch = Arch.current();
+        String rustTargetTriple = targetArch.getRustTriple();
 
         String cc = getCC().getOrElse("gcc");
         String cxx = getCXX().getOrElse("g++");
@@ -132,9 +133,9 @@ public abstract class BuildNative extends DefaultTask {
 
         // restarter
         Path restarterDir = nativeRoot.resolve("restarter");
-        builder.exec(cargo, "build", "--target=" + targetArch.getRustTriple(), "--release",
+        builder.exec(cargo, "build", "--target=" + rustTargetTriple, "--release",
                 "--manifest-path=" + restarterDir.resolve("Cargo.toml"));
-        builder.addResult(restarterDir.resolve("target/release/restarter"));
+        builder.addResult(restarterDir.resolve("target/" + rustTargetTriple + "/release/restarter"));
 
         // repair-utility
         Path repairUtilityDir = nativeRoot.resolve("repair-utility");
@@ -146,9 +147,9 @@ public abstract class BuildNative extends DefaultTask {
 
         // XPlatLauncher
         Path xplatLauncherDir = nativeRoot.resolve("XPlatLauncher");
-        builder.exec(cargo, "build", "--release", "--target=" + targetArch.getRustTriple(), "--release",
+        builder.exec(cargo, "build", "--release", "--target=" + rustTargetTriple, "--release",
                 "--manifest-path=" + xplatLauncherDir.resolve("Cargo.toml"));
-        builder.addResult(xplatLauncherDir.resolve("target/release/xplat-launcher"));
+        builder.addResult(xplatLauncherDir.resolve("target/" + rustTargetTriple + "/release/xplat-launcher"));
 
         // pty4j
         Path pty4jDir = nativeRoot.resolve("pty4j");
