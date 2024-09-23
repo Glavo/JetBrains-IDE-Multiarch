@@ -1,7 +1,6 @@
 package org.glavo.build;
 
 import com.sun.jna.Platform;
-import kala.value.LazyValue;
 
 import java.util.Locale;
 
@@ -10,11 +9,6 @@ public enum Arch {
     AARCH64,
     RISCV64,
     LOONGARCH64;
-
-    private final LazyValue<String> normalizedName = LazyValue.of(() -> switch (this) {
-        case X86_64 -> "x86-64";
-        default -> this.name().toLowerCase(Locale.ROOT);
-    });
 
     public static Arch current() {
         return switch (Platform.ARCH) {
@@ -37,7 +31,7 @@ public enum Arch {
     }
 
     public String normalize() {
-        return normalizedName.get();
+        return this.name().toLowerCase(Locale.ROOT);
     }
 
     public String getGoArch() {
@@ -46,6 +40,13 @@ public enum Arch {
             case AARCH64 -> "arm64";
             case LOONGARCH64 -> "loong64";
             default -> normalize();
+        };
+    }
+
+    public String getRustTriple() {
+        return switch (this) {
+            case RISCV64 -> "riscv64gc-unknown-linux-gnu";
+            default -> normalize().replace('-', '_') + "-unknown-linux-gnu";
         };
     }
 }

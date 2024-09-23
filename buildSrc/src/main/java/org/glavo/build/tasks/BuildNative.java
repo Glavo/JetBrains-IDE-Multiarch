@@ -132,7 +132,7 @@ public abstract class BuildNative extends DefaultTask {
 
         // restarter
         Path restarterDir = nativeRoot.resolve("restarter");
-        builder.exec(cargo, "build", "--target=" + triple(targetArch), "--release",
+        builder.exec(cargo, "build", "--target=" + targetArch.getRustTriple(), "--release",
                 "--manifest-path=" + restarterDir.resolve("Cargo.toml"));
         builder.addResult(restarterDir.resolve("target/release/restarter"));
 
@@ -146,7 +146,7 @@ public abstract class BuildNative extends DefaultTask {
 
         // XPlatLauncher
         Path xplatLauncherDir = nativeRoot.resolve("XPlatLauncher");
-        builder.exec(cargo, "build", "--release", "--target=" + triple(targetArch), "--release",
+        builder.exec(cargo, "build", "--release", "--target=" + targetArch.getRustTriple(), "--release",
                 "--manifest-path=" + xplatLauncherDir.resolve("Cargo.toml"));
         builder.addResult(xplatLauncherDir.resolve("target/release/xplat-launcher"));
 
@@ -200,10 +200,6 @@ public abstract class BuildNative extends DefaultTask {
             getOutputFile().get().getAsFile().delete();
             throw e;
         }
-    }
-
-    private static String autoMakeTriple(Arch arch) {
-        return arch.normalize() + "-linux-gnu";
     }
 
     private static String triple(Arch arch) {
