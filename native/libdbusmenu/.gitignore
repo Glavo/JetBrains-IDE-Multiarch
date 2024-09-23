@@ -26,6 +26,9 @@ libdbusmenu-glib/menuitem-marshal.c
 libdbusmenu-glib/menuitem-marshal.h
 libdbusmenu-glib/server-marshal.c
 libdbusmenu-glib/server-marshal.h
+libdbusmenu-glib/dbus-menu-clean.xml
+libdbusmenu-glib/dbus-menu-clean.xml.c
+libdbusmenu-glib/dbus-menu-clean.xml.h
 libdbusmenu-gtk/.deps/
 libdbusmenu-gtk/.libs/
 libdbusmenu-gtk/Makefile
