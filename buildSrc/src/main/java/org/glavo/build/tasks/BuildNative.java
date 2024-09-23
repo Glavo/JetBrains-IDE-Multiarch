@@ -41,6 +41,10 @@ public abstract class BuildNative extends DefaultTask {
 
     @Input
     @Optional
+    public abstract Property<String> getMake();
+
+    @Input
+    @Optional
     public abstract Property<String> getCMake();
 
     @Input
@@ -66,6 +70,7 @@ public abstract class BuildNative extends DefaultTask {
 
         String cc = getCC().getOrElse("gcc");
         String cxx = getCXX().getOrElse("g++");
+        String make = getMake().getOrElse("make");
         String cmake = getCMake().getOrElse("cmake");
         String go = getGo().getOrElse("go");
         String cargo = getCargo().getOrElse("cargo");
@@ -86,11 +91,13 @@ public abstract class BuildNative extends DefaultTask {
 
         Path libdbusmenuDir = nativeRoot.resolve("libdbusmenu");
         Path libdbusmenuGlibDir = libdbusmenuDir.resolve("libdbusmenu-glib");
+        builder.exec(make, "clean")
+                .working(libdbusmenuDir);
         builder.exec("bash", "./configure",
                         "--build=" + triple(osArch),
                         "--host=" + triple(targetArch))
                 .working(libdbusmenuDir);
-        builder.exec("make")
+        builder.exec(make)
                 .working(libdbusmenuGlibDir);
         builder.copy(
                 libdbusmenuGlibDir.resolve(".libs/libdbusmenu-glib.a"),
@@ -117,7 +124,7 @@ public abstract class BuildNative extends DefaultTask {
 
         // restarter
         Path restarterDir = nativeRoot.resolve("restarter");
-        builder.exec("cargo", "build", "--target=" + triple(targetArch), "--release",
+        builder.exec(cargo, "build", "--target=" + triple(targetArch), "--release",
                 "--manifest-path=" + restarterDir.resolve("Cargo.toml"));
         builder.addResult(restarterDir.resolve("target/release/restarter"));
 
