@@ -103,10 +103,10 @@ for (arch in Arch.values()) {
         targetArch.set(arch)
         cc.set(findArchProperty("cc") ?: (if (isCross) arch.getTriple(null) + "-gcc" else "gcc"))
         cxx.set(findArchProperty("cxx") ?: (if (isCross) arch.getTriple(null) + "-g++" else "g++"))
-        make.set(findArchProperty("make"))
-        cMake.set(findArchProperty("cmake"))
-        go.set(findArchProperty("go"))
-        cargo.set(findArchProperty("cargo"))
+        make.set(findArchProperty("make") ?: "make")
+        cMake.set(findArchProperty("cmake") ?: "cmake")
+        go.set(findArchProperty("go") ?: "go")
+        cargo.set(findArchProperty("cargo") ?: "cargo")
     }
 }
 
