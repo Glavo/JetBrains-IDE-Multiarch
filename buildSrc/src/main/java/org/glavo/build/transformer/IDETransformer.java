@@ -279,9 +279,7 @@ public abstract class IDETransformer implements AutoCloseable {
         var jbrPrefix = prefix + "jbr/";
 
         Map<String, FileTransformer> transformers = new HashMap<>();
-        getTransformers().forEach((path, transformer) -> {
-            transformers.put(prefix + path, transformer);
-        });
+        getTransformers().forEach((path, transformer) -> transformers.put(prefix + path, transformer));
 
         boolean processedJbr = false;
 
@@ -292,13 +290,13 @@ public abstract class IDETransformer implements AutoCloseable {
             if (path.startsWith(jbrPrefix)) {
                 if (path.equals(jbrPrefix)) {
                     processedJbr = true;
-                    if (task.getJDKArchive().get() == null) {
-                        LOGGER.warn("No JRE provided");
-                    } else {
+                    if (task.getJDKArchive().isPresent()) {
                         LOGGER.lifecycle("Copying JRE from {}", task.getJDKArchive().get());
                         try (var jreTar = new TarArchiveInputStream(new GZIPInputStream(Files.newInputStream(task.getJDKArchive().get().getAsFile().toPath())))) {
                             copyJRE(jbrPrefix, jreTar);
                         }
+                    } else {
+                        LOGGER.warn("No JRE provided");
                     }
                 } else {
                     LOGGER.info("Skip JBR entry: {}", path);
