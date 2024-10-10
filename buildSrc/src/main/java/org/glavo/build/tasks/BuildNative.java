@@ -34,6 +34,10 @@ public abstract class BuildNative extends DefaultTask {
 
     @Input
     @Optional
+    public abstract Property<String> getZig();
+
+    @Input
+    @Optional
     public abstract Property<String> getCC();
 
     @Input

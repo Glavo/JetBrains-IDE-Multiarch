@@ -101,6 +101,7 @@ for (arch in Arch.values()) {
         outputFile.set(nativesFile(arch))
 
         targetArch.set(arch)
+        zig.set(findArchProperty("zig"))
         cc.set(findArchProperty("cc") ?: (if (isCross) arch.getTriple(null) + "-gcc" else "gcc"))
         cxx.set(findArchProperty("cxx") ?: (if (isCross) arch.getTriple(null) + "-g++" else "g++"))
         make.set(findArchProperty("make") ?: "make")
