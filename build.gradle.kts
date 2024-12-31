@@ -29,7 +29,7 @@ val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 val jdkProperties: Map<String, String> = Utils.loadProperties(configDir.file("jdk.properties"))
 val downloadJDKTasks = arches.associateWith { arch ->
     jdkProperties["jdk.linux.${arch.normalize()}.url"]?.let { url ->
-        tasks.create<Download>("downloadJDK-${arch.normalize()}") {
+        tasks.register<Download>("downloadJDK-${arch.normalize()}") {
             src(url)
             dest(downloadDir.dir("jdk"))
             overwrite(false)
@@ -47,7 +47,7 @@ for (product in products) {
     val productBaseArch = Arch.of(productProperties["baseArch"])
     val targetVersion = "$productVersion+$productVersionAdditional"
 
-    val downloadProductTask = tasks.create<Download>("download${product.productCode}") {
+    val downloadProductTask = tasks.register<Download>("download${product.productCode}") {
         inputs.properties(productProperties)
 
         src(product.getDownloadLink(productVersion, productBaseArch))
@@ -55,31 +55,31 @@ for (product in products) {
         overwrite(false)
     }
 
-    tasks.create<ExtractIDE>("extract${product.productCode}") {
+    tasks.register<ExtractIDE>("extract${product.productCode}") {
         dependsOn(downloadProductTask)
 
-        sourceFile.set(downloadProductTask.outputFile)
+        sourceFile.set(downloadProductTask.get().outputFile)
         targetDir.set(
-            downloadProductTask.outputFile.parentFile.resolve(
+            downloadProductTask.get().outputFile.parentFile.resolve(
                 product.getFileNameBase(productVersion, productBaseArch)
             )
         )
     }
 
     for (targetArch in arches) {
-        tasks.create<TransformIDE>("transform${product.productCode}-${targetArch.normalize()}") {
+        tasks.register<TransformIDE>("transform${product.productCode}-${targetArch.normalize()}") {
             dependsOn(downloadProductTask)
 
             inputs.properties(productProperties)
 
             downloadJDKTasks[targetArch]?.let {
                 dependsOn(it)
-                jdkArchive.set(it.outputFile)
+                jdkArchive.set(it.get().outputFile)
             }
 
             ideBaseArch.set(productBaseArch)
             ideProduct.set(product)
-            ideBaseTar.set(downloadProductTask.outputFile)
+            ideBaseTar.set(downloadProductTask.get().outputFile)
 
             ideTargetArch.set(targetArch)
             ideNativesZipFile.set(nativesFile(targetArch))
@@ -96,7 +96,7 @@ for (arch in Arch.values()) {
     val archName = arch.normalize()
     fun findArchProperty(name: String): String? = findProperty("$arch.$name")?.toString()
 
-    tasks.create<BuildNative>("buildNative-$archName") {
+    tasks.register<BuildNative>("buildNative-$archName") {
         nativeProjectsRoot.set(project.file("native"))
         outputFile.set(nativesFile(arch))
 
@@ -111,7 +111,7 @@ for (arch in Arch.values()) {
     }
 }
 
-tasks.create<GenerateReadMe>("generateReadMe") {
+tasks.register<GenerateReadMe>("generateReadMe") {
     templateFile.set(templateDir.file("README.md.template"))
     propertiesFile.set(configDir.file("README.properties"))
     outputFile.set(project.file("README.md"))
