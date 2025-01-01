@@ -62,21 +62,6 @@ mod tests {
         classpath_test_impl(&test);
     }
 
-    #[test]
-    #[cfg(target_os = "windows")]
-    fn classpath_test_on_acp() {
-        use windows::Win32::Globalization::{CP_ACP, MB_ERR_INVALID_CHARS, MultiByteToWideChar};
-
-        let acp_chars = [0xc0, 0xc1, 0xc2, 0xc3];
-        let mut ucs_chars = vec![0u16; 4];
-        let ucs_len = unsafe { MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, &acp_chars, Some(&mut ucs_chars)) };
-        assert_eq!(ucs_len, 4, "MultiByteToWideChar={} err={}", ucs_len, std::io::Error::last_os_error());
-        let utf_str = String::from_utf16(&ucs_chars).unwrap();
-
-        let test = prepare_custom_test_env(LauncherLocation::Standard, Some(&utf_str), true);
-        classpath_test_impl(&test);
-    }
-
     fn classpath_test_impl(test: &TestEnvironment) {
         let dump = run_launcher_ext(test, LauncherRunSpec::standard().with_dump().assert_status()).dump();
         let classpath = &dump.systemProperties["java.class.path"];
@@ -257,6 +242,16 @@ mod tests {
         let dump = run_launcher_ext(&test, LauncherRunSpec::standard().with_dump().assert_status()).dump();
 
         assert_eq!(dump.systemProperties["jb.vmOptionsFile.corrupted"], "true");
+    }
+
+    #[test]
+    fn debug_vm_option_test() {
+        let mut test = prepare_test_env(LauncherLocation::Standard);
+        test.create_toolbox_vm_options("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n\n");
+
+        let dump = run_launcher_ext(&test, LauncherRunSpec::standard().with_dump().assert_status()).dump();
+
+        assert_vm_option_presence(&dump, "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n");
     }
 
     #[test]

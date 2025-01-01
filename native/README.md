@@ -4,8 +4,8 @@
 * [fsNotifier](./fsNotifier): `f93937d167866171179b804c5ee4db735f6c6992`
 * [restarter](./restarter): `9e1cb16ee3fd934dab87f189e762df994e851903`
 * [repair-utility](./repair-utility): `5b258db4987eb9de11949fe29baa52e9437f3db8`
-* [XPlatLauncher](./XPlatLauncher): `d23d55e2a83ac98bf5921760d237991eff3bfbc1`
-  * [Cargo.toml](./XPlatLauncher/Cargo.toml): L24~L25
+* [XPlatLauncher](./XPlatLauncher): `8709a0428509a8082e200b7c0b50fe47301404cf`
+  * [Cargo.toml](./XPlatLauncher/Cargo.toml): L28~L29
   
 ## [pty4j](https://github.com/JetBrains/pty4j/tree/master/native)
 

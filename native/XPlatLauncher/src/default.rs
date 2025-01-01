@@ -104,14 +104,15 @@ impl DefaultLaunchConfiguration {
         let caches_home = get_caches_home()?;
 
         let product_info = read_product_info(&product_info_file)?;
-        let (launch_info, custom_data_directory_name) = compute_launch_info(&product_info, args.first())?;
+        let product_launch_info = compute_launch_info(&product_info, args.first())?;
+        let launch_info = product_launch_info.product_info_launch_field;
         let vm_options_rel_path = &launch_info.vmOptionsFilePath;
-        let vm_options_path = product_info_file.parent().unwrap().join(vm_options_rel_path);
-        let data_directory_name = custom_data_directory_name.unwrap_or(product_info.dataDirectoryName.clone());
+        let vm_options_path = product_info_file.parent().context("failed to get product_info_file parent()")?.join(vm_options_rel_path);
+        let data_directory_name = product_launch_info.custom_data_directory_name.unwrap_or(product_info.dataDirectoryName.clone());
         let user_config_dir = config_home.join(&product_info.productVendor).join(&data_directory_name);
         let user_caches_dir = caches_home.join(&product_info.productVendor).join(&data_directory_name);
         let launcher_base_name = Self::get_launcher_base_name(vm_options_rel_path);
-        let env_var_base_name = product_info.envVarBaseName.clone();
+        let env_var_base_name = product_launch_info.custom_env_var_base_name.unwrap_or(product_info.envVarBaseName.clone());
 
         let config = DefaultLaunchConfiguration {
             product_info,
@@ -286,15 +287,17 @@ impl DefaultLaunchConfiguration {
             Err(e) => { debug!("Failed: {}", e.to_string()); }
         }
 
-        let real_ide_home = if cfg!(target_os = "macos") { self.ide_home.parent().unwrap() } else { &self.ide_home };
-        let tb_file_base = real_ide_home.file_name().unwrap().to_str().unwrap();
-        let tb_file_path = real_ide_home.parent().unwrap().join(tb_file_base.to_string() + ".vmoptions");
+        let real_ide_home = if cfg!(target_os = "macos") { self.ide_home.parent().context("Failed to get ide_home parent")? } else { &self.ide_home };
+        let tb_file_base = real_ide_home.file_name()
+            .context("Failed to get real_ide_home file_name()")?.to_str()
+            .context("Failed to get to_str() from real_ide_home file_name()")?;
+        let tb_file_path = real_ide_home.parent().context("Failed to get real_ide_home parent()")?.join(tb_file_base.to_string() + ".vmoptions");
         debug!("Checking {:?}", tb_file_path);
         if tb_file_path.is_file() {
             return Ok(tb_file_path);
         }
 
-        let user_file_name = self.vm_options_path.file_name().unwrap();
+        let user_file_name = self.vm_options_path.file_name().context("failed to vm_options_path file_name()")?;
         let user_file_path = self.user_config_dir.join(user_file_name);
         debug!("Checking {:?}", user_file_path);
         if user_file_path.is_file() {
@@ -331,8 +334,14 @@ pub fn read_product_info(product_info_path: &Path) -> Result<ProductInfo> {
     Ok(product_info)
 }
 
+pub struct ProductLaunchInfo {
+    pub product_info_launch_field: ProductInfoLaunchField,
+    pub custom_env_var_base_name: Option<String>,
+    pub custom_data_directory_name: Option<String>,
+}
+
 pub fn compute_launch_info(product_info: &ProductInfo, command_name: Option<&String>)
-    -> Result<(ProductInfoLaunchField, Option<String>)> {
+    -> Result<ProductLaunchInfo> {
 
     if product_info.launch.len() != 1 {
         bail!("Malformed product descriptor (expecting 1 'launch' record, got {})", product_info.launch.len())
@@ -352,9 +361,13 @@ pub fn compute_launch_info(product_info: &ProductInfo, command_name: Option<&Str
     };
 
     let result = match custom_command_data {
-        None => (launch_data.clone(), None),
-        Some(custom_command_data) => {
-            (ProductInfoLaunchField {
+        None => ProductLaunchInfo {
+            product_info_launch_field: launch_data.clone(),
+            custom_env_var_base_name: None,
+            custom_data_directory_name: None
+        },
+        Some(custom_command_data) => ProductLaunchInfo {
+            product_info_launch_field: ProductInfoLaunchField {
                 vmOptionsFilePath: custom_command_data.vmOptionsFilePath.clone().unwrap_or(launch_data.vmOptionsFilePath.clone()),
                 bootClassPathJarNames: if !custom_command_data.bootClassPathJarNames.is_empty() {
                     custom_command_data.bootClassPathJarNames.clone()
@@ -370,7 +383,9 @@ pub fn compute_launch_info(product_info: &ProductInfo, command_name: Option<&Str
                 },
                 mainClass: custom_command_data.mainClass.clone().unwrap_or(launch_data.mainClass.clone()),
                 customCommands: None
-            }, custom_command_data.dataDirectoryName.clone())
+            },
+            custom_env_var_base_name: custom_command_data.envVarBaseName.clone(),
+            custom_data_directory_name: custom_command_data.dataDirectoryName.clone()
         }
     };
     Ok(result)
