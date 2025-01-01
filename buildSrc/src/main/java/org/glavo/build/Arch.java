@@ -16,6 +16,7 @@
 package org.glavo.build;
 
 import com.sun.jna.Platform;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -23,7 +24,10 @@ public enum Arch {
     X86_64,
     AARCH64,
     RISCV64,
-    LOONGARCH64;
+    LOONGARCH64,
+    UNKNOWN;
+
+    private final String normalizedName = name().toLowerCase(Locale.ROOT);
 
     public static Arch current() {
         return switch (Platform.ARCH) {
@@ -31,7 +35,7 @@ public enum Arch {
             case "aarch64" -> AARCH64;
             case "riscv64" -> RISCV64;
             case "loongarch64" -> LOONGARCH64;
-            default -> null;
+            default -> UNKNOWN;
         };
     }
 
@@ -46,7 +50,7 @@ public enum Arch {
     }
 
     public String normalize() {
-        return this.name().toLowerCase(Locale.ROOT);
+        return normalizedName;
     }
 
     public String getGoArch() {
@@ -58,11 +62,12 @@ public enum Arch {
         };
     }
 
-    public String getTriple(String vendor) {
+    public String getTriple(@Nullable String vendor) {
         return "%s%s-linux-gnu".formatted(normalize(), vendor == null ? "" : "-" + vendor);
     }
 
     public String getRustTriple() {
+        //noinspection SwitchStatementWithTooFewBranches
         return switch (this) {
             case RISCV64 -> "riscv64gc-unknown-linux-gnu";
             default -> normalize().replace('-', '_') + "-unknown-linux-gnu";
