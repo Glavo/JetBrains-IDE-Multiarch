@@ -17,6 +17,7 @@ package org.glavo.build.tasks;
 
 import org.glavo.build.Arch;
 import org.glavo.build.util.IOBuffer;
+import org.glavo.build.util.StreamPump;
 import org.glavo.build.util.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
@@ -31,12 +32,14 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -192,7 +195,7 @@ public abstract class BuildNative extends DefaultTask {
                     case Action.Exec exec -> {
                         LOGGER.lifecycle("Exec " + exec.commands);
 
-                        ProcessBuilder processBuilder = new ProcessBuilder(exec.commands).inheritIO();
+                        ProcessBuilder processBuilder = new ProcessBuilder(exec.commands);
                         processBuilder.environment().putAll(builder.env);
                         if (exec.env != null) {
                             processBuilder.environment().putAll(exec.env);
@@ -202,6 +205,7 @@ public abstract class BuildNative extends DefaultTask {
                         }
 
                         Process process = processBuilder.start();
+                        StreamPump.pump(process, LOGGER);
                         if (process.waitFor() != 0) {
                             throw new GradleException("Process exit with code " + process.exitValue());
                         }
