@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025 Glavo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import de.undercouch.gradle.tasks.download.Download
 import org.glavo.build.Arch
 import org.glavo.build.Product
@@ -24,7 +40,7 @@ val Download.outputFile: File
 fun nativesFile(arch: Arch) = project.file("resources/natives-linux-${arch.normalize()}.zip")
 
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
-val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
+// val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 
 val jdkProperties: Map<String, String> = Utils.loadProperties(configDir.file("jdk.properties"))
 val downloadJDKTasks = arches.associateWith { arch ->
@@ -39,7 +55,7 @@ val downloadJDKTasks = arches.associateWith { arch ->
 
 val allProductProperties: Map<String, String> = Utils.loadProperties(configDir.file("product.properties"))
 
-for (product in products) {
+for (product in Product.values()) {
     val productProperties = product.resolveProperties(allProductProperties)
 
     val productVersion = productProperties["version"]
