@@ -192,7 +192,7 @@ public abstract class BuildNative extends DefaultTask {
             for (Action action : builder.actions) {
                 switch (action) {
                     case Action.Exec exec -> {
-                        LOGGER.lifecycle("Exec " + exec.commands);
+                        LOGGER.lifecycle("> Exec " + exec.commands);
 
                         ProcessBuilder processBuilder = new ProcessBuilder(exec.commands);
                         processBuilder.environment().putAll(builder.env);
@@ -210,11 +210,11 @@ public abstract class BuildNative extends DefaultTask {
                         }
                     }
                     case Action.Copy copy -> {
-                        LOGGER.lifecycle("Copy {} to {}", copy.source, copy.target);
+                        LOGGER.lifecycle("> Copy {} to {}", copy.source, copy.target);
                         Files.copy(copy.source, copy.target, StandardCopyOption.REPLACE_EXISTING);
                     }
                     case Action.AddResult addResult -> {
-                        LOGGER.lifecycle("Add {} to result", addResult.file);
+                        LOGGER.lifecycle("> Add {} to result", addResult.file);
                         out.putNextEntry(new ZipEntry(addResult.name));
                         try (var input = Files.newInputStream(addResult.file)) {
                             buffer.copy(input, out);
