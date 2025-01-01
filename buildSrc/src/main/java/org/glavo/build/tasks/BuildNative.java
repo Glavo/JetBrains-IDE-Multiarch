@@ -19,6 +19,7 @@ import org.glavo.build.Arch;
 import org.glavo.build.util.IOBuffer;
 import org.glavo.build.util.Utils;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.GradleException;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.LogLevel;
 import org.gradle.api.logging.Logger;
@@ -87,7 +88,7 @@ public abstract class BuildNative extends DefaultTask {
     }
 
     @TaskAction
-    public void run() throws IOException {
+    public void run() throws IOException, InterruptedException {
         Utils.ensureLinux();
 
         Arch targetArch = getTargetArch().getOrElse(Arch.current());
@@ -191,17 +192,19 @@ public abstract class BuildNative extends DefaultTask {
                     case Action.Exec exec -> {
                         LOGGER.lifecycle("Exec " + exec.commands);
 
-                        this.getProject().exec(execSpec -> {
-                            execSpec.commandLine(exec.commands);
-                            if (exec.workingDir != null) {
-                                execSpec.setWorkingDir(exec.workingDir.toFile());
-                            }
-                            execSpec.environment(builder.env);
-                            if (exec.env != null) {
-                                execSpec.environment(exec.env);
-                            }
+                        ProcessBuilder processBuilder = new ProcessBuilder(exec.commands).inheritIO();
+                        processBuilder.environment().putAll(builder.env);
+                        if (exec.env != null) {
+                            processBuilder.environment().putAll(exec.env);
+                        }
+                        if (exec.workingDir != null) {
+                            processBuilder.directory(exec.workingDir.toFile());
+                        }
 
-                        }).assertNormalExitValue();
+                        Process process = processBuilder.start();
+                        if (process.waitFor() != 0) {
+                            throw new GradleException("Process exit with code " + process.exitValue());
+                        }
                     }
                     case Action.Copy copy -> {
                         LOGGER.lifecycle("Copy {} to {}", copy.source, copy.target);
@@ -217,6 +220,7 @@ public abstract class BuildNative extends DefaultTask {
                 }
             }
         } catch (Throwable e) {
+            //noinspection ResultOfMethodCallIgnored
             getOutputFile().get().getAsFile().delete();
             throw e;
         }
