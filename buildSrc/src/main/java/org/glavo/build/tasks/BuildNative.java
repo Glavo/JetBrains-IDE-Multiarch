@@ -32,7 +32,6 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -228,10 +227,6 @@ public abstract class BuildNative extends DefaultTask {
             getOutputFile().get().getAsFile().delete();
             throw e;
         }
-    }
-
-    private static String triple(Arch arch) {
-        return arch.normalize() + "-unknown-linux-gnu";
     }
 
     private sealed interface Action {
