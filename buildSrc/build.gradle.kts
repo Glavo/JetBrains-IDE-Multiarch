@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-repositories {
-    mavenCentral()
-}
-
 tasks.compileJava {
     options.release.set(21)
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {

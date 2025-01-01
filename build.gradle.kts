@@ -24,6 +24,7 @@ import org.glavo.build.tasks.GenerateReadMe
 import org.glavo.build.tasks.TransformIDE
 
 plugins {
+    id("java")
     id("de.undercouch.download") version "5.6.0"
 }
 
@@ -131,4 +132,10 @@ tasks.register<GenerateReadMe>("generateReadMe") {
     templateFile.set(templateDir.file("README.md.template"))
     propertiesFile.set(configDir.file("README.properties"))
     outputFile.set(project.file("README.md"))
+}
+
+
+// In order for Intellij to download the source code of dependencies
+repositories {
+    mavenCentral()
 }
