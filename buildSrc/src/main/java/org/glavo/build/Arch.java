@@ -73,4 +73,9 @@ public enum Arch {
             default -> normalize().replace('-', '_') + "-unknown-linux-gnu";
         };
     }
+
+    @Override
+    public String toString() {
+        return normalize();
+    }
 }

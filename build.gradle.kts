@@ -54,6 +54,45 @@ val downloadJDKTasks = arches.associateWith { arch ->
     }
 }
 
+val nativesProperties: Map<String, String> = Utils.loadProperties(configDir.file("natives.properties"))
+
+for (arch in Arch.values()) {
+    val isCross = arch != Arch.current()
+    val archName = arch.normalize()
+    fun findArchProperty(name: String): String? = findProperty("$arch.$name")?.toString()
+
+    val nativesFile = nativesFile(arch)
+
+    val buildNatives = tasks.register<BuildNative>("buildNatives-$archName") {
+        nativeProjectsRoot.set(project.file("native"))
+        outputFile.set(nativesFile)
+
+        targetArch.set(arch)
+        zig.set(findArchProperty("zig"))
+        cc.set(findArchProperty("cc") ?: (if (isCross) arch.getTriple(null) + "-gcc" else "gcc"))
+        cxx.set(findArchProperty("cxx") ?: (if (isCross) arch.getTriple(null) + "-g++" else "g++"))
+        make.set(findArchProperty("make") ?: "make")
+        cMake.set(findArchProperty("cmake") ?: "cmake")
+        go.set(findArchProperty("go") ?: "go")
+        cargo.set(findArchProperty("cargo") ?: "cargo")
+    }
+
+    val nativesUrl = nativesProperties["natives.linux.$archName.url"]
+    if (nativesUrl != null) {
+        tasks.register<Download>("downloadNative-$archName") {
+            src(nativesUrl)
+            dest(nativesFile)
+            overwrite(false)
+        }
+    } else {
+        tasks.register("fetchNatives-$archName") {
+            if (!nativesFile.exists()) {
+                dependsOn(buildNatives)
+            }
+        }
+    }
+}
+
 val allProductProperties: Map<String, String> = Utils.loadProperties(configDir.file("product.properties"))
 
 for (product in Product.values()) {
@@ -84,8 +123,8 @@ for (product in Product.values()) {
     }
 
     for (targetArch in arches) {
-        tasks.register<TransformIDE>("transform${product.productCode}-${targetArch.normalize()}") {
-            dependsOn(downloadProductTask)
+        tasks.register<TransformIDE>("transform${product.productCode}-$targetArch") {
+            dependsOn(downloadProductTask, "fetchNatives-$targetArch")
 
             inputs.properties(productProperties)
 
@@ -108,40 +147,6 @@ for (product in Product.values()) {
     }
 }
 
-val nativesProperties: Map<String, String> = Utils.loadProperties(configDir.file("natives.properties"))
-
-for (arch in Arch.values()) {
-    val isCross = arch != Arch.current()
-    val archName = arch.normalize()
-    fun findArchProperty(name: String): String? = findProperty("$arch.$name")?.toString()
-
-    val buildNative = tasks.register<BuildNative>("buildNative-$archName") {
-        nativeProjectsRoot.set(project.file("native"))
-        outputFile.set(nativesFile(arch))
-
-        targetArch.set(arch)
-        zig.set(findArchProperty("zig"))
-        cc.set(findArchProperty("cc") ?: (if (isCross) arch.getTriple(null) + "-gcc" else "gcc"))
-        cxx.set(findArchProperty("cxx") ?: (if (isCross) arch.getTriple(null) + "-g++" else "g++"))
-        make.set(findArchProperty("make") ?: "make")
-        cMake.set(findArchProperty("cmake") ?: "cmake")
-        go.set(findArchProperty("go") ?: "go")
-        cargo.set(findArchProperty("cargo") ?: "cargo")
-    }
-
-    val nativesUrl = nativesProperties["natives.linux.$archName.url"]
-    if (nativesUrl != null) {
-        tasks.register<Download>("downloadNative-$archName") {
-            src(nativesUrl)
-            dest(nativesFile(arch))
-            overwrite(false)
-        }
-    } else {
-        tasks.register("fetchNative-$archName") {
-            dependsOn(buildNative)
-        }
-    }
-}
 
 tasks.register<GenerateReadMe>("generateReadMe") {
     templateFile.set(templateDir.file("README.md.template"))
