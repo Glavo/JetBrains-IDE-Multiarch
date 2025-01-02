@@ -221,11 +221,11 @@ public abstract class IDETransformer implements AutoCloseable {
                             }
                             foundOSFacadeImpl = true;
 
-                            byte[] bytes;
-                            try (var stream = IDETransformer.class.getResourceAsStream("OSFacadeImpl.class.bin")) {
-                                //noinspection DataFlowIssue
-                                bytes = stream.readAllBytes();
-                            }
+                            byte[] bytes = OSFacadeImplProcessor.process(input.readAllBytes());
+//                            try (var stream = IDETransformer.class.getResourceAsStream("OSFacadeImpl.class.bin")) {
+//                                //noinspection DataFlowIssue
+//                                bytes = stream.readAllBytes();
+//                            }
 
                             ZipEntry newEntry = new ZipEntry(zipEntry.getName());
                             newEntry.setSize(bytes.length);
