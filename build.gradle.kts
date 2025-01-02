@@ -80,7 +80,7 @@ for (arch in Arch.values()) {
     }
 
     val nativesUrl = nativesProperties["natives.linux.$archName.url"]
-    if (nativesUrl != null && !nativesFile.exists()) {
+    if (nativesUrl != null) {
         tasks.register<Download>("fetchNatives-$archName") {
             group = "natives"
 
@@ -91,10 +91,7 @@ for (arch in Arch.values()) {
     } else {
         tasks.register("fetchNatives-$archName") {
             group = "natives"
-
-            if (!nativesFile.exists()) {
-                dependsOn(buildNatives)
-            }
+            dependsOn(buildNatives)
         }
     }
 }
