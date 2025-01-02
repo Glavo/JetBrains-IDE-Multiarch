@@ -64,6 +64,8 @@ for (arch in Arch.values()) {
     val nativesFile = nativesFile(arch)
 
     val buildNatives = tasks.register<BuildNative>("buildNatives-$archName") {
+        group = "natives"
+
         nativeProjectsRoot.set(project.file("native"))
         outputFile.set(nativesFile)
 
@@ -78,14 +80,18 @@ for (arch in Arch.values()) {
     }
 
     val nativesUrl = nativesProperties["natives.linux.$archName.url"]
-    if (nativesUrl != null) {
-        tasks.register<Download>("downloadNative-$archName") {
+    if (nativesUrl != null && !nativesFile.exists()) {
+        tasks.register<Download>("fetchNatives-$archName") {
+            group = "natives"
+
             src(nativesUrl)
             dest(nativesFile)
             overwrite(false)
         }
     } else {
         tasks.register("fetchNatives-$archName") {
+            group = "natives"
+
             if (!nativesFile.exists()) {
                 dependsOn(buildNatives)
             }
@@ -104,6 +110,8 @@ for (product in Product.values()) {
     val targetVersion = "$productVersion+$productVersionAdditional"
 
     val downloadProductTask = tasks.register<Download>("download${product.productCode}") {
+        group = "download"
+
         inputs.properties(productProperties)
 
         src(product.getDownloadLink(productVersion, productBaseArch))
@@ -112,6 +120,8 @@ for (product in Product.values()) {
     }
 
     tasks.register<ExtractIDE>("extract${product.productCode}") {
+        group = "download"
+
         dependsOn(downloadProductTask)
 
         sourceFile.set(downloadProductTask.get().outputFile)
@@ -124,6 +134,8 @@ for (product in Product.values()) {
 
     for (targetArch in arches) {
         tasks.register<TransformIDE>("transform${product.productCode}-$targetArch") {
+            group = "build"
+
             dependsOn(downloadProductTask, "fetchNatives-$targetArch")
 
             inputs.properties(productProperties)
