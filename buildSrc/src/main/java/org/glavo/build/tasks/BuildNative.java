@@ -105,7 +105,7 @@ public abstract class BuildNative extends DefaultTask {
         String cargo = getCargo().getOrElse("cargo");
 
         Path nativeRoot = Utils.getAsPath(getNativeProjectsRoot()).toAbsolutePath();
-        Path buildDir = nativeRoot.resolve("build");
+        Path buildDir = getProject().getLayout().getBuildDirectory().dir("native-" + targetArch.normalize()).get().getAsFile().toPath();
 
         Utils.deleteDirectory(buildDir);
         Files.createDirectories(buildDir);
