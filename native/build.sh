@@ -15,20 +15,6 @@ rm -rf "$OUTPUT_DIR"
 mkdir -p "$NATIVE_BUILD_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-## libdbusmenu
-LIBDBUSMENU_DIR="$NATIVE_DIR/libdbusmenu"
-cd "$LIBDBUSMENU_DIR"
-./configure --build "$TARGET_ARCH-unknown-linux-gnu" --target "$TARGET_ARCH-unknown-linux-gnu"
-cd "$LIBDBUSMENU_DIR/libdbusmenu-glib"
-make
-cp "$LIBDBUSMENU_DIR/libdbusmenu-glib/.libs/libdbusmenu-glib.a" "$NATIVE_DIR/LinuxGlobalMenu/"
-cd "$NATIVE_DIR"
-
-## LinuxGlobalMenu
-cmake -DCMAKE_BUILD_TYPE=Release -S "$NATIVE_DIR/LinuxGlobalMenu/" -B "$NATIVE_BUILD_DIR/LinuxGlobalMenu/"
-cmake --build "$NATIVE_BUILD_DIR/LinuxGlobalMenu/"
-cp "$NATIVE_BUILD_DIR/LinuxGlobalMenu/libdbm.so" "$OUTPUT_DIR/libdbm.so"
-
 ## fsNotifier
 FSNOTIFIER_DIR="$NATIVE_DIR/fsNotifier"
 $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"f93937d\"" -std=c11 \

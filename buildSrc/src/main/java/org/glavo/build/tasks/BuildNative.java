@@ -114,32 +114,6 @@ public abstract class BuildNative extends DefaultTask {
                 .env("CC", cc)
                 .env("CXX", cxx);
 
-//        // LinuxGlobalMenu
-//        Path linuxGlobalMenuDir = nativeRoot.resolve("LinuxGlobalMenu");
-//        Path linuxGlobalMenuBuildDir = buildDir.resolve("LinuxGlobalMenu");
-//
-//        Path libdbusmenuDir = nativeRoot.resolve("libdbusmenu");
-//        Path libdbusmenuGlibDir = libdbusmenuDir.resolve("libdbusmenu-glib");
-//        builder.exec(make, "clean")
-//                .working(libdbusmenuDir);
-//        builder.exec("bash", "./configure",
-//                        "--build=" + autoMakeTriple(osArch),
-//                        "--host=" + autoMakeTriple(targetArch))
-//                .working(libdbusmenuDir);
-//        builder.exec(make)
-//                .working(libdbusmenuGlibDir);
-//        builder.copy(
-//                libdbusmenuGlibDir.resolve(".libs/libdbusmenu-glib.a"),
-//                linuxGlobalMenuDir.resolve("libdbusmenu-glib.a")
-//        );
-//
-//        builder.exec(cmake, "-DCMAKE_BUILD_TYPE=Release",
-//                "-S", linuxGlobalMenuDir,
-//                "-B", linuxGlobalMenuBuildDir
-//        );
-//        builder.exec(cmake, "--build", linuxGlobalMenuBuildDir);
-//        builder.addResult(linuxGlobalMenuBuildDir.resolve("libdbm.so"));
-
         // fsNotifier
         Path fsNotifierDir = nativeRoot.resolve("fsNotifier");
         Path fsNotifierTargetFile = buildDir.resolve("fsnotifier");
