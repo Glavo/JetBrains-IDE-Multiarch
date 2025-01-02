@@ -27,6 +27,12 @@ import org.glavo.build.util.IOBuffer;
 import org.glavo.build.util.OpenHelper;
 import org.glavo.build.tasks.TransformIDE;
 import org.glavo.build.util.Utils;
+import org.glavo.classfile.ClassFile;
+import org.glavo.classfile.ClassModel;
+import org.glavo.classfile.ClassTransform;
+import org.glavo.classfile.constantpool.PoolEntry;
+import org.glavo.classfile.constantpool.StringEntry;
+import org.glavo.classfile.instruction.ConstantInstruction;
 import org.gradle.api.GradleException;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -41,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.zip.*;
 
 import static java.util.Objects.requireNonNullElse;
@@ -119,6 +126,41 @@ public abstract class IDETransformer implements AutoCloseable {
                 return;
             }
         }
+    }
+
+    private static byte[] processOSFacadeImpl(byte[] bytes) {
+        ClassFile cf = ClassFile.of();
+        ClassModel cm = cf.parse(bytes);
+
+        StringEntry cEntry = null;
+        StringEntry utilEntry = null;
+
+        for (PoolEntry entry : cm.constantPool()) {
+            if (entry instanceof StringEntry stringEntry) {
+                switch (stringEntry.stringValue()) {
+                    case "c" -> cEntry = stringEntry;
+                    case "util" -> utilEntry = stringEntry;
+                }
+            }
+        }
+
+        StringEntry finalCEntry = cEntry;
+        StringEntry finalUtilEntry = utilEntry;
+
+        Objects.requireNonNull(utilEntry, "utilEntry");
+        Objects.requireNonNull(cEntry, "cEntry");
+
+        ClassTransform ct = ClassTransform.transformingMethodBodies(model -> model.methodName().equalsString("<clinit>"),
+                (builder, code) -> {
+                    if (code instanceof ConstantInstruction.LoadConstantInstruction ldc
+                        && ldc.constantEntry().index() == finalUtilEntry.index()) {
+                        builder.with(ConstantInstruction.ofLoad(ldc.opcode(), finalCEntry));
+                    } else {
+                        builder.with(code);
+                    }
+                });
+
+        return cf.transform(cm, ct);
     }
 
     @MustBeInvokedByOverriders
@@ -221,7 +263,7 @@ public abstract class IDETransformer implements AutoCloseable {
                             }
                             foundOSFacadeImpl = true;
 
-                            byte[] bytes = OSFacadeImplProcessor.process(input.readAllBytes());
+                            byte[] bytes = processOSFacadeImpl(input.readAllBytes());
 //                            try (var stream = IDETransformer.class.getResourceAsStream("OSFacadeImpl.class.bin")) {
 //                                //noinspection DataFlowIssue
 //                                bytes = stream.readAllBytes();
