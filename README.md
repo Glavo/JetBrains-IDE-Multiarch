@@ -1,6 +1,6 @@
 # JetBrains IDEs for Linux LoongArch64/RISC-V 64
 
-This project provides JetBrians IDEs distributions for more architectures.
+This project provides JetBrains IDEs distributions for more architectures.
 
 Currently supported platforms:
 
