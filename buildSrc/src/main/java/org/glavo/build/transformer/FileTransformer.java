@@ -22,12 +22,11 @@ import java.io.IOException;
 
 public sealed interface FileTransformer {
 
-    boolean optional();
+    default boolean optional() {
+        return false;
+    }
 
-    record Replace(boolean optional, byte[] replacement, @Nullable String targetPath) implements FileTransformer {
-        public Replace(byte[] replacement, @Nullable String targetPath) {
-            this(false, replacement, targetPath);
-        }
+    record Replace(byte[] replacement, @Nullable String targetPath) implements FileTransformer {
     }
 
     record FilterOut(boolean optional) implements FileTransformer {
@@ -36,9 +35,6 @@ public sealed interface FileTransformer {
         }
     }
 
-    record Transform(boolean optional, CheckedFunction<byte[], byte[], IOException> action) implements FileTransformer {
-        public Transform(CheckedFunction<byte[], byte[], IOException> action) {
-            this(false, action);
-        }
+    record Transform(CheckedFunction<byte[], byte[], IOException> action) implements FileTransformer {
     }
 }

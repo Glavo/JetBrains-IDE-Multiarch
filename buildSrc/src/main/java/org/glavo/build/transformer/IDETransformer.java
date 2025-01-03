@@ -363,7 +363,11 @@ public abstract class IDETransformer implements AutoCloseable {
                     case FileTransformer.Replace replace -> {
                         LOGGER.lifecycle("TRANSFORM: Replace {}", entry.getName());
 
-                        var newEntry = Utils.copyTarEntry(entry, requireNonNullElse(replace.targetPath(), entry.getName()), replace.replacement().length);
+                        String newName = replace.targetPath() == null
+                                ? entry.getName()
+                                : prefix + replace.targetPath();
+
+                        var newEntry = Utils.copyTarEntry(entry, newName, replace.replacement().length);
                         tarOutput.putArchiveEntry(newEntry);
                         tarOutput.write(replace.replacement());
                         tarOutput.closeArchiveEntry();

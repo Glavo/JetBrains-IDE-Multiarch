@@ -91,7 +91,10 @@ for (arch in Arch.values()) {
     } else {
         tasks.register("fetchNatives-$archName") {
             group = "natives"
-            dependsOn(buildNatives)
+
+            if (!nativesFile.exists()) {
+                dependsOn(buildNatives)
+            }
         }
     }
 }
