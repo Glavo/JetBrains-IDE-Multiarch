@@ -159,13 +159,13 @@ for (product in Product.values()) {
     }
 }
 
-
 tasks.register<GenerateReadMe>("generateReadMe") {
+    group = "documentation"
+
     templateFile.set(templateDir.file("README.md.template"))
     propertiesFile.set(configDir.file("README.properties"))
     outputFile.set(project.file("README.md"))
 }
-
 
 // In order for Intellij to download the source code of dependencies
 repositories {

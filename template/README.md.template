@@ -1,22 +1,62 @@
-# JetBrains IDE for Linux LoongArch64/RISC-V 64
+# JetBrains IDEs for Linux LoongArch64/RISC-V 64
 
-This project provides IntelliJ IDEA distributions for more architectures. 
+This project provides JetBrians IDEs distributions for more architectures.
 
 Currently supported platforms:
 
-* Linux LoongArch64 (New World)
 * Linux RISC-V 64
+* Linux LoongArch64 (New World)
 
-## Download
+## Download the pre-built IDEs
 
-Download IntelliJ IDEA Community Edition ${idea.version}: 
+We provide pre-built distributions for the IDEs that can be redistributed.
 
-* Linux LoongArch64: [ideaIC-${idea.version}+${idea.version.additional}-loongarch64.tar.gz](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases/download/idea%2F${idea.version}%2B${idea.version.additional}/ideaIC-${idea.version}+${idea.version.additional}-loongarch64.tar.gz) 
-* Linux RISC-V 64: [ideaIC-${idea.version}+${idea.version.additional}-riscv64.tar.gz](https://github.com/Glavo/IntelliJ-IDEA-Multiarch/releases/download/idea%2F${idea.version}%2B${idea.version.additional}/ideaIC-${idea.version}+${idea.version.additional}-riscv64.tar.gz)
+|                                 | RISC-V 64                                                         | LoongArch64                                                               |
+|---------------------------------|-------------------------------------------------------------------|---------------------------------------------------------------------------|
+| IntelliJ IDEA Community Edition | [${releases.idea.version.riscv64}](${releases.idea.link.riscv64}) | [${releases.idea.version.loongarch64}](${releases.idea.link.loongarch64}) |
+
+As for other IDEs, we are not allowed to redistribute them.
+Please [build them yourself](#Building).
+
+## Building
+
+Environmental requirements:
+
+* OpenJDK (>= 21)
+
+We have pre-built native libraries for the Linux RISC-V 64 platform, which are automatically downloaded when building.
+If you want to build for other platforms, you will also need the following dependencies:
+
+* GCC
+* cargo (>= 1.82.0)
+* Go (>= 1.20)
+
+If you want to cross-compile this project for another platform, 
+make sure you have the cross compiler for the target platform installed and have configured cargo correctly.
+
+Then run the following command replacing `$PRODUCT_CODE` with the product code of the IDE you want to build 
+and `$ARCH` with the simple name of the target architecture:
+
+```shell
+./gradlew transform$PRODUCT_CODE-$ARCH
+```
+
+`$PRODUCT_CODE` for IDEs:
+
+* IntelliJ IDEA Community Edition: `IC`
+* IntelliJ IDEA Ultimate: `IU`
+* PyCharm Community: `PC`
+* PyCharm Professional: `PY`
+* Goland: `GO`
+
+`$ARCH` for architectures:
+
+* RISC-V 64: `riscv64`
+* LoongArch64: `loongarch64`
 
 ## To-do list
 
-* Distributed with JBR.
+* Using JBR on Linux LoongArch64.
 
 ## Especially thanks
 
