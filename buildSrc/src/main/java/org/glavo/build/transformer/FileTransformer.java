@@ -22,15 +22,23 @@ import java.io.IOException;
 
 public sealed interface FileTransformer {
 
-    record Replace(byte[] replacement, @Nullable String targetPath) implements FileTransformer {
-        public Replace(byte[] replacement) {
-            this(replacement, null);
+    boolean optional();
+
+    record Replace(boolean optional, byte[] replacement, @Nullable String targetPath) implements FileTransformer {
+        public Replace(byte[] replacement, @Nullable String targetPath) {
+            this(false, replacement, targetPath);
         }
     }
 
-    record FilterOut() implements FileTransformer {
+    record FilterOut(boolean optional) implements FileTransformer {
+        public FilterOut() {
+            this(false);
+        }
     }
 
-    record Transform(CheckedFunction<byte[], byte[], IOException> action) implements FileTransformer {
+    record Transform(boolean optional, CheckedFunction<byte[], byte[], IOException> action) implements FileTransformer {
+        public Transform(CheckedFunction<byte[], byte[], IOException> action) {
+            this(false, action);
+        }
     }
 }

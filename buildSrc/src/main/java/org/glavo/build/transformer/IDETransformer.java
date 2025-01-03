@@ -173,7 +173,7 @@ public abstract class IDETransformer implements AutoCloseable {
         transformer.put("bin/fsnotifier", getNativeReplacement("fsnotifier"));
         transformer.put("bin/restarter", getNativeReplacement("restarter"));
         // transformer.put("bin/libdbm.so", getNativeReplacement("libdbm.so"));
-        transformer.put("bin/libdbm.so", new FileTransformer.FilterOut());
+        transformer.put("bin/libdbm.so", new FileTransformer.FilterOut(true));
         transformer.put("lib/pty4j/linux/%s/libpty.so".formatted(baseArch.normalize()),
                 getNativeReplacement("libpty.so", "lib/pty4j/linux/%s/libpty.so".formatted(targetArch.normalize())));
 
@@ -361,7 +361,7 @@ public abstract class IDETransformer implements AutoCloseable {
             } else if (transformers.remove(path) instanceof FileTransformer transformer) {
                 switch (transformer) {
                     case FileTransformer.Replace replace -> {
-                        LOGGER.lifecycle("TRANSFORM: Replace {} with {}/{}", entry.getName(), task.getIDENativesZipFile().get().getAsFile().getName(), replace.replacement());
+                        LOGGER.lifecycle("TRANSFORM: Replace {}", entry.getName());
 
                         var newEntry = Utils.copyTarEntry(entry, requireNonNullElse(replace.targetPath(), entry.getName()), replace.replacement().length);
                         tarOutput.putArchiveEntry(newEntry);
@@ -391,7 +391,7 @@ public abstract class IDETransformer implements AutoCloseable {
             }
         }
 
-        if (!transformers.isEmpty()) {
+        if (!transformers.isEmpty() && !transformers.values().stream().allMatch(FileTransformer::optional)) {
             throw new GradleException("These files were not found: " + transformers.entrySet());
         }
 

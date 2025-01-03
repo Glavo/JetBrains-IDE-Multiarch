@@ -156,6 +156,7 @@ public abstract class BuildNative extends DefaultTask {
                 pty4jDir.resolve("openpty.c"),
                 pty4jDir.resolve("pfind.c")
         );
+        builder.addResult(pty4jFile);
 
         // ---
         Path nativesZipFile = Utils.getAsPath(getOutputFile());
