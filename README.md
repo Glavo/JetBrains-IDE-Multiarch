@@ -11,9 +11,10 @@ Currently supported platforms:
 
 We provide pre-built distributions for the IDEs that can be redistributed.
 
-|                                 | RISC-V 64                                                         | LoongArch64                                                               |
-|---------------------------------|-------------------------------------------------------------------|---------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition | [2024.3.1.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2024.3.1.1%2B0/ideaIC-2024.3.1.1+0-riscv64.tar.gz) | [2024.2.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2024.2.1%2B0/ideaIC-2024.2.1+0-loongarch64.tar.gz) |
+|                                 | RISC-V 64                                                               | LoongArch64                                                               |
+|---------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| IntelliJ IDEA Community Edition | [2024.3.1.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2024.3.1.1%2B0/ideaIC-2024.3.1.1+0-riscv64.tar.gz)       | [2024.2.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2024.2.1%2B0/ideaIC-2024.2.1+0-loongarch64.tar.gz) |
+| PyCharm Community               | [2024.3.1.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/pycharm%2F2024.3.1.1%2B0/pycharm-community-2024.3.1.1+0-riscv64.tar.gz) | /                                                                         |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
@@ -28,7 +29,7 @@ We have pre-built native libraries for the Linux RISC-V 64 platform, which are a
 If you want to build for other platforms, you will also need the following dependencies:
 
 * GCC
-* cargo (>= 1.82.0)
+* cargo (>= 1.82.0) 
 * Go (>= 1.20)
 
 If you want to cross-compile this project for another platform, 

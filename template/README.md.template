@@ -11,9 +11,10 @@ Currently supported platforms:
 
 We provide pre-built distributions for the IDEs that can be redistributed.
 
-|                                 | RISC-V 64                                                         | LoongArch64                                                               |
-|---------------------------------|-------------------------------------------------------------------|---------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition | [${releases.idea.version.riscv64}](${releases.idea.link.riscv64}) | [${releases.idea.version.loongarch64}](${releases.idea.link.loongarch64}) |
+|                                 | RISC-V 64                                                               | LoongArch64                                                               |
+|---------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| IntelliJ IDEA Community Edition | [${releases.idea.version.riscv64}](${releases.idea.link.riscv64})       | [${releases.idea.version.loongarch64}](${releases.idea.link.loongarch64}) |
+| PyCharm Community               | [${releases.pycharm.version.riscv64}](${releases.pycharm.link.riscv64}) | /                                                                         |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
@@ -28,7 +29,7 @@ We have pre-built native libraries for the Linux RISC-V 64 platform, which are a
 If you want to build for other platforms, you will also need the following dependencies:
 
 * GCC
-* cargo (>= 1.82.0)
+* cargo (>= 1.82.0) 
 * Go (>= 1.20)
 
 If you want to cross-compile this project for another platform, 
