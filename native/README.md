@@ -8,4 +8,4 @@
   
 ## [pty4j](https://github.com/JetBrains/pty4j/tree/master/native)
 
-* [pty4j](./pty4j): `9721ee89eb77f4ade32397439b70e99c5bd789e3`
+* [pty4j](./pty4j): `1654e54ccc44306a944a2b6e761455d0e5a9bca6`
