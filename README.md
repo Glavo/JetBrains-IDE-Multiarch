@@ -60,7 +60,7 @@ The IDE distribution will be built into `./build/target/`.
 ### Build native binaries
 
 We have pre-built native binaries for some platforms.
-By default, the project downloads these pre-built binaries and patches the IDE with them.
+By default, the project downloads these prebuilt binaries and patches the IDE with them.
 You can also build them yourself.
 
 Building native binaries requires:
@@ -75,6 +75,26 @@ To cross-compile binaries, you need to have the GCC Cross-Compiler for your targ
 Running `./gradlew buildNatives-$ARCH` builds native binaries for the target platform,
 the built native binaries will be packaged into the file `./resources/natives-linux-$ARCH.zip`.
 When this file exists, the script will use it first to patch the IDE instead of downloading the prebuilt binary.
+
+### Customizing the bundled Java runtime
+
+JetBrains IDEs require a Java runtime environment to run.
+
+We have pre-built JDKs for some platforms.
+By default, this project downloads these pre-built JDKs and bundles them into the IDE distribution.
+You can replace the default Java runtime environment via the project properties:
+
+```
+./gradlew transform$PRODUCT_CODE-$ARCH -Pjdk.linux.$ARCH.url="..."
+```
+
+The URL should point to a JDK distribution in `.tar.gz` or `.zip` format.
+
+If you want to build the JDK yourself,
+we recommend using the [JetBrains Runtime](https://github.com/JetBrains/JetBrainsRuntime) for the best experience.
+
+For Linux LoongArch64, since OpenJDK mainline does not provide full support for LoongArch64,
+it is recommended to build based on [loongson/jdk21u](https://github.com/loongson/jdk21u).
 
 ## To-do list
 

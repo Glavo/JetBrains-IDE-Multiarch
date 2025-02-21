@@ -41,12 +41,13 @@ val Download.outputFile: File
 fun nativesFile(arch: Arch) = project.file("resources/natives-linux-${arch.normalize()}.zip")
 
 val arches = listOf(Arch.RISCV64, Arch.LOONGARCH64)
-// val products = listOf(Product.IDEA_IC, Product.IDEA_IU)
 
 val jdkProperties: Map<String, String> = Utils.loadProperties(configDir.file("jdk.properties"))
 val downloadJDKTasks = arches.associateWith { arch ->
-    jdkProperties["jdk.linux.${arch.normalize()}.url"]?.let { url ->
-        tasks.register<Download>("downloadJDK-${arch.normalize()}") {
+    val propertyName = "jdk.linux.${arch.normalize()}.url"
+    (findProperty(propertyName) ?: jdkProperties[propertyName])?.toString()?.let { url ->
+        if (url.isEmpty()) null
+        else tasks.register<Download>("downloadJDK-${arch.normalize()}") {
             src(url)
             dest(downloadDir.dir("jdk"))
             overwrite(false)
