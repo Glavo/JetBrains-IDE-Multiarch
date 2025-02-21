@@ -21,24 +21,17 @@ Please [build them yourself](#Building).
 
 ## Building
 
-Environmental requirements:
+The work of this project is to download the official IDE distribution,
+patch the IDE with self-built native binaries and generate distributions for the target platform.
 
-* OpenJDK (>= 21)
+The scripts that do this are based on Gradle and require OpenJDK (>= 21) to run.
 
-We have pre-built native libraries for the Linux RISC-V 64 platform, which are automatically downloaded when building.
-If you want to build for other platforms, you will also need the following dependencies:
 
-* GCC
-* cargo (>= 1.82.0) 
-* Go (>= 1.20)
-
-If you want to cross-compile this project for another platform, 
-make sure you have the cross compiler for the target platform installed and have configured cargo correctly.
-
-Then run the following command replacing `$PRODUCT_CODE` with the product code of the IDE you want to build 
+With OpenJDK installed and the `JAVA_HOME` environment variable set,
+run the following command replacing `$PRODUCT_CODE` with the product code of the IDE you want to build
 and `$ARCH` with the simple name of the target architecture:
 
-```shell
+```
 ./gradlew transform$PRODUCT_CODE-$ARCH
 ```
 
@@ -54,6 +47,26 @@ and `$ARCH` with the simple name of the target architecture:
 
 * RISC-V 64: `riscv64`
 * LoongArch64: `loongarch64`
+
+The IDE distribution will be built into `./build/target/`.
+
+### Build native binaries
+
+We have pre-built native binaries for some platforms.
+By default, the project downloads these pre-built binaries and patches the IDE with them.
+You can also build them yourself.
+
+Building native binaries requires:
+
+* GCC
+* Cargo (>= 1.82.0)
+* Go (>= 1.20)
+
+This project supports cross-compiling native binaries.
+To cross-compile binaries, you need to have the GCC Cross-Compiler for your target platform installed and Cargo configured for that.
+
+Running `./gradlew buildNatives-$ARCH` builds native binaries for the target platform,
+the built native binaries will be packaged into the file `./resources/natives-linux-$ARCH.zip`.
 
 ## To-do list
 
