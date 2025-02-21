@@ -7,6 +7,13 @@ Currently supported platforms:
 * Linux RISC-V 64
 * Linux LoongArch64 (New World)
 
+
+> [!NOTE]
+> The Linux LoongArch64 platform has two incompatible ABIs ("Old World" and "New World").
+> This project only provides support for the "New World".
+> 
+> See [this document](https://areweloongyet.com/en/docs/old-and-new-worlds/) for more details.
+
 ## Download the pre-built IDEs
 
 We provide pre-built distributions for the IDEs that can be redistributed.
@@ -67,6 +74,7 @@ To cross-compile binaries, you need to have the GCC Cross-Compiler for your targ
 
 Running `./gradlew buildNatives-$ARCH` builds native binaries for the target platform,
 the built native binaries will be packaged into the file `./resources/natives-linux-$ARCH.zip`.
+When this file exists, the script will use it first to patch the IDE instead of downloading the prebuilt binary.
 
 ## To-do list
 
