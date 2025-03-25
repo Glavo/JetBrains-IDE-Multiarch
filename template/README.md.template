@@ -20,8 +20,8 @@ We provide pre-built distributions for the IDEs that can be redistributed.
 
 |                                 | RISC-V 64                                                               | LoongArch64                                                               |
 |---------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition | [${releases.idea.version.riscv64}](${releases.idea.link.riscv64})       | [${releases.idea.version.loongarch64}](${releases.idea.link.loongarch64}) |
-| PyCharm Community               | [${releases.pycharm.version.riscv64}](${releases.pycharm.link.riscv64}) | /                                                                         |
+| IntelliJ IDEA Community Edition | [${releases.riscv64.idea.version}](${releases.riscv64.idea.link.tgz})   | [${releases.loongarch64.idea.version}](${releases.loongarch64.idea.link.tgz}) |
+| PyCharm Community               | [${releases.riscv64.pycharm.version}](${releases.riscv64.pycharm.link.tgz}) | /                                                                         |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
