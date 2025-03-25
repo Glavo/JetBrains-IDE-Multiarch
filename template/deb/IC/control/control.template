@@ -1,0 +1,10 @@
+Package: intellij-idea-ce-multiarch
+Version: ${version}
+Vendor: https://www.jetbrains.com/
+Architecture: ${arch}
+Maintainer: Glavo <glavo@isrc.iscas.ac.cn>
+Installed-Size: 3145728
+Section: devel
+Priority: optional
+Homepage: https://github.com/Glavo/JetBrains-IDE-Multiarch
+Description: Java, Groovy, Scala and Android development

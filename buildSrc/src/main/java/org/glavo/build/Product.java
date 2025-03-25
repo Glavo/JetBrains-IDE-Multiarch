@@ -42,6 +42,10 @@ public enum Product {
         return this == IDEA_IC || this == PYCHARM_COMMUNITY;
     }
 
+    public String getFileNamePrefix() {
+        return fileNamePrefix;
+    }
+
     public String getProductCode() {
         return productCode;
     }

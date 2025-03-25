@@ -17,11 +17,8 @@
 import de.undercouch.gradle.tasks.download.Download
 import org.glavo.build.Arch
 import org.glavo.build.Product
-import org.glavo.build.tasks.BuildNative
+import org.glavo.build.tasks.*
 import org.glavo.build.util.Utils
-import org.glavo.build.tasks.ExtractIDE
-import org.glavo.build.tasks.GenerateReadMe
-import org.glavo.build.tasks.TransformIDE
 
 plugins {
     id("java")
@@ -134,7 +131,7 @@ for (product in Product.values()) {
     }
 
     for (targetArch in arches) {
-        tasks.register<TransformIDE>("transform${product.productCode}-$targetArch") {
+        val transformTask = tasks.register<TransformIDE>("transform${product.productCode}-$targetArch") {
             group = "build"
 
             dependsOn(downloadProductTask, "fetchNatives-$targetArch")
@@ -157,6 +154,22 @@ for (product in Product.values()) {
                     .file(product.getFileNameBase(targetVersion, targetArch) + ".tar.gz")
             )
         }
+
+        tasks.register<CreateDeb>("createDeb${product.productCode}-$targetArch") {
+            group = "build"
+
+            dependsOn(transformTask)
+
+            version.set(targetVersion)
+            ideTargetArch.set(targetArch)
+            ideProduct.set(product)
+            tarFile.set(transformTask.flatMap { it.targetFile })
+            configDir.set(layout.projectDirectory.file("template/deb/${product.productCode}"))
+            outputFile.set(
+                layout.buildDirectory.dir("target")
+                    .map { it.file(product.getFileNameBase(targetVersion, targetArch) + ".deb") })
+        }
+
     }
 }
 

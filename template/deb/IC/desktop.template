@@ -1,10 +1,10 @@
 [Desktop Entry]
 Name=IntelliJ IDEA Community Edition
 Type=Application
-Version=${idea.version.full}
+Version=${version}
 Terminal=false
 Comment=
-Exec=${idea.path}/bin/idea %F
-Icon=${idea.path}/bin/idea.svg
+Exec=/usr/share/jetbrains-multiarch/ideaIC/bin/idea %F
+Icon=/usr/share/jetbrains-multiarch/ideaIC/bin/idea.svg
 Categories=TextEditor;Development;IDE;Java;Kotlin;
 Keywords=jetbrains;intellij;idea;java;kotlin;ide

@@ -74,6 +74,13 @@ public enum Arch {
         };
     }
 
+    public String getDebArch() {
+        return switch (this) {
+            case X86_64 -> "amd64";
+            default -> normalize();
+        };
+    }
+
     @Override
     public String toString() {
         return normalize();
