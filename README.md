@@ -20,8 +20,8 @@ We provide pre-built distributions for the IDEs that can be redistributed.
 
 |                                 | RISC-V 64                                                               | LoongArch64                                                               |
 |---------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition | [2024.3.5+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2024.3.5%2B0/ideaIC-2024.3.5+0-riscv64.tar.gz)       | [2024.2.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2024.2.1%2B0/ideaIC-2024.2.1+0-loongarch64.tar.gz) |
-| PyCharm Community               | [2024.3.5+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/pycharm%2F2024.3.5%2B0/pycharm-community-2024.3.5+0-riscv64.tar.gz) | /                                                                         |
+| IntelliJ IDEA Community Edition | [2024.3.5+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea/2024.3.5+0/ideaIC-2024.3.5+0-riscv64.tar.gz)       | [2024.2.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea/2024.2.1+0/ideaIC-2024.2.1+0-loongarch64.tar.gz) |
+| PyCharm Community               | [2024.3.5+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/pycharm/2024.3.5+0/pycharm-community-2024.3.5+0-riscv64.tar.gz) | /                                                                         |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).

@@ -25,7 +25,9 @@ import org.gradle.api.tasks.TaskAction;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Properties;
+import java.util.function.Function;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -40,6 +42,20 @@ public abstract class GenerateReadMe extends DefaultTask {
     @InputFile
     public abstract RegularFileProperty getPropertiesFile();
 
+    private static String process(String input, Properties properties) {
+        return TemplateEngine.getDefault().process(input, new Function<>() {
+            @Override
+            public Object apply(String name) {
+                String property = properties.getProperty(name);
+                if (property == null) {
+                    throw new GradleException("Can't find value for " + name);
+                }
+
+                return TemplateEngine.getDefault().process(property, this);
+            }
+        });
+    }
+
     @TaskAction
     public void run() throws IOException {
         var properties = new Properties();
@@ -47,15 +63,7 @@ public abstract class GenerateReadMe extends DefaultTask {
             properties.load(reader);
         }
 
-        TemplateEngine.getDefault().process(getTemplateFile().getAsFile().get().toPath(), getOutputFile().getAsFile().get().toPath(), list -> {
-            for (String key : list.split(":")) {
-                String value = properties.getProperty(key);
-                if (value != null) {
-                    return value;
-                }
-            }
-
-            throw new GradleException("Can't find value for " + list);
-        });
+        Files.writeString(getOutputFile().getAsFile().get().toPath(),
+                process(Files.readString(getTemplateFile().getAsFile().get().toPath()), properties));
     }
 }
