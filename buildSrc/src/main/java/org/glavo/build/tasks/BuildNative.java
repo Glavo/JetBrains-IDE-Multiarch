@@ -131,16 +131,6 @@ public abstract class BuildNative extends DefaultTask {
                 "--manifest-path=" + restarterDir.resolve("Cargo.toml"));
         builder.addResult(restarterDir.resolve("target/" + rustTargetTriple + "/release/restarter"));
 
-        // repair-utility
-        Path repairUtilityDir = nativeRoot.resolve("repair-utility");
-        Path repairUtilityFile = buildDir.resolve("repair");
-        builder.exec(go, "build", "-o", repairUtilityFile)
-                .working(repairUtilityDir)
-                .env("GOOS", "linux")
-                .env("GOARCH", targetArch.getGoArch())
-                .env("CGO_ENABLED", "0");
-        builder.addResult(repairUtilityFile);
-
         // XPlatLauncher
         Path xplatLauncherDir = nativeRoot.resolve("XPlatLauncher");
         builder.exec(cargo, "build", "--release", "--target=" + rustTargetTriple,

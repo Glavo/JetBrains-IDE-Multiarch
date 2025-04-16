@@ -26,7 +26,7 @@ cargo build --release --manifest-path="$NATIVE_DIR/restarter/Cargo.toml"
 cp "$NATIVE_DIR/restarter/target/release/restarter" "$OUTPUT_DIR/restarter"
 
 ## repair-utility
-go build -C repair-utility -o "$OUTPUT_DIR/repair"
+# go build -C repair-utility -o "$OUTPUT_DIR/repair"
 
 ## XPlatLauncher
 cargo build --release --manifest-path="$NATIVE_DIR/XPlatLauncher/Cargo.toml"
