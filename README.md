@@ -67,7 +67,6 @@ Building native binaries requires:
 
 * GCC
 * Cargo (>= 1.82.0)
-* Go (>= 1.20)
 
 This project supports cross-compiling native binaries.
 To cross-compile binaries, you need to have the GCC Cross-Compiler for your target platform installed and Cargo configured for that.
