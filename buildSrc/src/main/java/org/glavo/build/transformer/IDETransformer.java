@@ -177,6 +177,10 @@ public abstract class IDETransformer implements AutoCloseable {
         transformer.put("lib/pty4j/linux/%s/libpty.so".formatted(baseArch.normalize()),
                 getNativeReplacement("libpty.so", "lib/pty4j/linux/%s/libpty.so".formatted(targetArch.normalize())));
 
+        // https://github.com/JetBrains/intellij-community/blob/0d842e477a28255cd6d64f1663746030b634b3d9/platform/sqlite/src/org/jetbrains/sqlite/sqliteLibLoader.kt#L37
+        transformer.put("lib/native/linux-%s/libsqliteij.so".formatted(baseArch.normalize())
+                , getNativeReplacement("libsqliteij.so", "lib/native/linux-x86_64/libsqliteij.so"));
+
         String jniDispatchPath = "linux-%s/libjnidispatch.so".formatted(targetArch.normalize());
         try (var stream = Native.class.getResourceAsStream(jniDispatchPath)) {
             if (stream == null) {
