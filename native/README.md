@@ -9,3 +9,7 @@
 ## [pty4j](https://github.com/JetBrains/pty4j/tree/master/native)
 
 * [pty4j](./pty4j): `1654e54ccc44306a944a2b6e761455d0e5a9bca6`
+
+## [sqlite](https://github.com/JetBrains/intellij-community/tree/master/platform/sqlite)
+
+* [sqlite](./sqlite): `98799639aad3e5b78996df896f40e958d410cb6f`

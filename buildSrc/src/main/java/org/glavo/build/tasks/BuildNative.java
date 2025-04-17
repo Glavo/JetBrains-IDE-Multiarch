@@ -148,6 +148,14 @@ public abstract class BuildNative extends DefaultTask {
         );
         builder.addResult(pty4jFile);
 
+        // sqlite
+        Path sqliteDir = nativeRoot.resolve("sqlite");
+        builder.exec(sqliteDir.resolve("make.sh"))
+                .env("OS", "linux")
+                .env("ARCH", targetArch.normalize())
+                .working(sqliteDir);
+        builder.addResult(sqliteDir.resolve("target/sqlite/linux-" + targetArch.normalize() + "/libsqliteij.so"));
+
         // ---
         Path nativesZipFile = Utils.getAsPath(getOutputFile());
         Files.createDirectories(nativesZipFile.getParent());
