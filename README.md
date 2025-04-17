@@ -20,8 +20,8 @@ We provide pre-built distributions for the IDEs that can be redistributed.
 
 |                                 | RISC-V 64                                                           | LoongArch64                                                               |
 |---------------------------------|---------------------------------------------------------------------|---------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition | [2024.3.5+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/idea/2024.3.5+0)   | [2024.2.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/idea/2024.2.1+0) |
-| PyCharm Community               | [2024.3.5+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/pycharm/2024.3.5+0) | /                                                                         |
+| IntelliJ IDEA Community Edition | [2025.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/idea/2025.1+0)   | [2024.2.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/idea/2024.2.1+0) |
+| PyCharm Community               | [2025.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/pycharm/2025.1+0) | /                                                                         |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
@@ -67,6 +67,7 @@ Building native binaries requires:
 
 * GCC
 * Cargo (>= 1.82.0)
+* Go (>= 1.20)
 
 This project supports cross-compiling native binaries.
 To cross-compile binaries, you need to have the GCC Cross-Compiler for your target platform installed and Cargo configured for that.
