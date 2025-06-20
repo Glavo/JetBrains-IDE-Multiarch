@@ -150,7 +150,7 @@ public abstract class BuildNative extends DefaultTask {
 
         // sqlite
         Path sqliteDir = nativeRoot.resolve("sqlite");
-        builder.exec(sqliteDir.resolve("make.sh"))
+        builder.exec("bash", sqliteDir.resolve("make.sh"))
                 .env("OS", "linux")
                 .env("ARCH", targetArch.normalize())
                 .working(sqliteDir);

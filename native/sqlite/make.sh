@@ -27,7 +27,7 @@ elif [ "$OS" == "linux" ]; then
   libFilename="libsqliteij.so"
 
   # cannot compile arm - unable to find library -lgcc, so, use dock cross
-  if [ "$ARCH" == "aarch64" ] || [ "$ARCH" == "riscv64" ] ; then
+  if [ "$ARCH" == "aarch64" ] || [ "$ARCH" == "riscv64" ] || [ "$ARCH" == "loongarch64" ] ; then
     linkFlags+=" -shared"
   else
     cFlags+=" --target=$ARCH-unknown-linux-gnu --sysroot=target/linux-$ARCH"
