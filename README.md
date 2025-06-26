@@ -4,14 +4,8 @@ This project provides JetBrains IDEs distributions for more architectures.
 
 Currently supported platforms:
 
-* Linux RISC-V 64
-* Linux LoongArch64 (New World)
-
-> [!NOTE]
-> The Linux LoongArch64 platform has two incompatible ABIs ("Old World" and "New World").
-> This project only provides support for the "New World".
->
-> See [this document](https://areweloongyet.com/en/docs/old-and-new-worlds/) for more details.
+* Linux RISC-V 64 (glibc 2.34+)
+* Linux LoongArch64 ([New World](https://areweloongyet.com/en/docs/old-and-new-worlds/), glibc 2.38+)
 
 ## Download the pre-built IDEs
 
