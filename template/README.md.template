@@ -7,24 +7,30 @@ Currently supported platforms:
 * Linux RISC-V 64
 * Linux LoongArch64 (New World)
 
-
 > [!NOTE]
 > The Linux LoongArch64 platform has two incompatible ABIs ("Old World" and "New World").
 > This project only provides support for the "New World".
-> 
+>
 > See [this document](https://areweloongyet.com/en/docs/old-and-new-worlds/) for more details.
 
 ## Download the pre-built IDEs
 
 We provide pre-built distributions for the IDEs that can be redistributed.
 
-|                                 | RISC-V 64                                                           | LoongArch64                                                               |
-|---------------------------------|---------------------------------------------------------------------|---------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition | [${releases.riscv64.idea.version}](${releases.riscv64.idea.link})   | [${releases.loongarch64.idea.version}](${releases.loongarch64.idea.link}) |
-| PyCharm Community               | [${releases.riscv64.pycharm.version}](${releases.riscv64.pycharm.link}) | /                                                                         |
+|                                                                 | RISC-V 64                                                                                       | LoongArch64                                                                                                                                                                                 |
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IntelliJ IDEA Community Edition (${releases.idea.version.full}) | [tag.gz](${releases.idea.release.riscv64.tgz}) <br> [deb](${releases.idea.release.riscv64.deb}) | [tag.gz](${releases.idea.release.loongarch64.tgz}) <br> [deb (AOSC OS)](${releases.idea.release.loongarch64.deb}) <br> [deb (Debian/Deepin/Loongnix)](${releases.idea.release.loong64.deb}) |
+| PyCharm Community (${releases.pycharm.version.full})            | [tag.gz](${releases.pycharm.release.riscv64.tgz})                                               | /                                                                                                                                                                                           |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
+
+
+> [!NOTE]
+> Since [PyCharm Community has been replaced by PyCharm](https://blog.jetbrains.com/pycharm/2025/04/unified-pycharm/), which is not allowed to be redistributed,
+> we will no longer provide pre-built files for PyCharm in the future.
+> 
+> If you want to continue using PyCharm, please build it yourself according to the following documentation.
 
 ## Building
 
@@ -32,7 +38,6 @@ The work of this project is to download the official IDE distribution,
 patch the IDE with self-built native binaries and generate distributions for the target platform.
 
 The scripts that do this are based on Gradle and require OpenJDK (>= 21) to run.
-
 
 With OpenJDK installed and the `JAVA_HOME` environment variable set,
 run the following command replacing `$PRODUCT_CODE` with the product code of the IDE you want to build
@@ -70,7 +75,8 @@ Building native binaries requires:
 * Go (>= 1.20)
 
 This project supports cross-compiling native binaries.
-To cross-compile binaries, you need to have the GCC Cross-Compiler for your target platform installed and Cargo configured for that.
+To cross-compile binaries, you need to have the GCC Cross-Compiler for your target platform installed and Cargo
+configured for that.
 
 Running `./gradlew buildNatives-$ARCH` builds native binaries for the target platform,
 the built native binaries will be packaged into the file `./resources/natives-linux-$ARCH.zip`.

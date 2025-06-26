@@ -7,24 +7,30 @@ Currently supported platforms:
 * Linux RISC-V 64
 * Linux LoongArch64 (New World)
 
-
 > [!NOTE]
 > The Linux LoongArch64 platform has two incompatible ABIs ("Old World" and "New World").
 > This project only provides support for the "New World".
-> 
+>
 > See [this document](https://areweloongyet.com/en/docs/old-and-new-worlds/) for more details.
 
 ## Download the pre-built IDEs
 
 We provide pre-built distributions for the IDEs that can be redistributed.
 
-|                                 | RISC-V 64                                                           | LoongArch64                                                               |
-|---------------------------------|---------------------------------------------------------------------|---------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition | [2025.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/idea/2025.1+0)   | [2024.2.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/idea/2024.2.1+0) |
-| PyCharm Community               | [2025.1+0](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/tag/pycharm/2025.1+0) | /                                                                         |
+|                                                                 | RISC-V 64                                                                                       | LoongArch64                                                                                                                                                                                 |
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IntelliJ IDEA Community Edition (2025.1.3+0) | [tag.gz](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2025.1.3%2B0/ideaIC-2025.1.3+0-riscv64.tar.gz) <br> [deb](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2025.1.3%2B0/ideaIC-2025.1.3+0-riscv64.deb) | [tag.gz](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2025.1.3%2B0/ideaIC-2025.1.3+0-loongarch64.tar.gz) <br> [deb (AOSC OS)](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2025.1.3%2B0/ideaIC-2025.1.3+0-loongarch64.deb) <br> [deb (Debian/Deepin/Loongnix)](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/idea%2F2025.1.3%2B0/ideaIC-2025.1.3+0-loong64.deb) |
+| PyCharm Community (2025.1+0)            | [tag.gz](https://github.com/Glavo/JetBrains-IDE-Multiarch/releases/download/pycharm%2F2025.1%2B0/pycharm-community-2025.1+0-riscv64.tar.gz)                                               | /                                                                                                                                                                                           |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
+
+
+> [!NOTE]
+> Since [PyCharm Community has been replaced by PyCharm](https://blog.jetbrains.com/pycharm/2025/04/unified-pycharm/), which is not allowed to be redistributed,
+> we will no longer provide pre-built files for PyCharm in the future.
+> 
+> If you want to continue using PyCharm, please build it yourself according to the following documentation.
 
 ## Building
 
@@ -32,7 +38,6 @@ The work of this project is to download the official IDE distribution,
 patch the IDE with self-built native binaries and generate distributions for the target platform.
 
 The scripts that do this are based on Gradle and require OpenJDK (>= 21) to run.
-
 
 With OpenJDK installed and the `JAVA_HOME` environment variable set,
 run the following command replacing `$PRODUCT_CODE` with the product code of the IDE you want to build
@@ -70,7 +75,8 @@ Building native binaries requires:
 * Go (>= 1.20)
 
 This project supports cross-compiling native binaries.
-To cross-compile binaries, you need to have the GCC Cross-Compiler for your target platform installed and Cargo configured for that.
+To cross-compile binaries, you need to have the GCC Cross-Compiler for your target platform installed and Cargo
+configured for that.
 
 Running `./gradlew buildNatives-$ARCH` builds native binaries for the target platform,
 the built native binaries will be packaged into the file `./resources/natives-linux-$ARCH.zip`.
