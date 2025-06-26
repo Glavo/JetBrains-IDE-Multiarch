@@ -253,6 +253,7 @@ public abstract class IDETransformer implements AutoCloseable {
         }));
 
         if (targetArch == Arch.LOONGARCH64) {
+            // Some distributions do not provide libutil.so, which will prevent pty4j from working.
             transformer.put("lib/util.jar", new FileTransformer.Transform(raw -> {
                 var buffer = new ByteArrayOutputStream();
                 try (var input = new ZipInputStream(new ByteArrayInputStream(raw));
