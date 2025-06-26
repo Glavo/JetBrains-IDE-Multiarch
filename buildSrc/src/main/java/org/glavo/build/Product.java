@@ -51,7 +51,11 @@ public enum Product {
     }
 
     public String getFileNameBase(String version, Arch arch) {
-        return "%s-%s-%s".formatted(fileNamePrefix, version, arch.normalize());
+        return getFileNameBase(version, arch.normalize());
+    }
+
+    public String getFileNameBase(String version, String arch) {
+        return "%s-%s-%s".formatted(fileNamePrefix, version, arch);
     }
 
     public String getDownloadLink(String version, Arch arch) {

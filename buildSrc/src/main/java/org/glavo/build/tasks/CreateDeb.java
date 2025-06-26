@@ -57,7 +57,7 @@ public abstract class CreateDeb extends DefaultTask {
     public abstract Property<String> getVersion();
 
     @Input
-    public abstract Property<Arch> getIDETargetArch();
+    public abstract Property<String> getDebArch();
 
     @Input
     public abstract Property<Product> getIDEProduct();
@@ -98,7 +98,7 @@ public abstract class CreateDeb extends DefaultTask {
 
         var properties = Map.of(
                 "version", getVersion().get(),
-                "arch", getIDETargetArch().get().getDebArch()
+                "arch", getDebArch().get()
         );
 
         LOGGER.lifecycle("Creating control.tar.gz");

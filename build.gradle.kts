@@ -31,6 +31,7 @@ version = "0.1.0"
 val downloadDir = layout.buildDirectory.dir("download").get()
 val configDir = layout.projectDirectory.dir("config")
 val templateDir = layout.projectDirectory.dir("template")
+val targetDir = layout.buildDirectory.dir("target")
 
 val Download.outputFile: File
     get() = outputFiles.first()
@@ -149,10 +150,7 @@ for (product in Product.values()) {
 
             ideTargetArch.set(targetArch)
             ideNativesZipFile.set(nativesFile(targetArch))
-            targetFile.set(
-                layout.buildDirectory.dir("target").get()
-                    .file(product.getFileNameBase(targetVersion, targetArch) + ".tar.gz")
-            )
+            targetFile.set(targetDir.map { it.file(product.getFileNameBase(targetVersion, targetArch) + ".tar.gz") })
         }
 
         tasks.register<CreateDeb>("createDeb${product.productCode}-$targetArch") {
@@ -161,15 +159,29 @@ for (product in Product.values()) {
             dependsOn(transformTask)
 
             version.set(targetVersion)
-            ideTargetArch.set(targetArch)
+            debArch.set(targetArch.debArch)
             ideProduct.set(product)
             tarFile.set(transformTask.flatMap { it.targetFile })
             configDir.set(layout.projectDirectory.file("template/deb/${product.productCode}"))
-            outputFile.set(
-                layout.buildDirectory.dir("target")
-                    .map { it.file(product.getFileNameBase(targetVersion, targetArch) + ".deb") })
+            outputFile.set(targetDir.map { it.file(product.getFileNameBase(targetVersion, targetArch) + ".deb") })
         }
 
+        if (targetArch == Arch.LOONGARCH64) {
+            // Some distributions use loong64, others use loongarch64
+            // We solve this problem by creating two deb archives at the same time
+            tasks.register<CreateDeb>("createDeb${product.productCode}-loong64") {
+                group = "build"
+
+                dependsOn(transformTask)
+
+                version.set(targetVersion)
+                debArch.set("loong64")
+                ideProduct.set(product)
+                tarFile.set(transformTask.flatMap { it.targetFile })
+                configDir.set(layout.projectDirectory.file("template/deb/${product.productCode}"))
+                outputFile.set(targetDir.map { it.file(product.getFileNameBase(targetVersion, "loong64") + ".deb") })
+            }
+        }
     }
 }
 
