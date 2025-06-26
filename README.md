@@ -4,14 +4,8 @@ This project provides JetBrains IDEs distributions for more architectures.
 
 Currently supported platforms:
 
-* Linux RISC-V 64
-* Linux LoongArch64 (New World)
-
-> [!NOTE]
-> The Linux LoongArch64 platform has two incompatible ABIs ("Old World" and "New World").
-> This project only provides support for the "New World".
->
-> See [this document]() for more details.
+* Linux RISC-V 64 (glibc 2.34+)
+* Linux LoongArch64 ([New World](https://areweloongyet.com/en/docs/old-and-new-worlds/), glibc 2.38+)
 
 ## Download the pre-built IDEs
 
@@ -24,7 +18,6 @@ We provide pre-built distributions for the IDEs that can be redistributed.
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
-
 
 > [!NOTE]
 > Since [PyCharm Community has been replaced by PyCharm](https://blog.jetbrains.com/pycharm/2025/04/unified-pycharm/), which is not allowed to be redistributed,
