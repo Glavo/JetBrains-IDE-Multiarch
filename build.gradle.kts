@@ -168,7 +168,7 @@ for (product in Product.values()) {
 
         if (targetArch == Arch.LOONGARCH64) {
             // Some distributions use loong64, others use loongarch64
-            // We solve this problem by creating two deb archives at the same time
+            // We solve this problem by creating two deb packages at the same time
             tasks.register<CreateDeb>("createDeb${product.productCode}-loong64") {
                 group = "build"
 
