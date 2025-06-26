@@ -19,7 +19,6 @@ We provide pre-built distributions for the IDEs that can be redistributed.
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
 
-
 > [!NOTE]
 > Since [PyCharm Community has been replaced by PyCharm](https://blog.jetbrains.com/pycharm/2025/04/unified-pycharm/), which is not allowed to be redistributed,
 > we will no longer provide pre-built files for PyCharm in the future.
