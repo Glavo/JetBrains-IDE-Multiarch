@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=PyCharm Community
+Type=Application
+Version=${version}
+Terminal=false
+Comment=
+Exec=/usr/share/jetbrains-multiarch/pycharm-community/bin/pycharm %F
+Icon=/usr/share/jetbrains-multiarch/pycharm-community/bin/pycharm.svg
+Categories=TextEditor;Development;IDE;Python;
+Keywords=jetbrains;pycharm;python;ai;ide
