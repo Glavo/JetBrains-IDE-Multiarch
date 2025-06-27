@@ -7,6 +7,20 @@ Currently supported platforms:
 * Linux RISC-V 64 (glibc 2.34+)
 * Linux LoongArch64 ([New World](https://areweloongyet.com/en/docs/old-and-new-worlds/), glibc 2.38+)
 
+Currently supported IDEs:
+
+* IntelliJ IDEA Community Edition
+* IntelliJ IDEA Ultimate
+* PyCharm
+* PyCharm Community Edition
+
+IDEs that work, but need more validation:
+
+* WebStorm
+* Goland
+* RustRover
+* RubyMine
+
 ## Download the pre-built IDEs
 
 We provide pre-built distributions for the IDEs that can be redistributed.
@@ -46,7 +60,11 @@ and `$ARCH` with the simple name of the target architecture:
 * IntelliJ IDEA Ultimate: `IU`
 * PyCharm: `PY`
 * PyCharm Community: `PC`
+* WebStorm: `WS`
 * Goland: `GO`
+* RustRover: `RR`
+* RubyMine: `RM`
+* PhpStorm: `PS`
 
 `$ARCH` for architectures:
 

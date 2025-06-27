@@ -24,7 +24,12 @@ public enum Product {
     IDEA_IU("IU"),
     PYCHARM("PY"),
     PYCHARM_COMMUNITY("PC"),
+    WEBSTORM("WS"),
+    CLION("CL"), // FIXME
     GOLAND("GO"),
+    RUSTROVER("RR"),
+    RUBYMINE("RM"),
+    PHPSTORM("PS"),
     ;
 
     private final String productCode;
@@ -47,7 +52,12 @@ public enum Product {
             case IDEA_IU -> "ideaIU";
             case PYCHARM -> "pycharm";
             case PYCHARM_COMMUNITY -> "pycharm-community";
+            case WEBSTORM -> "WebStorm";
+            case CLION -> "CLion";
             case GOLAND -> "goland";
+            case RUSTROVER -> "RustRover";
+            case RUBYMINE -> "RubyMine";
+            case PHPSTORM -> "PhpStorm";
         };
     }
 
@@ -63,7 +73,12 @@ public enum Product {
         String downloadLinkPrefix = switch (this) {
             case IDEA_IC, IDEA_IU -> "idea";
             case PYCHARM, PYCHARM_COMMUNITY -> "python";
+            case WEBSTORM -> "webstorm";
+            case CLION -> "cpp";
             case GOLAND -> "go";
+            case RUSTROVER -> "rustrover";
+            case RUBYMINE -> "ruby";
+            case PHPSTORM -> "webide";
         };
         return "https://download.jetbrains.com/%s/%s.tar.gz".formatted(downloadLinkPrefix, getFileNameBase(version, arch));
     }
@@ -72,17 +87,28 @@ public enum Product {
         return switch (this) {
             case IDEA_IC, IDEA_IU -> "idea";
             case PYCHARM, PYCHARM_COMMUNITY -> "pycharm";
+            case WEBSTORM -> "webstorm";
+            case CLION -> "clion";
             case GOLAND -> "goland";
+            case RUSTROVER -> "rustrover";
+            case RUBYMINE -> "rubymine";
+            case PHPSTORM -> "phpstorm";
         };
     }
 
     public String getPackageName() {
+        // https://github.com/JonasGroeger/jetbrains-ppa
         return switch (this) {
             case IDEA_IC -> "intellij-idea-community";
             case IDEA_IU -> "intellij-idea-ultimate";
             case PYCHARM -> "pycharm";
             case PYCHARM_COMMUNITY -> "pycharm-community";
+            case WEBSTORM -> "webstorm";
+            case CLION -> "clion";
             case GOLAND -> "goland";
+            case RUSTROVER -> "rustrover";
+            case RUBYMINE -> "rubymine";
+            case PHPSTORM -> "phpstorm";
         };
     }
 
@@ -92,7 +118,12 @@ public enum Product {
             case IDEA_IU -> "IntelliJ IDEA Ultimate";
             case PYCHARM -> "PyCharm";
             case PYCHARM_COMMUNITY -> "PyCharm Community";
+            case WEBSTORM -> "WebStorm";
+            case CLION -> "CLion";
             case GOLAND -> "GoLand";
+            case RUSTROVER -> "RustRover";
+            case RUBYMINE -> "RubyMine";
+            case PHPSTORM -> "PhpStorm";
         };
     }
 
@@ -102,7 +133,12 @@ public enum Product {
             case IDEA_IU -> "The IDE for Pro Java and Kotlin developers";
             case PYCHARM -> "The only Python IDE you need";
             case PYCHARM_COMMUNITY -> "The pure Python IDE";
+            case WEBSTORM -> "A JavaScript and TypeScript IDE";
+            case CLION -> "A cross-platform C and C++ IDE";
             case GOLAND -> "An IDE for Go and Web";
+            case RUSTROVER -> "A powerful IDE for Rust";
+            case RUBYMINE -> "A Ruby and Rails IDE";
+            case PHPSTORM -> "A smart IDE for PHP and Web";
         };
     }
 
@@ -119,10 +155,15 @@ public enum Product {
     }
 
     public String getDesktopKeywords() {
-        return (switch (this) {
-            case IDEA_IC, IDEA_IU -> "jetbrains;intellij;idea;java;kotlin;scala;";
-            case PYCHARM, PYCHARM_COMMUNITY -> "jetbrains;python;";
-            case GOLAND -> "jetbrains;golang;";
+        return "jetbrains;" + (switch (this) {
+            case IDEA_IC, IDEA_IU -> "intellij;idea;java;kotlin;scala;";
+            case PYCHARM, PYCHARM_COMMUNITY -> "python;";
+            case WEBSTORM -> "js;javascript;typescript;html;";
+            case CLION -> "cpp;";
+            case GOLAND -> "golang;";
+            case RUSTROVER -> "rust;";
+            case RUBYMINE -> "ruby;rails;";
+            case PHPSTORM -> "php;";
         });
     }
 
