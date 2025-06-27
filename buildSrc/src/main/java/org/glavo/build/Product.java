@@ -22,8 +22,8 @@ import java.util.Map;
 public enum Product {
     IDEA_IC("IC", "idea", "ideaIC", "idea"),
     IDEA_IU("IU", "idea", "ideaIU", "idea"),
+    PYCHARM("PY", "python", "pycharm", "pycharm"),
     PYCHARM_COMMUNITY("PC", "python", "pycharm-community", "pycharm"),
-    PYCHARM_PROFESSIONAL("PY", "python", "pycharm-professional", "pycharm"),
     GOLAND("GO", "go", "goland", "goland");
 
     private final String productCode;

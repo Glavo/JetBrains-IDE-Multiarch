@@ -44,8 +44,8 @@ and `$ARCH` with the simple name of the target architecture:
 
 * IntelliJ IDEA Community Edition: `IC`
 * IntelliJ IDEA Ultimate: `IU`
+* PyCharm: `PY`
 * PyCharm Community: `PC`
-* PyCharm Professional: `PY`
 * Goland: `GO`
 
 `$ARCH` for architectures:
