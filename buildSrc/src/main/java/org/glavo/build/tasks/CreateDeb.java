@@ -15,13 +15,11 @@
  */
 package org.glavo.build.tasks;
 
-import kala.template.TemplateEngine;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.commons.compress.archivers.ar.ArArchiveOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.glavo.build.Arch;
 import org.glavo.build.Product;
 import org.glavo.build.util.Utils;
 import org.gradle.api.DefaultTask;
@@ -30,7 +28,6 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
@@ -42,11 +39,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -68,8 +64,9 @@ public abstract class CreateDeb extends DefaultTask {
     @OutputFile
     public abstract RegularFileProperty getOutputFile();
 
-    @InputDirectory
-    public abstract RegularFileProperty getConfigDir();
+    private String getInstallPath() {
+        return "/usr/share/jetbrains-multiarch/" + getIDEProduct().get().getPackageName();
+    }
 
     private static void makeDirectories(Set<String> directories, TarArchiveOutputStream output, String dirName) throws IOException {
         assert dirName.endsWith("/");
@@ -91,38 +88,26 @@ public abstract class CreateDeb extends DefaultTask {
         output.closeArchiveEntry();
     }
 
+    private static void putEntry(TarArchiveOutputStream output, String name, String content) throws IOException {
+        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+        TarArchiveEntry entry = new TarArchiveEntry(name);
+        entry.setSize(bytes.length);
+        output.putArchiveEntry(entry);
+        output.write(bytes);
+        output.closeArchiveEntry();
+    }
+
     @TaskAction
     public void run() throws IOException {
-        Path configDir = getConfigDir().get().getAsFile().toPath();
         Product product = getIDEProduct().get();
-
-        var properties = Map.of(
-                "version", getVersion().get(),
-                "arch", getDebArch().get()
-        );
 
         LOGGER.lifecycle("Creating control.tar.gz");
 
         ByteArrayOutputStream controlData = new ByteArrayOutputStream();
-        try (var output = new TarArchiveOutputStream(new GZIPOutputStream(controlData));
-             Stream<Path> stream = Files.list(configDir.resolve("control"))) {
-            for (Path path : stream.toList()) {
-                String fileName = path.getFileName().toString();
-                String content = Files.readString(path);
-
-                if (fileName.endsWith(".template")) {
-                    fileName = fileName.substring(0, fileName.length() - ".template".length());
-                    content = TemplateEngine.getDefault().process(Files.readString(path), properties);
-                }
-
-                byte[] contentBytes = content.getBytes();
-
-                TarArchiveEntry entry = new TarArchiveEntry("./" + fileName);
-                entry.setSize(contentBytes.length);
-                output.putArchiveEntry(entry);
-                output.write(contentBytes);
-                output.closeArchiveEntry();
-            }
+        try (var output = new TarArchiveOutputStream(new GZIPOutputStream(controlData))) {
+            putEntry(output, "./control", getControl());
+            putEntry(output, "./postinst", getPostinst());
+            putEntry(output, "./prerm", getPrerm());
         }
 
         Path outputFile = getOutputFile().get().getAsFile().toPath();
@@ -157,8 +142,7 @@ public abstract class CreateDeb extends DefaultTask {
                         throw new IOException("Invalid entry: " + name);
                     }
 
-                    String targetFileName = "./usr/share/jetbrains-multiarch/" + product.getFileNamePrefix() + "/"
-                                            + name.substring(idx + 1);
+                    String targetFileName = ".%s/%s".formatted(getInstallPath(), name.substring(idx + 1));
 
                     makeDirectories(directories, output, targetFileName.substring(0, targetFileName.lastIndexOf('/') + 1));
 
@@ -167,27 +151,7 @@ public abstract class CreateDeb extends DefaultTask {
                     output.closeArchiveEntry();
                 }
 
-                {
-                    Path launcherFile = configDir.resolve("launcher.sh");
-                    entry = new TarArchiveEntry("./usr/bin/" + product.getLauncherName());
-                    entry.setSize(Files.size(launcherFile));
-                    entry.setMode(0x81ed);
-
-                    output.putArchiveEntry(entry);
-                    Files.copy(launcherFile, output);
-                    output.closeArchiveEntry();
-                }
-
-                {
-                    Path desktopTemplate = configDir.resolve("desktop.template");
-                    byte[] processed = TemplateEngine.getDefault().process(Files.readString(desktopTemplate), properties).getBytes();
-
-                    entry = new TarArchiveEntry("./usr/share/applications/org.glavo.jetbrains." + product.getProductCode().toLowerCase(Locale.ROOT) + ".desktop");
-                    entry.setSize(processed.length);
-                    output.putArchiveEntry(entry);
-                    output.write(processed);
-                    output.closeArchiveEntry();
-                }
+                putEntry(output, "./usr/share/applications/org.glavo.jetbrains." + product.getPackageName() + ".desktop", getDesktopInfo());
             }
         } catch (Throwable e) {
             try {
@@ -226,5 +190,70 @@ public abstract class CreateDeb extends DefaultTask {
         } finally {
             Files.deleteIfExists(tempDataTar);
         }
+    }
+
+    private String getControl() {
+        Product product = getIDEProduct().get();
+        var lines = new ArrayList<>(List.of(
+                "Package: " + product.getPackageName(),
+                "Version: " + getVersion().get(),
+                "Section: devel",
+                "Priority: optional",
+                "Architecture: " + getDebArch().get(),
+                "Installed-Size: 3145728",
+                "Maintainer: Glavo <glavo@isrc.iscas.ac.cn>",
+                "Description: " + product.getDescription() + ".",
+                "Homepage: https://github.com/Glavo/JetBrains-IDE-Multiarch"
+        ));
+
+        // Older packages create a script in /usr/bin instead of using update-alternatives
+        // We should make sure old packages are removed
+        if (product == Product.IDEA_IC || product == Product.IDEA_IU) {
+            lines.add("Replaces: intellij-idea-ce-multiarch");
+            lines.add("Conflicts: intellij-idea-ce-multiarch");
+        } else if (product == Product.PYCHARM_COMMUNITY || product == Product.PYCHARM) {
+            lines.add("Replaces: pycharm-community-multiarch");
+            lines.add("Conflicts: pycharm-community-multiarch");
+        }
+
+        return String.join("\n", lines) + "\n";
+    }
+
+    private String getPostinst() {
+        Product product = getIDEProduct().get();
+        return String.join("\n",
+                "#!/bin/bash -e",
+                "",
+                "if [ \"$1\" = configure ]; then",
+                "    update-alternatives --install /usr/bin/%1$s %1$s %2$s/bin/%1$s %3$d".formatted(product.getLauncherName(), getInstallPath(), product.getPriority()),
+                "fi",
+                "");
+    }
+
+    private String getPrerm() {
+        Product product = getIDEProduct().get();
+        return String.join("\n",
+                "#!/bin/bash -e",
+                "",
+                "if [ \"$1\" = \"remove\" ] || [ \"$1\" = \"deconfigure\" ]; then",
+                "    update-alternatives --remove %1$s %2$s/bin/%1$s".formatted(product.getLauncherName(), getInstallPath()),
+                "fi",
+                "");
+    }
+
+    private String getDesktopInfo() {
+        Product product = getIDEProduct().get();
+        return String.join("\n",
+                "[Desktop Entry]",
+                "Type=Application",
+                "Name=" + product.getFullName(),
+                "Version=" + getVersion().get(),
+                "Terminal=false",
+                "Comment=" + product.getDescription(),
+                "Exec=%s/bin/%s %%F".formatted(getInstallPath(), product.getLauncherName()),
+                "Icon=%s/bin/%s.svg".formatted(getInstallPath(), product.getLauncherName()),
+                "Categories=" + product.getDesktopCategories(),
+                "Keywords=" + product.getDesktopKeywords(),
+                "");
     }
 }

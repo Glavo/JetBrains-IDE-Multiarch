@@ -162,7 +162,6 @@ for (product in Product.values()) {
             debArch.set(targetArch.debArch)
             ideProduct.set(product)
             tarFile.set(transformTask.flatMap { it.targetFile })
-            configDir.set(layout.projectDirectory.file("template/deb/${product.productCode}"))
             outputFile.set(targetDir.map { it.file(product.getFileNameBase(targetVersion, targetArch) + ".deb") })
         }
 
@@ -178,7 +177,6 @@ for (product in Product.values()) {
                 debArch.set("loong64")
                 ideProduct.set(product)
                 tarFile.set(transformTask.flatMap { it.targetFile })
-                configDir.set(layout.projectDirectory.file("template/deb/${product.productCode}"))
                 outputFile.set(targetDir.map { it.file(product.getFileNameBase(targetVersion, "loong64") + ".deb") })
             }
         }

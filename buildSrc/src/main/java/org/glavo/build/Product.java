@@ -20,34 +20,35 @@ import java.util.Locale;
 import java.util.Map;
 
 public enum Product {
-    IDEA_IC("IC", "idea", "ideaIC", "idea"),
-    IDEA_IU("IU", "idea", "ideaIU", "idea"),
-    PYCHARM("PY", "python", "pycharm", "pycharm"),
-    PYCHARM_COMMUNITY("PC", "python", "pycharm-community", "pycharm"),
-    GOLAND("GO", "go", "goland", "goland");
+    IDEA_IC("IC"),
+    IDEA_IU("IU"),
+    PYCHARM("PY"),
+    PYCHARM_COMMUNITY("PC"),
+    GOLAND("GO"),
+    ;
 
     private final String productCode;
-    private final String downloadLinkPrefix;
-    private final String fileNamePrefix;
-    private final String launcherName;
 
-    Product(String productCode, String downloadLinkPrefix, String fileNamePrefix, String launcherName) {
+    Product(String productCode) {
         this.productCode = productCode;
-        this.downloadLinkPrefix = downloadLinkPrefix;
-        this.fileNamePrefix = fileNamePrefix;
-        this.launcherName = launcherName;
     }
 
     public boolean isOpenSource() {
         return this == IDEA_IC || this == PYCHARM_COMMUNITY;
     }
 
-    public String getFileNamePrefix() {
-        return fileNamePrefix;
-    }
-
     public String getProductCode() {
         return productCode;
+    }
+
+    private String getFileNamePrefix() {
+        return switch (this) {
+            case IDEA_IC -> "ideaIC";
+            case IDEA_IU -> "ideaIU";
+            case PYCHARM -> "pycharm";
+            case PYCHARM_COMMUNITY -> "pycharm-community";
+            case GOLAND -> "goland";
+        };
     }
 
     public String getFileNameBase(String version, Arch arch) {
@@ -55,15 +56,74 @@ public enum Product {
     }
 
     public String getFileNameBase(String version, String arch) {
-        return "%s-%s-%s".formatted(fileNamePrefix, version, arch);
+        return "%s-%s-%s".formatted(getFileNamePrefix(), version, arch);
     }
 
     public String getDownloadLink(String version, Arch arch) {
+        String downloadLinkPrefix = switch (this) {
+            case IDEA_IC, IDEA_IU -> "idea";
+            case PYCHARM, PYCHARM_COMMUNITY -> "python";
+            case GOLAND -> "go";
+        };
         return "https://download.jetbrains.com/%s/%s.tar.gz".formatted(downloadLinkPrefix, getFileNameBase(version, arch));
     }
 
     public String getLauncherName() {
-        return launcherName;
+        return switch (this) {
+            case IDEA_IC, IDEA_IU -> "idea";
+            case PYCHARM, PYCHARM_COMMUNITY -> "pycharm";
+            case GOLAND -> "goland";
+        };
+    }
+
+    public String getPackageName() {
+        return switch (this) {
+            case IDEA_IC -> "intellij-idea-community";
+            case IDEA_IU -> "intellij-idea-ultimate";
+            case PYCHARM -> "pycharm";
+            case PYCHARM_COMMUNITY -> "pycharm-community";
+            case GOLAND -> "goland";
+        };
+    }
+
+    public String getFullName() {
+        return switch (this) {
+            case IDEA_IC -> "IntelliJ IDEA Community Edition";
+            case IDEA_IU -> "IntelliJ IDEA Ultimate";
+            case PYCHARM -> "PyCharm";
+            case PYCHARM_COMMUNITY -> "PyCharm Community";
+            case GOLAND -> "GoLand";
+        };
+    }
+
+    public String getDescription() {
+        return switch (this) {
+            case IDEA_IC -> "The IDE for Java and Kotlin enthusiasts";
+            case IDEA_IU -> "The IDE for Pro Java and Kotlin developers";
+            case PYCHARM -> "The only Python IDE you need";
+            case PYCHARM_COMMUNITY -> "The pure Python IDE";
+            case GOLAND -> "An IDE for Go and Web";
+        };
+    }
+
+    public long getPriority() {
+        return switch (this) {
+            case IDEA_IC, PYCHARM_COMMUNITY -> 50L;
+            default -> 100L;
+        };
+    }
+
+    // https://specifications.freedesktop.org/menu-spec/latest/category-registry.html
+    public String getDesktopCategories() {
+        return "Development;Debugger;IDE;";
+    }
+
+    public String getDesktopKeywords() {
+        return (switch (this) {
+            case IDEA_IC, IDEA_IU -> "jetbrains;intellij;idea;java;kotlin;scala;";
+            case PYCHARM, PYCHARM_COMMUNITY -> "jetbrains;python;";
+            case GOLAND -> "jetbrains;golang;";
+        });
     }
 
     public Map<String, String> resolveProperties(Map<String, String> properties) {
