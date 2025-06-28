@@ -21,6 +21,11 @@ IDEs that work, but need more validation:
 * RustRover
 * RubyMine
 
+Currently unsupported IDEs (some important features are not available):
+
+* CLion
+* Rider (https://github.com/Glavo/JetBrains-IDE-Multiarch/issues/3)
+
 This project is sponsored by [PLCT Lab](https://plctlab.org).
 
 <img alt="PLCT Logo" src="./PLCT.svg" width="400" height="200">
