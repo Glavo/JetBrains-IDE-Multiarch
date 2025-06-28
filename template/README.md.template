@@ -21,6 +21,10 @@ IDEs that work, but need more validation:
 * RustRover
 * RubyMine
 
+This project is sponsored by [PLCT Lab](https://plctlab.org).
+
+<img alt="PLCT Logo" src="./PLCT.svg" width="200" height="200">
+
 ## Download the pre-built IDEs
 
 We provide pre-built distributions for the IDEs that can be redistributed.
@@ -117,8 +121,3 @@ it is recommended to build based on [loongson/jdk21u](https://github.com/loongso
 
 * Using JBR on Linux LoongArch64.
 
-## Especially thanks
-
-<img alt="PLCT Logo" src="./PLCT.svg" width="200" height="200">
-
-Thanks to [PLCT Lab](https://plctlab.org) for supporting me.
