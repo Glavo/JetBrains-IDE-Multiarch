@@ -63,6 +63,13 @@ and `$ARCH` with the simple name of the target architecture:
 ./gradlew transform$PRODUCT_CODE-$ARCH
 ```
 
+For Debian, Ubuntu, AOSC OS and other distributions using dpkg/apt as package manager, 
+you can create a deb package using the following command:
+
+```
+./gradlew createDeb$PRODUCT_CODE-$ARCH
+```
+
 `$PRODUCT_CODE` for IDEs:
 
 * IntelliJ IDEA Community Edition: `IC`
