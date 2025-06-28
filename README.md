@@ -23,7 +23,7 @@ IDEs that work, but need more validation:
 
 This project is sponsored by [PLCT Lab](https://plctlab.org).
 
-<img alt="PLCT Logo" src="./PLCT.svg" width="200" height="200">
+<img alt="PLCT Logo" src="./PLCT.svg" width="200" height="100">
 
 ## Download the pre-built IDEs
 
