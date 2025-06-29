@@ -18,12 +18,12 @@ IDEs that work, but need more validation:
 
 * WebStorm
 * Goland
-* RustRover
 * RubyMine
 
 Currently unsupported IDEs (some important features are not available):
 
 * CLion
+* RustRover
 * Rider (https://github.com/Glavo/JetBrains-IDE-Multiarch/issues/3)
 
 This project is sponsored by [PLCT Lab](https://plctlab.org).
