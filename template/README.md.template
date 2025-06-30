@@ -4,8 +4,8 @@ This project provides JetBrains IDEs distributions for more architectures.
 
 Currently supported platforms:
 
-* Linux RISC-V 64
-* Linux LoongArch64 ([New World](https://areweloongyet.com/en/docs/old-and-new-worlds/))
+* Linux RISC-V 64 (glibc 2.34+)
+* Linux LoongArch64 ([New World](https://areweloongyet.com/en/docs/old-and-new-worlds/), glibc 2.38+)
 
 Currently supported IDEs:
 
@@ -34,10 +34,10 @@ This project is sponsored by [PLCT Lab](https://plctlab.org).
 
 We provide pre-built distributions for the IDEs that can be redistributed.
 
-|                                                                 | RISC-V 64 (glibc 2.34+)                                                                                    | LoongArch64 (glibc 2.38+)                                                                                                                                                                            |
-|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| IntelliJ IDEA Community Edition (${releases.idea.version.full}) | [tag.gz](${releases.idea.release.riscv64.tgz}) <br> [deb](${releases.idea.release.riscv64.deb})       | [tag.gz](${releases.idea.release.loongarch64.tgz}) <br> [deb (AOSC OS)](${releases.idea.release.loongarch64.deb}) <br> [deb (Debian/Deepin/Loongnix)](${releases.idea.release.loong64.deb})          |
-| PyCharm Community (${releases.pycharm.version.full})            | [tag.gz](${releases.pycharm.release.riscv64.tgz}) <br> [deb](${releases.pycharm.release.riscv64.deb}) | [tag.gz](${releases.pycharm.release.loongarch64.tgz}) <br> [deb (AOSC OS)](${releases.pycharm.release.loongarch64.deb}) <br> [deb (Debian/Deepin/Loongnix)](${releases.pycharm.release.loong64.deb}) |
+|                                                                 | RISC-V 64                                                                                          | LoongArch64                                                                                                                                                                                |
+|-----------------------------------------------------------------|----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IntelliJ IDEA Community Edition (${releases.idea.version.full}) | [tag.gz](${releases.idea.release.riscv64.tgz}) <br> [deb](${releases.idea.release.riscv64.deb})    | [tag.gz](${releases.idea.release.loongarch64.tgz}) <br> [deb (AOSC OS)](${releases.idea.release.loongarch64.deb}) <br> [deb (Debian/Deepin/Loongnix)](${releases.idea.release.loong64.deb}) |
+| PyCharm Community (${releases.pycharm.version.full})            | [tag.gz](${releases.pycharm.release.riscv64.tgz}) <br> [deb](${releases.pycharm.release.riscv64.deb}) | [tag.gz](${releases.pycharm.release.loongarch64.tgz}) <br> [deb (AOSC OS)](${releases.pycharm.release.loongarch64.deb}) <br> [deb (Debian/Deepin/Loongnix)](${releases.pycharm.release.loong64.deb})                                                                                                                                                                                           |
 
 As for other IDEs, we are not allowed to redistribute them.
 Please [build them yourself](#Building).
