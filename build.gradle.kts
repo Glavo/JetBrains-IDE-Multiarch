@@ -74,7 +74,6 @@ for (arch in Arch.values()) {
         cxx.set(findArchProperty("cxx") ?: (if (isCross) arch.getTriple(null) + "-g++" else "g++"))
         make.set(findArchProperty("make") ?: "make")
         cMake.set(findArchProperty("cmake") ?: "cmake")
-        go.set(findArchProperty("go") ?: "go")
         cargo.set(findArchProperty("cargo") ?: "cargo")
     }
 

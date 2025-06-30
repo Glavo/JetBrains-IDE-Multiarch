@@ -72,10 +72,6 @@ public abstract class BuildNative extends DefaultTask {
 
     @Input
     @Optional
-    public abstract Property<String> getGo();
-
-    @Input
-    @Optional
     public abstract Property<String> getCargo();
 
     @InputDirectory
@@ -101,7 +97,6 @@ public abstract class BuildNative extends DefaultTask {
         String cxx = getCXX().getOrElse("g++");
         String make = getMake().getOrElse("make");
         String cmake = getCMake().getOrElse("cmake");
-        String go = getGo().getOrElse("go");
         String cargo = getCargo().getOrElse("cargo");
 
         Path nativeRoot = Utils.getAsPath(getNativeProjectsRoot()).toAbsolutePath();
