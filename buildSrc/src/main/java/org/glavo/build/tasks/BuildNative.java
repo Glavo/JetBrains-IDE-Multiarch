@@ -114,7 +114,7 @@ public abstract class BuildNative extends DefaultTask {
         Path fsNotifierTargetFile = buildDir.resolve("fsnotifier");
         builder.exec(cc, "-O2", "-Wall", "-Wextra", "-Wpedantic",
                 "-std=c11",
-                "-DVERSION=\"f93937d\"",
+                "-DVERSION=\"1725b9d\"",
                 fsNotifierDir.resolve("main.c"), fsNotifierDir.resolve("inotify.c"), fsNotifierDir.resolve("util.c"),
                 "-o", fsNotifierTargetFile
         );

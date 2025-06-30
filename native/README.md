@@ -1,6 +1,6 @@
 ## [IntelliJ Natives](https://github.com/JetBrains/intellij-community/tree/master/native)
 
-* [fsNotifier](./fsNotifier): `f93937d167866171179b804c5ee4db735f6c6992`
+* [fsNotifier](./fsNotifier): `1725b9d80229df4741d8089ba0011a8911e472d2`
 * [restarter](./restarter): `9e1cb16ee3fd934dab87f189e762df994e851903`
 * [XPlatLauncher](./XPlatLauncher): `621f5f9e2028f5ab7ba32c9ce05c414aa2158b6a`
   * [Cargo.toml](./XPlatLauncher/Cargo.toml): L28~L29, L48
