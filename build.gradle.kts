@@ -55,7 +55,7 @@ val downloadJDKTasks = arches.associateWith { arch ->
 
 val nativesProperties: Map<String, String> = Utils.loadProperties(configDir.file("natives.properties"))
 
-for (arch in Arch.values()) {
+for (arch in Arch.entries) {
     val isCross = arch != Arch.current()
     val archName = arch.normalize()
     fun findArchProperty(name: String): String? = findProperty("$arch.$name")?.toString()
@@ -99,7 +99,7 @@ for (arch in Arch.values()) {
 
 val allProductProperties: Map<String, String> = Utils.loadProperties(configDir.file("product.properties"))
 
-for (product in Product.values()) {
+for (product in Product.entries) {
     val productProperties = product.resolveProperties(allProductProperties)
 
     val productVersion = productProperties["version"]
@@ -113,7 +113,7 @@ for (product in Product.values()) {
         inputs.properties(productProperties)
 
         src(product.getDownloadLink(productVersion, productBaseArch))
-        dest(downloadDir.dir("ide"))
+        dest(downloadDir.dir("ide").file(product.getFileNameBase(productVersion, productBaseArch) + ".tar.gz"))
         overwrite(false)
     }
 
