@@ -208,7 +208,7 @@ public abstract class CreateDeb extends DefaultTask {
 
         // Older packages create a script in /usr/bin instead of using update-alternatives
         // We should make sure old packages are removed
-        if (product == Product.IDEA_IC || product == Product.IDEA_IU) {
+        if (product == Product.IDEA_COMMUNITY || product == Product.IDEA) {
             lines.add("Replaces: intellij-idea-ce-multiarch");
             lines.add("Conflicts: intellij-idea-ce-multiarch");
         } else if (product == Product.PYCHARM_COMMUNITY || product == Product.PYCHARM) {

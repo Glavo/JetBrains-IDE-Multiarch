@@ -20,8 +20,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public enum Product {
-    IDEA_IC("IC"),
-    IDEA_IU("IU"),
+    IDEA("IU"),
+    IDEA_COMMUNITY("IC"),
     PYCHARM("PY"),
     PYCHARM_COMMUNITY("PC"),
     WEBSTORM("WS"),
@@ -39,7 +39,7 @@ public enum Product {
     }
 
     public boolean isOpenSource() {
-        return this == IDEA_IC || this == PYCHARM_COMMUNITY;
+        return this == IDEA_COMMUNITY || this == PYCHARM_COMMUNITY;
     }
 
     public String getProductCode() {
@@ -48,8 +48,8 @@ public enum Product {
 
     private String getFileNamePrefix() {
         return switch (this) {
-            case IDEA_IC -> "ideaIC";
-            case IDEA_IU -> "ideaIU";
+            case IDEA -> "idea";
+            case IDEA_COMMUNITY -> "ideaIC";
             case PYCHARM -> "pycharm";
             case PYCHARM_COMMUNITY -> "pycharm-community";
             case WEBSTORM -> "WebStorm";
@@ -70,22 +70,35 @@ public enum Product {
     }
 
     public String getDownloadLink(String version, Arch arch) {
-        String downloadLinkPrefix = switch (this) {
-            case IDEA_IC, IDEA_IU -> "idea";
-            case PYCHARM, PYCHARM_COMMUNITY -> "python";
-            case WEBSTORM -> "webstorm";
-            case CLION -> "cpp";
-            case GOLAND -> "go";
-            case RUSTROVER -> "rustrover";
-            case RUBYMINE -> "ruby";
-            case PHPSTORM -> "webide";
-        };
-        return "https://download.jetbrains.com/%s/%s.tar.gz".formatted(downloadLinkPrefix, getFileNameBase(version, arch));
+        if (this == IDEA_COMMUNITY || this == PYCHARM_COMMUNITY) {
+            String githubName = switch (this) {
+                case IDEA_COMMUNITY -> "idea";
+                case PYCHARM_COMMUNITY -> "pycharm";
+                default -> throw new AssertionError("Unreachable code");
+            };
+
+            return "https://github.com/JetBrains/intellij-community/releases/download/%1$s%%2F%2$s/%1$s-%2$s-%3$s.tar.gz"
+                    .formatted(githubName, version, arch.normalize());
+        } else {
+            String downloadLinkPrefix = switch (this) {
+                //noinspection DataFlowIssue
+                case IDEA_COMMUNITY, IDEA -> "idea";
+                //noinspection DataFlowIssue
+                case PYCHARM, PYCHARM_COMMUNITY -> "python";
+                case WEBSTORM -> "webstorm";
+                case CLION -> "cpp";
+                case GOLAND -> "go";
+                case RUSTROVER -> "rustrover";
+                case RUBYMINE -> "ruby";
+                case PHPSTORM -> "webide";
+            };
+            return "https://download.jetbrains.com/%s/%s.tar.gz".formatted(downloadLinkPrefix, getFileNameBase(version, arch));
+        }
     }
 
     public String getLauncherName() {
         return switch (this) {
-            case IDEA_IC, IDEA_IU -> "idea";
+            case IDEA_COMMUNITY, IDEA -> "idea";
             case PYCHARM, PYCHARM_COMMUNITY -> "pycharm";
             case WEBSTORM -> "webstorm";
             case CLION -> "clion";
@@ -99,8 +112,8 @@ public enum Product {
     public String getPackageName() {
         // https://github.com/JonasGroeger/jetbrains-ppa
         return switch (this) {
-            case IDEA_IC -> "intellij-idea-community";
-            case IDEA_IU -> "intellij-idea-ultimate";
+            case IDEA -> "intellij-idea-ultimate";
+            case IDEA_COMMUNITY -> "intellij-idea-community";
             case PYCHARM -> "pycharm";
             case PYCHARM_COMMUNITY -> "pycharm-community";
             case WEBSTORM -> "webstorm";
@@ -114,8 +127,8 @@ public enum Product {
 
     public String getFullName() {
         return switch (this) {
-            case IDEA_IC -> "IntelliJ IDEA Community Edition";
-            case IDEA_IU -> "IntelliJ IDEA Ultimate";
+            case IDEA -> "IntelliJ IDEA Ultimate";
+            case IDEA_COMMUNITY -> "IntelliJ IDEA Community Edition";
             case PYCHARM -> "PyCharm";
             case PYCHARM_COMMUNITY -> "PyCharm Community";
             case WEBSTORM -> "WebStorm";
@@ -129,8 +142,8 @@ public enum Product {
 
     public String getDescription() {
         return switch (this) {
-            case IDEA_IC -> "The IDE for Java and Kotlin enthusiasts";
-            case IDEA_IU -> "The IDE for Pro Java and Kotlin developers";
+            case IDEA -> "The IDE for Pro Java and Kotlin developers";
+            case IDEA_COMMUNITY -> "The IDE for Java and Kotlin enthusiasts";
             case PYCHARM -> "The only Python IDE you need";
             case PYCHARM_COMMUNITY -> "The pure Python IDE";
             case WEBSTORM -> "A JavaScript and TypeScript IDE";
@@ -144,7 +157,7 @@ public enum Product {
 
     public long getPriority() {
         return switch (this) {
-            case IDEA_IC, PYCHARM_COMMUNITY -> 50L;
+            case IDEA_COMMUNITY, PYCHARM_COMMUNITY -> 50L;
             default -> 100L;
         };
     }
@@ -156,7 +169,7 @@ public enum Product {
 
     public String getDesktopKeywords() {
         return "jetbrains;" + (switch (this) {
-            case IDEA_IC, IDEA_IU -> "intellij;idea;java;kotlin;scala;";
+            case IDEA_COMMUNITY, IDEA -> "intellij;idea;java;kotlin;scala;";
             case PYCHARM, PYCHARM_COMMUNITY -> "python;";
             case WEBSTORM -> "js;javascript;typescript;html;";
             case CLION -> "cpp;";
